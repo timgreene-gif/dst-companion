@@ -1,0 +1,3461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Don't Starve Together Companion - Recipes & Progression Guide</title>
+    <style>
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2a2a2a;
+            --bg-tertiary: #3a3a3a;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0a0;
+            --accent-primary: #d4a44a;
+            --accent-secondary: #8b4513;
+            --accent-gradient: linear-gradient(135deg, #d4a44a, #8b4513);
+            --health-color: #e74c3c;
+            --hunger-color: #f39c12;
+            --sanity-color: #9b59b6;
+            --tier-s: #ffd700;
+            --tier-a: #c0c0c0;
+            --tier-b: #cd7f32;
+            --season-autumn: #d35400;
+            --season-winter: #3498db;
+            --season-spring: #27ae60;
+            --season-summer: #e74c3c;
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--accent-primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.4rem;
+            color: var(--accent-primary);
+        }
+
+        .logo-text span {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 10px 18px;
+            background: var(--bg-tertiary);
+            border: none;
+            border-radius: var(--border-radius);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+        }
+
+        .nav-tab:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .nav-tab.active {
+            background: var(--accent-gradient);
+            color: #1a1a1a;
+            font-weight: bold;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-primary);
+            border-bottom: 2px solid var(--accent-secondary);
+            padding-bottom: 0.5rem;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 14px;
+            background: var(--bg-tertiary);
+            border: none;
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+
+        .filter-btn:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--accent-primary);
+            color: #1a1a1a;
+        }
+
+        .search-box {
+            padding: 10px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--bg-tertiary);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            min-width: 220px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        /* Recipe Cards */
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .recipe-card {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.25rem;
+            border: 1px solid var(--bg-tertiary);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(212, 164, 74, 0.15);
+        }
+
+        .recipe-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .recipe-name {
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: var(--accent-primary);
+        }
+
+        .recipe-tier {
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .tier-essential { background: var(--tier-s); color: #1a1a1a; }
+        .tier-great { background: var(--tier-a); color: #1a1a1a; }
+        .tier-good { background: var(--tier-b); color: white; }
+        .tier-niche { background: var(--bg-tertiary); color: var(--text-secondary); }
+
+        .recipe-stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.85rem;
+            padding: 4px 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+        }
+
+        .stat-health { color: var(--health-color); }
+        .stat-hunger { color: var(--hunger-color); }
+        .stat-sanity { color: var(--sanity-color); }
+
+        .recipe-ingredients {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .recipe-notes {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            border-top: 1px solid var(--bg-tertiary);
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Progression Section */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--accent-gradient);
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding: 1.25rem;
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--accent-primary);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            border: 3px solid var(--bg-primary);
+        }
+
+        .timeline-day {
+            font-size: 0.8rem;
+            color: var(--accent-primary);
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .timeline-content ul {
+            margin-left: 1.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .timeline-content li {
+            margin-bottom: 0.25rem;
+        }
+
+        /* Season Cards */
+        .season-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .season-card {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            border-top: 4px solid;
+        }
+
+        .season-autumn { border-color: var(--season-autumn); }
+        .season-winter { border-color: var(--season-winter); }
+        .season-spring { border-color: var(--season-spring); }
+        .season-summer { border-color: var(--season-summer); }
+
+        .season-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .season-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .season-days {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .season-content h4 {
+            color: var(--accent-primary);
+            margin: 0.75rem 0 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .season-content ul {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-left: 1rem;
+        }
+
+        .season-content li {
+            margin-bottom: 0.2rem;
+        }
+
+        /* Boss Cards */
+        .boss-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .boss-card {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.25rem;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .boss-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .boss-name {
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: var(--health-color);
+        }
+
+        .boss-type {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+
+        .boss-stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+        }
+
+        .boss-health {
+            color: var(--health-color);
+        }
+
+        .boss-damage {
+            color: var(--hunger-color);
+        }
+
+        .boss-loot, .boss-tips {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .boss-loot strong, .boss-tips strong {
+            color: var(--accent-primary);
+        }
+
+        /* Character Cards */
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .character-card {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.25rem;
+            border: 1px solid var(--bg-tertiary);
+            transition: transform 0.2s;
+        }
+
+        .character-card:hover {
+            transform: scale(1.02);
+        }
+
+        .character-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .character-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--accent-primary);
+        }
+
+        .character-tier {
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .character-stats {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        .character-perk {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .character-role {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* Crafting Section */
+        .crafting-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .crafting-card {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.25rem;
+            border-left: 4px solid var(--accent-primary);
+        }
+
+        .crafting-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--accent-primary);
+        }
+
+        .crafting-recipe {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .crafting-station {
+            font-size: 0.8rem;
+            color: var(--sanity-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .crafting-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Subsection headers */
+        .subsection-title {
+            font-size: 1.3rem;
+            color: var(--accent-primary);
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 2rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 2rem;
+            border: 2px solid var(--accent-primary);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--accent-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-section {
+            margin-bottom: 1.25rem;
+        }
+
+        .modal-section h4 {
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-section p, .modal-section ul {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .modal-section ul {
+            padding-left: 1.5rem;
+        }
+
+        /* Crock Pot Simulator */
+        .simulator-container {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 2rem;
+        }
+
+        .sim-ingredients-panel {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+        }
+
+        .sim-results-panel {
+                position: static;
+                max-height: none;
+            }
+
+            .tracker-container {
+                grid-template-columns: 1fr;
+            }
+        }
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            position: sticky;
+            top: 100px;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .sim-section-title {
+            font-size: 1.1rem;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .sim-category {
+            margin-bottom: 1.5rem;
+        }
+
+        .sim-category-header {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ingredient-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .ingredient-btn {
+            padding: 6px 12px;
+            background: var(--bg-tertiary);
+            border: 2px solid transparent;
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .ingredient-btn:hover {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border-color: var(--accent-secondary);
+        }
+
+        .ingredient-btn.selected {
+            background: var(--accent-primary);
+            color: #1a1a1a;
+            border-color: var(--accent-primary);
+        }
+
+        .ingredient-btn .count {
+            background: rgba(0,0,0,0.3);
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .ingredient-btn.selected .count {
+            background: rgba(0,0,0,0.2);
+        }
+
+        /* Crock Pot Visual */
+        .crockpot-visual {
+            background: var(--bg-tertiary);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .crockpot-slots {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .crockpot-slot {
+            aspect-ratio: 1;
+            background: var(--bg-primary);
+            border: 2px dashed var(--bg-secondary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .crockpot-slot.filled {
+            border-style: solid;
+            border-color: var(--accent-primary);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 0.7rem;
+            padding: 4px;
+            text-align: center;
+        }
+
+        .crockpot-slot.filled:hover {
+            border-color: var(--health-color);
+        }
+
+        .crockpot-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .sim-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .sim-btn-cook {
+            background: var(--accent-gradient);
+            color: #1a1a1a;
+        }
+
+        .sim-btn-cook:hover {
+            transform: scale(1.02);
+        }
+
+        .sim-btn-cook:disabled {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .sim-btn-clear {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+
+        .sim-btn-clear:hover {
+            background: var(--health-color);
+            color: white;
+        }
+
+        /* Results */
+        .sim-result-card {
+            background: var(--bg-tertiary);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-left: 4px solid var(--accent-primary);
+        }
+
+        .sim-result-card.warning {
+            border-left-color: var(--health-color);
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        .sim-result-card.best {
+            border-left-color: var(--tier-s);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        }
+
+        .sim-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .sim-result-name {
+            font-weight: bold;
+            color: var(--accent-primary);
+        }
+
+        .sim-result-priority {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+        }
+
+        .sim-result-stats {
+            display: flex;
+            gap: 0.75rem;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .sim-result-ingredients {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .sim-warning {
+            background: rgba(231, 76, 60, 0.15);
+            border: 1px solid var(--health-color);
+            border-radius: var(--border-radius);
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .sim-warning-title {
+            color: var(--health-color);
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .sim-tip {
+            background: rgba(39, 174, 96, 0.15);
+            border: 1px solid var(--season-spring);
+            border-radius: var(--border-radius);
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .sim-tip-title {
+            color: var(--season-spring);
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .sim-empty {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 2rem;
+        }
+
+        .sim-values {
+            background: var(--bg-primary);
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 0.8rem;
+        }
+
+        .sim-values-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .sim-value-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .sim-value-label {
+            color: var(--text-secondary);
+        }
+
+        .sim-value-num {
+            color: var(--accent-primary);
+            font-weight: bold;
+        }
+
+        .sim-efficiency {
+            font-size: 0.75rem;
+            color: var(--season-spring);
+            margin-top: 0.25rem;
+        }
+
+        
+        /* Responsive */
+
+        /* Day Tracker */
+        .tracker-container { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .tracker-input-panel { background: var(--bg-secondary); border-radius: var(--border-radius); padding: 1.5rem; }
+        .tracker-info-panel { background: var(--bg-secondary); border-radius: var(--border-radius); padding: 1.5rem; }
+        .day-input-group { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .day-input-group label { font-size: 1rem; color: var(--text-primary); }
+        .day-input { width: 100px; padding: 12px 16px; background: var(--bg-tertiary); border: 2px solid var(--bg-tertiary); border-radius: 8px; color: var(--text-primary); font-size: 1.2rem; font-weight: bold; text-align: center; }
+        .day-input:focus { outline: none; border-color: var(--accent-primary); }
+        .day-buttons { display: flex; gap: 0.5rem; }
+        .day-btn { padding: 8px 16px; background: var(--bg-tertiary); border: none; border-radius: 6px; color: var(--text-secondary); cursor: pointer; font-size: 1rem; transition: all 0.2s; }
+        .day-btn:hover { background: var(--accent-primary); color: #1a1a1a; }
+        .current-season-display { background: var(--bg-tertiary); border-radius: var(--border-radius); padding: 1.5rem; margin-bottom: 1.5rem; text-align: center; }
+        .season-icon { font-size: 3rem; margin-bottom: 0.5rem; }
+        .season-label { font-size: 1.5rem; font-weight: bold; margin-bottom: 0.25rem; }
+        .season-label.autumn { color: var(--season-autumn); }
+        .season-label.winter { color: var(--season-winter); }
+        .season-label.spring { color: var(--season-spring); }
+        .season-label.summer { color: var(--season-summer); }
+        .season-progress { margin-top: 1rem; }
+        .season-progress-bar { height: 8px; background: var(--bg-primary); border-radius: 4px; overflow: hidden; margin-bottom: 0.5rem; }
+        .season-progress-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+        .season-progress-fill.autumn { background: var(--season-autumn); }
+        .season-progress-fill.winter { background: var(--season-winter); }
+        .season-progress-fill.spring { background: var(--season-spring); }
+        .season-progress-fill.summer { background: var(--season-summer); }
+        .season-progress-text { font-size: 0.85rem; color: var(--text-secondary); }
+        .year-timeline { background: var(--bg-tertiary); border-radius: var(--border-radius); padding: 1rem; margin-bottom: 1.5rem; }
+        .timeline-bar { display: flex; height: 30px; border-radius: 6px; overflow: hidden; position: relative; }
+        .timeline-segment { display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+        .timeline-segment.autumn { background: var(--season-autumn); flex: 20; }
+        .timeline-segment.winter { background: var(--season-winter); flex: 15; }
+        .timeline-segment.spring { background: var(--season-spring); flex: 20; }
+        .timeline-segment.summer { background: var(--season-summer); flex: 15; }
+        .timeline-marker { position: absolute; top: -5px; bottom: -5px; width: 3px; background: white; box-shadow: 0 0 5px rgba(0,0,0,0.5); transform: translateX(-50%); }
+        .timeline-labels { display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.7rem; color: var(--text-secondary); }
+        .tracker-alert { border-radius: var(--border-radius); padding: 1rem; margin-bottom: 1rem; }
+        .tracker-alert.danger { background: rgba(231, 76, 60, 0.15); border: 1px solid var(--health-color); }
+        .tracker-alert.warning { background: rgba(243, 156, 18, 0.15); border: 1px solid var(--hunger-color); }
+        .tracker-alert.info { background: rgba(52, 152, 219, 0.15); border: 1px solid var(--season-winter); }
+        .tracker-alert.success { background: rgba(39, 174, 96, 0.15); border: 1px solid var(--season-spring); }
+        .tracker-alert-title { font-weight: bold; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem; }
+        .tracker-alert.danger .tracker-alert-title { color: var(--health-color); }
+        .tracker-alert.warning .tracker-alert-title { color: var(--hunger-color); }
+        .tracker-alert.info .tracker-alert-title { color: var(--season-winter); }
+        .tracker-alert.success .tracker-alert-title { color: var(--season-spring); }
+        .tracker-alert-text { font-size: 0.85rem; color: var(--text-secondary); }
+        .tracker-tasks { background: var(--bg-tertiary); border-radius: var(--border-radius); padding: 1rem; }
+        .tracker-tasks-title { font-size: 1rem; color: var(--accent-primary); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--bg-secondary); }
+        .tracker-task-item { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.5rem 0; font-size: 0.85rem; color: var(--text-secondary); border-bottom: 1px solid var(--bg-secondary); }
+        .tracker-task-item:last-child { border-bottom: none; }
+        .tracker-task-priority { padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }
+        .priority-high { background: var(--health-color); color: white; }
+        .priority-medium { background: var(--hunger-color); color: #1a1a1a; }
+        .priority-low { background: var(--bg-secondary); color: var(--text-secondary); }
+        .upcoming-events { margin-top: 1rem; }
+        .event-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-primary); border-radius: 6px; margin-bottom: 0.5rem; }
+        .event-name { font-size: 0.85rem; color: var(--text-primary); }
+        .event-days { font-size: 0.8rem; padding: 4px 8px; border-radius: 4px; font-weight: bold; }
+        .event-days.soon { background: var(--health-color); color: white; }
+        .event-days.upcoming { background: var(--hunger-color); color: #1a1a1a; }
+        .event-days.later { background: var(--bg-tertiary); color: var(--text-secondary); }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-tabs {
+                justify-content: center;
+            }
+
+            .recipe-grid, .boss-grid, .character-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .simulator-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sim-results-panel {
+                position: static;
+                max-height: none;
+            }
+
+            .tracker-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Checklists */
+        .checklists-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .checklist-card {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            border-top: 4px solid var(--accent-primary);
+        }
+
+        .checklist-card.winter { border-top-color: var(--season-winter); }
+        .checklist-card.boss { border-top-color: var(--health-color); }
+        .checklist-card.base { border-top-color: var(--season-spring); }
+        .checklist-card.summer { border-top-color: var(--season-summer); }
+
+        .checklist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .checklist-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checklist-progress {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            background: var(--bg-tertiary);
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .checklist-progress.complete {
+            background: var(--season-spring);
+            color: white;
+        }
+
+        .checklist-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0.75rem;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .checklist-item:hover {
+            background: var(--bg-primary);
+        }
+
+        .checklist-item.checked {
+            background: rgba(39, 174, 96, 0.15);
+        }
+
+        .checklist-item.checked .checklist-item-text {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+
+        .checklist-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-secondary);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .checklist-item.checked .checklist-checkbox {
+            background: var(--season-spring);
+            border-color: var(--season-spring);
+            color: white;
+        }
+
+        .checklist-item-text {
+            flex: 1;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+
+        .checklist-item-note {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            padding: 2px 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+        }
+
+        .checklist-reset {
+            margin-top: 1rem;
+            padding: 8px 16px;
+            background: var(--bg-tertiary);
+            border: none;
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .checklist-reset:hover {
+            background: var(--health-color);
+            color: white;
+        }
+
+        .global-reset-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+        }
+
+        .global-reset-btn:hover {
+            background: linear-gradient(135deg, #a93226, #c0392b);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+        }
+
+        /* Search wrapper with clear button */
+        .search-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .search-wrapper .search-box {
+            padding-right: 30px;
+        }
+
+        .search-clear {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0 4px;
+            line-height: 1;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+        }
+
+        .search-clear.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .search-clear:hover {
+            color: var(--health-color);
+        }
+
+        /* Ingredient icon styling */
+        .ingredient-icon {
+            margin-right: 4px;
+        }
+
+        .checklist-section-title {
+            font-size: 1.3rem;
+            color: var(--accent-primary);
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .checklist-section-title:first-child {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">🔥</div>
+            <div class="logo-text">
+                <h1>Don't Starve Together Companion</h1>
+                <span>Recipes • Progression • Survival Guide</span>
+            </div>
+        </div>
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="recipes">Crock Pot Recipes</button>
+            <button class="nav-tab" data-tab="progression">Progression</button>
+            <button class="nav-tab" data-tab="seasons">Seasons</button>
+            <button class="nav-tab" data-tab="bosses">Bosses</button>
+            <button class="nav-tab" data-tab="characters">Characters</button>
+            <button class="nav-tab" data-tab="crafting">Crafting</button>
+            <button class="nav-tab" data-tab="simulator">Crock Pot Sim</button>
+            <button class="nav-tab" data-tab="daytracker">Day Tracker</button>
+            <button class="nav-tab" data-tab="checklists">Checklists</button>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- Crock Pot Recipes Section -->
+        <section id="recipes" class="section active">
+            <h2 class="section-title">Crock Pot Recipes</h2>
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <button class="filter-btn recipe-filter active" data-tier="all">All</button>
+                    <button class="filter-btn recipe-filter" data-tier="essential">Essential</button>
+                    <button class="filter-btn recipe-filter" data-tier="great">Great</button>
+                    <button class="filter-btn recipe-filter" data-tier="good">Good</button>
+                </div>
+                <div class="filter-group">
+                    <button class="filter-btn stat-filter" data-stat="health">Best Health</button>
+                    <button class="filter-btn stat-filter" data-stat="hunger">Best Hunger</button>
+                    <button class="filter-btn stat-filter" data-stat="sanity">Best Sanity</button>
+                </div>
+                <div class="search-wrapper">
+                    <input type="text" class="search-box" id="recipe-search" placeholder="Search recipes...">
+                    <button class="search-clear" id="recipe-search-clear" onclick="clearRecipeSearch()">×</button>
+                </div>
+            </div>
+            <div class="recipe-grid" id="recipe-grid"></div>
+        </section>
+
+        <!-- Progression Section -->
+        <section id="progression" class="section">
+            <h2 class="section-title">Progression Guide</h2>
+            <div class="timeline" id="progression-timeline"></div>
+        </section>
+
+        <!-- Seasons Section -->
+        <section id="seasons" class="section">
+            <h2 class="section-title">Seasons Guide</h2>
+            <div class="season-grid" id="season-grid"></div>
+        </section>
+
+        <!-- Bosses Section -->
+        <section id="bosses" class="section">
+            <h2 class="section-title">Boss Guide</h2>
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <button class="filter-btn boss-filter active" data-type="all">All</button>
+                    <button class="filter-btn boss-filter" data-type="seasonal">Seasonal</button>
+                    <button class="filter-btn boss-filter" data-type="cave">Cave</button>
+                    <button class="filter-btn boss-filter" data-type="summon">Summonable</button>
+                </div>
+            </div>
+            <div class="boss-grid" id="boss-grid"></div>
+        </section>
+
+        <!-- Characters Section -->
+        <section id="characters" class="section">
+            <h2 class="section-title">Characters Guide</h2>
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <button class="filter-btn char-filter active" data-tier="all">All</button>
+                    <button class="filter-btn char-filter" data-tier="S">S-Tier</button>
+                    <button class="filter-btn char-filter" data-tier="A">A-Tier</button>
+                    <button class="filter-btn char-filter" data-tier="B">B-Tier</button>
+                </div>
+                <div class="search-wrapper">
+                    <input type="text" class="search-box" id="char-search" placeholder="Search characters...">
+                    <button class="search-clear" id="char-search-clear" onclick="clearCharSearch()">×</button>
+                </div>
+            </div>
+            <div class="character-grid" id="character-grid"></div>
+        </section>
+
+        <!-- Crafting Section -->
+        <section id="crafting" class="section">
+            <h2 class="section-title">Essential Crafting</h2>
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <button class="filter-btn craft-filter active" data-type="all">All</button>
+                    <button class="filter-btn craft-filter" data-type="structures">Structures</button>
+                    <button class="filter-btn craft-filter" data-type="tools">Tools</button>
+                    <button class="filter-btn craft-filter" data-type="survival">Survival</button>
+                    <button class="filter-btn craft-filter" data-type="magic">Magic</button>
+                </div>
+            </div>
+            <div class="crafting-grid" id="crafting-grid"></div>
+        </section>
+
+        <!-- Crock Pot Simulator Section -->
+        <section id="simulator" class="section">
+            <h2 class="section-title">Crock Pot Simulator</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Select ingredients to see what you can cook. Click ingredients to add them to the pot (max 4).</p>
+
+            <div class="simulator-container">
+                <div class="sim-ingredients-panel">
+                    <h3 class="sim-section-title">Select Ingredients</h3>
+                    <div id="ingredient-categories"></div>
+                </div>
+
+                <div class="sim-results-panel">
+                    <h3 class="sim-section-title">Your Crock Pot</h3>
+                    <div class="crockpot-visual">
+                        <div class="crockpot-slots" id="crockpot-slots">
+                            <div class="crockpot-slot" data-slot="0">Empty</div>
+                            <div class="crockpot-slot" data-slot="1">Empty</div>
+                            <div class="crockpot-slot" data-slot="2">Empty</div>
+                            <div class="crockpot-slot" data-slot="3">Empty</div>
+                        </div>
+                        <div class="crockpot-actions">
+                            <button class="sim-btn sim-btn-clear" id="clear-pot">Clear All</button>
+                        </div>
+                    </div>
+
+                    <div class="sim-values" id="sim-values" style="display: none;">
+                        <div class="sim-values-grid">
+                            <div class="sim-value-item">
+                                <span class="sim-value-label">Meat:</span>
+                                <span class="sim-value-num" id="val-meat">0</span>
+                            </div>
+                            <div class="sim-value-item">
+                                <span class="sim-value-label">Fish:</span>
+                                <span class="sim-value-num" id="val-fish">0</span>
+                            </div>
+                            <div class="sim-value-item">
+                                <span class="sim-value-label">Egg:</span>
+                                <span class="sim-value-num" id="val-egg">0</span>
+                            </div>
+                            <div class="sim-value-item">
+                                <span class="sim-value-label">Veggie:</span>
+                                <span class="sim-value-num" id="val-veggie">0</span>
+                            </div>
+                            <div class="sim-value-item">
+                                <span class="sim-value-label">Fruit:</span>
+                                <span class="sim-value-num" id="val-fruit">0</span>
+                            </div>
+                            <div class="sim-value-item">
+                                <span class="sim-value-label">Sweet:</span>
+                                <span class="sim-value-num" id="val-sweet">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="sim-section-title">Results</h3>
+                    <div id="sim-results">
+                        <div class="sim-empty">Add 4 ingredients to see possible recipes</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Day Tracker Section -->
+        <section id="daytracker" class="section">
+            <h2 class="section-title">Day Tracker</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Enter your current day to see season info, boss warnings, and what you should be doing.</p>
+
+            <div class="tracker-container">
+                <div class="tracker-input-panel">
+                    <div class="day-input-group">
+                        <label for="current-day">Current Day:</label>
+                        <input type="number" id="current-day" class="day-input" value="1" min="1">
+                        <div class="day-buttons">
+                            <button class="day-btn" onclick="adjustDay(-1)">-</button>
+                            <button class="day-btn" onclick="adjustDay(1)">+</button>
+                            <button class="day-btn" onclick="adjustDay(5)">+5</button>
+                        </div>
+                    </div>
+
+                    <div class="current-season-display" id="season-display">
+                        <div class="season-icon" id="season-icon"></div>
+                        <div class="season-label" id="season-name"></div>
+                        <div class="season-subtext" id="season-subtext"></div>
+                        <div class="season-progress">
+                            <div class="season-progress-bar">
+                                <div class="season-progress-fill" id="season-progress"></div>
+                            </div>
+                            <div class="season-progress-text" id="season-progress-text"></div>
+                        </div>
+                    </div>
+
+                    <div class="year-timeline">
+                        <div class="timeline-bar" id="timeline-bar">
+                            <div class="timeline-segment autumn">Autumn</div>
+                            <div class="timeline-segment winter">Winter</div>
+                            <div class="timeline-segment spring">Spring</div>
+                            <div class="timeline-segment summer">Summer</div>
+                            <div class="timeline-marker" id="timeline-marker"></div>
+                        </div>
+                        <div class="timeline-labels">
+                            <span>Day 1</span>
+                            <span>Day 21</span>
+                            <span>Day 36</span>
+                            <span>Day 56</span>
+                            <span>Day 70</span>
+                        </div>
+                    </div>
+
+                    <div class="upcoming-events" id="upcoming-events"></div>
+                </div>
+
+                <div class="tracker-info-panel">
+                    <div id="tracker-alerts"></div>
+                    <div class="tracker-tasks" id="tracker-tasks"></div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Checklists Section -->
+        <section id="checklists" class="section">
+            <h2 class="section-title">Survival Checklists</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Track your progress with interactive checklists. Your progress is saved automatically!</p>
+
+            <button class="global-reset-btn" onclick="showResetAllModal()">🗑️ Reset All Checklists</button>
+
+            <h3 class="checklist-section-title">Seasonal Preparation</h3>
+            <div class="checklists-container">
+                <!-- First Winter Checklist -->
+                <div class="checklist-card winter" data-checklist="first-winter">
+                    <div class="checklist-header">
+                        <div class="checklist-title">❄️ First Winter Kit</div>
+                        <div class="checklist-progress" id="progress-first-winter">0/8</div>
+                    </div>
+                    <div class="checklist-items" id="checklist-first-winter"></div>
+                    <button class="checklist-reset" onclick="resetChecklist('first-winter')">Reset</button>
+                </div>
+
+                <!-- Summer Prep Checklist -->
+                <div class="checklist-card summer" data-checklist="summer-prep">
+                    <div class="checklist-header">
+                        <div class="checklist-title">☀️ Summer Preparation</div>
+                        <div class="checklist-progress" id="progress-summer-prep">0/7</div>
+                    </div>
+                    <div class="checklist-items" id="checklist-summer-prep"></div>
+                    <button class="checklist-reset" onclick="resetChecklist('summer-prep')">Reset</button>
+                </div>
+            </div>
+
+            <h3 class="checklist-section-title">Boss Preparation</h3>
+            <div class="checklists-container">
+                <!-- Deerclops Kit -->
+                <div class="checklist-card boss" data-checklist="deerclops">
+                    <div class="checklist-header">
+                        <div class="checklist-title">👁️ Deerclops Kit</div>
+                        <div class="checklist-progress" id="progress-deerclops">0/6</div>
+                    </div>
+                    <div class="checklist-items" id="checklist-deerclops"></div>
+                    <button class="checklist-reset" onclick="resetChecklist('deerclops')">Reset</button>
+                </div>
+
+                <!-- Dragonfly Kit -->
+                <div class="checklist-card boss" data-checklist="dragonfly">
+                    <div class="checklist-header">
+                        <div class="checklist-title">🔥 Dragonfly Kit</div>
+                        <div class="checklist-progress" id="progress-dragonfly">0/7</div>
+                    </div>
+                    <div class="checklist-items" id="checklist-dragonfly"></div>
+                    <button class="checklist-reset" onclick="resetChecklist('dragonfly')">Reset</button>
+                </div>
+
+                <!-- Bearger Kit -->
+                <div class="checklist-card boss" data-checklist="bearger">
+                    <div class="checklist-header">
+                        <div class="checklist-title">🐻 Bearger Kit</div>
+                        <div class="checklist-progress" id="progress-bearger">0/5</div>
+                    </div>
+                    <div class="checklist-items" id="checklist-bearger"></div>
+                    <button class="checklist-reset" onclick="resetChecklist('bearger')">Reset</button>
+                </div>
+
+                <!-- Moose/Goose Kit -->
+                <div class="checklist-card boss" data-checklist="moosegoose">
+                    <div class="checklist-header">
+                        <div class="checklist-title">🦆 Moose/Goose Kit</div>
+                        <div class="checklist-progress" id="progress-moosegoose">0/5</div>
+                    </div>
+                    <div class="checklist-items" id="checklist-moosegoose"></div>
+                    <button class="checklist-reset" onclick="resetChecklist('moosegoose')">Reset</button>
+                </div>
+            </div>
+
+            <h3 class="checklist-section-title">Base Building</h3>
+            <div class="checklists-container">
+                <!-- Essential Base -->
+                <div class="checklist-card base" data-checklist="essential-base">
+                    <div class="checklist-header">
+                        <div class="checklist-title">🏠 Essential Base</div>
+                        <div class="checklist-progress" id="progress-essential-base">0/10</div>
+                    </div>
+                    <div class="checklist-items" id="checklist-essential-base"></div>
+                    <button class="checklist-reset" onclick="resetChecklist('essential-base')">Reset</button>
+                </div>
+
+                <!-- Advanced Base -->
+                <div class="checklist-card base" data-checklist="advanced-base">
+                    <div class="checklist-header">
+                        <div class="checklist-title">🏰 Advanced Base</div>
+                        <div class="checklist-progress" id="progress-advanced-base">0/10</div>
+                    </div>
+                    <div class="checklist-items" id="checklist-advanced-base"></div>
+                    <button class="checklist-reset" onclick="resetChecklist('advanced-base')">Reset</button>
+                </div>
+
+                <!-- Food Production -->
+                <div class="checklist-card base" data-checklist="food-production">
+                    <div class="checklist-header">
+                        <div class="checklist-title">🥕 Food Production</div>
+                        <div class="checklist-progress" id="progress-food-production">0/8</div>
+                    </div>
+                    <div class="checklist-items" id="checklist-food-production"></div>
+                    <button class="checklist-reset" onclick="resetChecklist('food-production')">Reset</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal" id="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title"></h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <script>
+        // =====================================
+        // DON'T STARVE TOGETHER DATA
+        // =====================================
+
+        const RECIPES = [
+            // ESSENTIAL RECIPES
+            {
+                name: 'Meatballs',
+                tier: 'essential',
+                health: 3,
+                hunger: 62.5,
+                sanity: 5,
+                spoilTime: 10,
+                ingredients: '1 Meat + 3 Fillers (no Twigs)',
+                examples: ['1 Monster Meat + 3 Ice', '1 Morsel + 3 Berries', '1 Meat + 3 Mushrooms'],
+                notes: 'Most versatile recipe. Works with any meat type.',
+                priority: -1
+            },
+            {
+                name: 'Meaty Stew',
+                tier: 'essential',
+                health: 12,
+                hunger: 150,
+                sanity: 5,
+                spoilTime: 10,
+                ingredients: '3.0+ Meat value (no Inedible)',
+                examples: ['3 Meat + 1 Filler', '1 Monster Meat + 2 Meat + 1 Ice'],
+                notes: 'Fills entire hunger bar. Best eaten when very hungry.',
+                priority: 0
+            },
+            {
+                name: 'Pierogi',
+                tier: 'essential',
+                health: 40,
+                hunger: 37.5,
+                sanity: 5,
+                spoilTime: 20,
+                ingredients: '1 Egg + 1 Meat + 0.5 Vegetable (no Twigs)',
+                examples: ['1 Egg + 1 Morsel + 1 Carrot + 1 Filler'],
+                notes: 'Great health restoration with good hunger. Long spoil time.',
+                priority: 5
+            },
+            {
+                name: 'Bacon and Eggs',
+                tier: 'essential',
+                health: 20,
+                hunger: 75,
+                sanity: 5,
+                spoilTime: 20,
+                ingredients: '1.5+ Meat + 2.0+ Eggs (no Vegetable)',
+                examples: ['2 Meat + 2 Eggs', '1 Meat + 1 Morsel + 2 Eggs'],
+                notes: 'Longest spoil time (20 days). Great for expeditions.',
+                priority: 10
+            },
+            {
+                name: 'Honey Ham',
+                tier: 'essential',
+                health: 30,
+                hunger: 75,
+                sanity: 5,
+                spoilTime: 15,
+                ingredients: '2.0+ Meat + 1 Honey (no Twigs)',
+                examples: ['2 Meat + 1 Honey + 1 Filler'],
+                notes: 'Good balance of all stats. Requires Honey from Bee Boxes.',
+                priority: 2
+            },
+            {
+                name: 'Dragonpie',
+                tier: 'essential',
+                health: 40,
+                hunger: 75,
+                sanity: 5,
+                spoilTime: 15,
+                ingredients: '1 Dragon Fruit (no Meat)',
+                examples: ['1 Dragon Fruit + 3 Twigs'],
+                notes: 'Best value recipe. Requires farming Dragon Fruit.',
+                priority: 1
+            },
+
+            // GREAT RECIPES
+            {
+                name: 'Fish Sticks',
+                tier: 'great',
+                health: 40,
+                hunger: 37.5,
+                sanity: 5,
+                spoilTime: 10,
+                ingredients: '0.5+ Fish + 1 Twig + 1 Filler (no Inedible)',
+                examples: ['1 Fish + 1 Twig + 2 Fillers'],
+                notes: 'Good healing if you have fish access.',
+                priority: 10
+            },
+            {
+                name: 'Surf \'n\' Turf',
+                tier: 'great',
+                health: 60,
+                hunger: 37.5,
+                sanity: 33,
+                spoilTime: 10,
+                ingredients: '2.5+ Meat + 1.5+ Fish (no Inedibles)',
+                examples: ['2 Meat + 1 Morsel + 1 Fish', '2 Eels + 2 Monster Meat'],
+                notes: 'Best all-around dish. Restores health, hunger, and sanity.',
+                priority: 30
+            },
+            {
+                name: 'Trail Mix',
+                tier: 'great',
+                health: 30,
+                hunger: 12.5,
+                sanity: 5,
+                spoilTime: 15,
+                ingredients: '1 Roasted Birchnut + 1 Berry + 0.5+ Fruit (no Meat/Vegetable/Eggs/Dairy)',
+                examples: ['1 Roasted Birchnut + 1 Berry + 2 Berries'],
+                notes: 'Early game healing. Birchnut must be roasted first.',
+                priority: 0
+            },
+            {
+                name: 'Bunny Stew',
+                tier: 'great',
+                health: 20,
+                hunger: 37.5,
+                sanity: 5,
+                spoilTime: 10,
+                ingredients: '1.0+ Meat (no Monster) + 2 Ice (no Twigs/Inedibles)',
+                examples: ['1 Morsel + 3 Ice', '1 Frog Legs + 3 Ice'],
+                notes: 'Great for Winter. Uses abundant Ice.',
+                priority: 1
+            },
+            {
+                name: 'Taffy',
+                tier: 'great',
+                health: -3,
+                hunger: 25,
+                sanity: 15,
+                spoilTime: 15,
+                ingredients: '3 Honey (no Meat)',
+                examples: ['3 Honey + 1 Twig'],
+                notes: 'Best sanity restoration from Honey. Slight health loss.',
+                priority: 10
+            },
+            {
+                name: 'Ice Cream',
+                tier: 'great',
+                health: 0,
+                hunger: 25,
+                sanity: 50,
+                spoilTime: 3,
+                ingredients: '1 Dairy + 1 Ice + 1 Sweetener (no Meat/Eggs/Vegetables/Twigs)',
+                examples: ['1 Butter + 1 Ice + 2 Honey'],
+                notes: 'Best sanity food. Short spoil time. Provides cooling.',
+                priority: 10
+            },
+            {
+                name: 'Wobster Dinner',
+                tier: 'great',
+                health: 60,
+                hunger: 37.5,
+                sanity: 50,
+                spoilTime: 10,
+                ingredients: '1 Wobster + 1 Butter',
+                examples: ['1 Wobster + 1 Butter + 2 Twigs'],
+                notes: 'Excellent mid-game dish. Requires Wobster fishing.',
+                priority: 25
+            },
+
+            // GOOD RECIPES
+            {
+                name: 'Butter Muffin',
+                tier: 'good',
+                health: 20,
+                hunger: 37.5,
+                sanity: 5,
+                spoilTime: 15,
+                ingredients: '1 Butterfly Wing + 0.5+ Vegetable (no Meat)',
+                examples: ['1 Butterfly Wing + 1 Mushroom + 2 Twigs'],
+                notes: 'Easy early game dish. Butterflies are common.',
+                priority: 1
+            },
+            {
+                name: 'Froggle Bunwich',
+                tier: 'good',
+                health: 20,
+                hunger: 37.5,
+                sanity: 5,
+                spoilTime: 15,
+                ingredients: '1 Frog Legs + 0.5+ Vegetable',
+                examples: ['1 Frog Legs + 1 Carrot + 2 Twigs'],
+                notes: 'Uses Frog Legs efficiently.',
+                priority: 1
+            },
+            {
+                name: 'Honey Nuggets',
+                tier: 'good',
+                health: 20,
+                hunger: 37.5,
+                sanity: 5,
+                spoilTime: 15,
+                ingredients: '1 Honey + 0.5+ Meat (no Twigs/Inedibles)',
+                examples: ['1 Honey + 1 Morsel + 2 Berries'],
+                notes: 'Good if you have excess Honey.',
+                priority: 2
+            },
+            {
+                name: 'Kabobs',
+                tier: 'good',
+                health: 3,
+                hunger: 37.5,
+                sanity: 5,
+                spoilTime: 15,
+                ingredients: '0.5+ Meat + 1 Twig (no Monster)',
+                examples: ['1 Morsel + 1 Twig + 2 Fillers'],
+                notes: 'Uses Twigs as filler. Lower hunger than Meatballs.',
+                priority: 5
+            },
+            {
+                name: 'Ratatouille',
+                tier: 'good',
+                health: 3,
+                hunger: 25,
+                sanity: 5,
+                spoilTime: 15,
+                ingredients: '0.5+ Vegetable (no Meat/Twigs/Inedibles)',
+                examples: ['4 Mushrooms', '2 Carrots + 2 Mushrooms'],
+                notes: 'Vegetable-only dish. Less efficient than eating raw.',
+                priority: 0
+            },
+            {
+                name: 'Tall Scotch Eggs',
+                tier: 'good',
+                health: 60,
+                hunger: 150,
+                sanity: 5,
+                spoilTime: 20,
+                ingredients: '1 Tallbird Egg + 0.5+ Vegetable',
+                examples: ['1 Tallbird Egg + 1 Carrot + 2 Fillers'],
+                notes: 'Massive stats. Requires stealing Tallbird Egg.',
+                priority: 10
+            },
+            {
+                name: 'Waffles',
+                tier: 'good',
+                health: 60,
+                hunger: 37.5,
+                sanity: 5,
+                spoilTime: 6,
+                ingredients: '1 Butter + 1 Berry + 1 Egg',
+                examples: ['1 Butter + 1 Berry + 1 Egg + 1 Filler'],
+                notes: 'Best health food. Requires Butter (rare).',
+                priority: 10
+            },
+            {
+                name: 'Mandrake Soup',
+                tier: 'good',
+                health: 100,
+                hunger: 150,
+                sanity: 5,
+                spoilTime: 6,
+                ingredients: '1 Mandrake',
+                examples: ['1 Mandrake + 3 Fillers'],
+                notes: 'Incredible stats but Mandrakes are very rare (2-4 per world).',
+                priority: 10
+            }
+        ];
+
+        const PROGRESSION = [
+            {
+                day: 'Days 1-5',
+                title: 'Exploration & Basic Setup',
+                tasks: [
+                    'Gather resources: Grass, Twigs, Flint, Logs',
+                    'Find Gold (Rock biome or Graveyard)',
+                    'Explore and map the world',
+                    'Pick Berries and Carrots for food',
+                    'Make Axe, Pickaxe, and Torch',
+                    'Find a good base location (near resources)'
+                ]
+            },
+            {
+                day: 'Days 6-10',
+                title: 'Base Establishment',
+                tasks: [
+                    'Build Science Machine',
+                    'Build Fire Pit at your base location',
+                    'Build Alchemy Engine',
+                    'Build Crock Pot',
+                    'Build Lightning Rod',
+                    'Start Berry Bush transplanting',
+                    'Build Chest storage'
+                ]
+            },
+            {
+                day: 'Days 11-15',
+                title: 'Winter Preparation',
+                tasks: [
+                    'Craft Thermal Stone',
+                    'Build Ice Box (needs Gears from Clockworks)',
+                    'Gather 40+ Grass, 40+ Twigs',
+                    'Stock food in Ice Box',
+                    'Build Drying Racks for jerky',
+                    'Optional: Build Bee Boxes'
+                ]
+            },
+            {
+                day: 'Days 16-20',
+                title: 'Final Autumn Tasks',
+                tasks: [
+                    'Ensure food supply for Winter',
+                    'Craft warm clothing (Beefalo Hat, Winter Hat)',
+                    'Find Walrus Camp locations',
+                    'Explore caves entrance (optional)',
+                    'Gather Silk for Bug Net and Tents'
+                ]
+            },
+            {
+                day: 'Days 21-35 (Winter)',
+                title: 'Surviving Winter',
+                tasks: [
+                    'Stay warm near fire or with Thermal Stone',
+                    'Hunt Koalefant for Trunk',
+                    'Hunt Walrus for Tam o\' Shanter and Walking Cane',
+                    'Avoid Deerclops (spawns around Day 30)',
+                    'Ice fishing if needed',
+                    'Collect Ice for Ice Box refills'
+                ]
+            },
+            {
+                day: 'Days 36-55 (Spring)',
+                title: 'Spring Activities',
+                tasks: [
+                    'Craft Umbrella or Eyebrella for rain',
+                    'Avoid Frog Rain (dangerous)',
+                    'Fight Moose/Goose for feathers',
+                    'Plant farms and crops',
+                    'Expand base infrastructure',
+                    'Explore caves'
+                ]
+            },
+            {
+                day: 'Days 56-70 (Summer)',
+                title: 'Surviving Summer',
+                tasks: [
+                    'Build Endothermic Fire Pit',
+                    'Build Ice Flingomatic to prevent fires',
+                    'Stay cool with Thermal Stone (in Ice Box)',
+                    'Fashion Melon Hat or Floral Shirt',
+                    'Underground exploration (caves are cooler)',
+                    'Avoid/fight Dragonfly'
+                ]
+            },
+            {
+                day: 'Year 2+',
+                title: 'Long-term Goals',
+                tasks: [
+                    'Fight seasonal bosses for loot',
+                    'Explore Ruins for Ancient crafting',
+                    'Defeat Ancient Guardian',
+                    'Unlock Shadow Manipulator',
+                    'Build Bee Queen arena',
+                    'Progress toward Celestial Champion'
+                ]
+            }
+        ];
+
+        const SEASONS = [
+            {
+                name: 'Autumn',
+                color: 'autumn',
+                days: 'Days 1-20 (20 days)',
+                temp: 'Mild',
+                boss: 'Bearger (Year 2+)',
+                dangers: ['Bearger destroys structures', 'Hound attacks'],
+                tips: ['Best time to explore', 'Gather resources', 'Build base', 'No temperature management needed'],
+                prep: ['Stock food', 'Build structures', 'Find important biomes']
+            },
+            {
+                name: 'Winter',
+                color: 'winter',
+                days: 'Days 21-35 (15 days)',
+                temp: 'Very Cold',
+                boss: 'Deerclops (Day 30)',
+                dangers: ['Freezing damage', 'Deerclops destroys structures', 'No plant growth'],
+                tips: ['Keep Thermal Stone warm', 'Stay near fires', 'Hunt for food'],
+                prep: ['Thermal Stone', 'Winter Hat/Beefalo Hat', 'Food stockpile', 'Fire near base']
+            },
+            {
+                name: 'Spring',
+                color: 'spring',
+                days: 'Days 36-55 (20 days)',
+                temp: 'Cool',
+                boss: 'Moose/Goose',
+                dangers: ['Constant rain', 'Frog Rain', 'Bees aggressive', 'Wetness reduces sanity'],
+                tips: ['Carry Umbrella', 'Eyebrella best item', 'Avoid Frog Rain'],
+                prep: ['Umbrella or Eyebrella', 'Rain Hat', 'Tent for sanity']
+            },
+            {
+                name: 'Summer',
+                color: 'summer',
+                days: 'Days 56-70 (15 days)',
+                temp: 'Very Hot',
+                boss: 'Dragonfly (in desert)',
+                dangers: ['Overheating', 'Spontaneous fires', 'Drought'],
+                tips: ['Cool Thermal Stone in Ice Box', 'Stay underground', 'Endothermic fires'],
+                prep: ['Endothermic Fire Pit', 'Ice Flingomatic', 'Cooling items']
+            }
+        ];
+
+        const BOSSES = [
+            // Seasonal Bosses
+            {
+                name: 'Deerclops',
+                type: 'seasonal',
+                season: 'Winter',
+                health: 4000,
+                damage: 75,
+                loot: ['Deerclops Eyeball', 'Meat x8'],
+                strategy: 'Spawns around Day 30. Kite with 3-4 hits. Destroys structures.',
+                tips: 'Lead away from base before fighting. Can make Eyebrella.'
+            },
+            {
+                name: 'Moose/Goose',
+                type: 'seasonal',
+                season: 'Spring',
+                health: 3000,
+                damage: 75,
+                loot: ['Feathers', 'Meat x6', 'Moslings (if eggs)'],
+                strategy: 'Stationary near nest. Kite 2-3 hits. Watch for Moslings.',
+                tips: 'Kill for Weather Pain crafting. Docile unless provoked.'
+            },
+            {
+                name: 'Dragonfly',
+                type: 'seasonal',
+                season: 'Summer',
+                health: 27500,
+                damage: 150,
+                loot: ['Scales', 'Meat x8'],
+                strategy: 'Very tough. Use walls to control. Watch for enrage phase.',
+                tips: 'Found in Desert. Scales make Scalemail. Optional fight.'
+            },
+            {
+                name: 'Bearger',
+                type: 'seasonal',
+                season: 'Autumn (Year 2+)',
+                health: 6000,
+                damage: 60,
+                loot: ['Thick Fur', 'Meat x8'],
+                strategy: 'Kite 4 hits. Drops items on hit. Ground pound attack.',
+                tips: 'Avoid near base - destroys everything. Fur makes Hibernation Vest.'
+            },
+            // Cave Bosses
+            {
+                name: 'Ancient Guardian',
+                type: 'cave',
+                season: 'Any',
+                health: 10000,
+                damage: 100,
+                loot: ['Guardian\'s Horn', 'Ancient Key', 'Thulecite'],
+                strategy: 'Dodge charge, hit during stun. Use walls.',
+                tips: 'In Labyrinth. Drops Ancient Key to reset Ruins.'
+            },
+            {
+                name: 'Toadstool',
+                type: 'cave',
+                season: 'Any',
+                health: 52500,
+                damage: 130,
+                loot: ['Shroom Skin', 'Toadstool Cap'],
+                strategy: 'Destroy Mushroom trees. Very long fight.',
+                tips: 'One of the hardest bosses. Optional.'
+            },
+            // Summonable Bosses
+            {
+                name: 'Bee Queen',
+                type: 'summon',
+                season: 'Any',
+                health: 22500,
+                damage: 120,
+                loot: ['Bundling Wrap Blueprint', 'Bee Queen Crown', 'Royal Jelly'],
+                strategy: 'Kill Grumble Bees first. Kite carefully.',
+                tips: 'Hammer large Beehive in Grassland. Bundling Wrap very useful.'
+            },
+            {
+                name: 'Klaus',
+                type: 'summon',
+                season: 'Winter',
+                health: 10000,
+                damage: 75,
+                loot: ['Klaus Sack (loot)', 'Stag Antler'],
+                strategy: 'Kill Gem Deer first. Two phases.',
+                tips: 'Need Deer Antler at Loot Stash. Great rewards.'
+            },
+            {
+                name: 'Ancient Fuelweaver',
+                type: 'summon',
+                season: 'Any',
+                health: 16000,
+                damage: 100,
+                loot: ['Shadow Thurible', 'Bone Armor'],
+                strategy: 'Complex fight. Need to understand mechanics.',
+                tips: 'Requires Shadow Pieces and Ancient Guardian defeated first.'
+            },
+            {
+                name: 'Crab King',
+                type: 'summon',
+                season: 'Any (Ocean)',
+                health: 'Varies',
+                damage: 'Varies',
+                loot: ['Celestial Tribute (with Pearl)'],
+                strategy: 'Socket 9 gems. Fight on boat. Difficulty scales with gems.',
+                tips: 'Required for Celestial Champion progression.'
+            },
+            {
+                name: 'Celestial Champion',
+                type: 'summon',
+                season: 'Any',
+                health: 'Multi-phase',
+                damage: 'High',
+                loot: ['End-game items'],
+                strategy: '3 phases with different mechanics.',
+                tips: 'Final boss. Requires extensive preparation.'
+            }
+        ];
+
+        const CHARACTERS = [
+            // S-Tier
+            { name: 'Wolfgang', tier: 'S', health: 200, hunger: 200, sanity: 200, perk: 'Gains massive damage when well-fed (up to 2x)', role: 'Combat', difficulty: 'Medium' },
+            { name: 'Wickerbottom', tier: 'S', health: 150, hunger: 150, sanity: 250, perk: 'Crafts magical books. Can\'t sleep.', role: 'Support/Utility', difficulty: 'Hard' },
+            { name: 'WX-78', tier: 'S', health: 150, hunger: 150, sanity: 150, perk: 'Upgrades with Gears. Lightning overcharge.', role: 'Flexible', difficulty: 'Medium' },
+            { name: 'Maxwell', tier: 'S', health: 75, hunger: 150, sanity: 200, perk: 'Shadow puppets for resource gathering', role: 'Resource Gathering', difficulty: 'Hard' },
+            
+            // A-Tier
+            { name: 'Wigfrid', tier: 'A', health: 200, hunger: 120, sanity: 120, perk: 'Heals on hit. Meat only diet.', role: 'Combat', difficulty: 'Easy' },
+            { name: 'Wendy', tier: 'A', health: 150, hunger: 150, sanity: 200, perk: 'Ghost sister Abigail fights for her', role: 'Combat/Farming', difficulty: 'Easy' },
+            { name: 'Wortox', tier: 'A', health: 150, hunger: 175, sanity: 150, perk: 'Souls for healing/teleport. Half food value.', role: 'Support', difficulty: 'Medium' },
+            { name: 'Warly', tier: 'A', health: 150, hunger: 250, sanity: 200, perk: 'Portable crock pot. Special spices.', role: 'Support/Food', difficulty: 'Hard' },
+            { name: 'Wanda', tier: 'A', health: 'Age', hunger: 175, sanity: 200, perk: 'Time magic. Age = health.', role: 'Combat', difficulty: 'Very Hard' },
+            { name: 'Webber', tier: 'A', health: 175, hunger: 175, sanity: 100, perk: 'Befriends spiders. Grows beard.', role: 'Resource/Combat', difficulty: 'Medium' },
+            
+            // B-Tier
+            { name: 'Wilson', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Grows beard for warmth and Meat Effigy', role: 'Balanced', difficulty: 'Easy' },
+            { name: 'Woodie', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Lucy axe. Were-transformations.', role: 'Resource Gathering', difficulty: 'Medium' },
+            { name: 'Wormwood', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Plant crops without tools. Can\'t heal from food.', role: 'Farming', difficulty: 'Hard' },
+            { name: 'Winona', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Builds Catapults and Spotlights', role: 'Building', difficulty: 'Medium' },
+            { name: 'Wurt', tier: 'B', health: 150, hunger: 200, sanity: 150, perk: 'Befriends Merms. Vegetarian.', role: 'Army Building', difficulty: 'Hard' },
+            { name: 'Walter', tier: 'B', health: 130, hunger: 110, sanity: 200, perk: 'Slingshot. Dog companion Woby.', role: 'Ranged Combat', difficulty: 'Medium' },
+            { name: 'Willow', tier: 'B', health: 150, hunger: 150, sanity: 120, perk: 'Fire immunity. Bernie bear.', role: 'Situational', difficulty: 'Easy' },
+            
+            // Challenge Tier
+            { name: 'Wes', tier: 'C', health: 113, hunger: 113, sanity: 150, perk: 'Challenge character. 25% less damage, 25% more hunger drain.', role: 'Challenge', difficulty: 'Very Hard' }
+        ];
+
+        const CRAFTING = [
+            // Structures
+            { name: 'Science Machine', type: 'structures', recipe: '1 Gold + 4 Logs + 4 Rocks', station: 'None', desc: 'Tier 1 prototyping. Build first.' },
+            { name: 'Alchemy Engine', type: 'structures', recipe: '4 Boards + 2 Cut Stone + 2 Electrical Doodads', station: 'Science Machine', desc: 'Tier 2 prototyping. Essential for progression.' },
+            { name: 'Fire Pit', type: 'structures', recipe: '2 Logs + 12 Rocks', station: 'Science Machine', desc: 'Permanent fire. Place at base.' },
+            { name: 'Crock Pot', type: 'structures', recipe: '3 Cut Stone + 6 Charcoal + 6 Twigs', station: 'Science Machine', desc: 'Cook advanced recipes. Essential.' },
+            { name: 'Ice Box', type: 'structures', recipe: '1 Gear + 1 Gold + 4 Boards', station: 'Alchemy Engine', desc: 'Slows food spoilage. Get Gears from Clockworks.' },
+            { name: 'Lightning Rod', type: 'structures', recipe: '1 Gold + 4 Cut Stone', station: 'Science Machine', desc: 'Prevents fire from lightning. Build near base.' },
+            { name: 'Chest', type: 'structures', recipe: '3 Boards', station: 'Science Machine', desc: 'Storage. Build many.' },
+            { name: 'Drying Rack', type: 'structures', recipe: '3 Twigs + 2 Charcoal + 3 Rope', station: 'Science Machine', desc: 'Makes Jerky. Long-lasting food.' },
+            { name: 'Bird Cage', type: 'structures', recipe: '2 Papyrus + 6 Gold + 2 Seeds', station: 'Science Machine', desc: 'Trade meat for eggs. Essential.' },
+            { name: 'Bee Box', type: 'structures', recipe: '1 Honeycomb + 4 Boards + 2 Bees', station: 'Science Machine', desc: 'Produces Honey. Very useful.' },
+            
+            // Tools
+            { name: 'Axe', type: 'tools', recipe: '1 Flint + 1 Twig', station: 'None', desc: 'Chop trees. Basic tool.' },
+            { name: 'Pickaxe', type: 'tools', recipe: '2 Flint + 2 Twigs', station: 'None', desc: 'Mine rocks. Basic tool.' },
+            { name: 'Shovel', type: 'tools', recipe: '2 Flint + 2 Twigs', station: 'Science Machine', desc: 'Dig up plants to transplant.' },
+            { name: 'Hammer', type: 'tools', recipe: '3 Rocks + 3 Twigs + 2 Cut Grass', station: 'Science Machine', desc: 'Destroy structures for resources.' },
+            { name: 'Fishing Rod', type: 'tools', recipe: '2 Twigs + 2 Silk', station: 'Science Machine', desc: 'Catch fish from ponds.' },
+            { name: 'Bug Net', type: 'tools', recipe: '4 Twigs + 2 Silk + 1 Rope', station: 'Science Machine', desc: 'Catch butterflies and bees.' },
+            
+            // Survival
+            { name: 'Thermal Stone', type: 'survival', recipe: '10 Rocks + 1 Pickaxe + 3 Flint', station: 'Science Machine', desc: 'Stores heat/cold. Essential for temperature.' },
+            { name: 'Backpack', type: 'survival', recipe: '4 Cut Grass + 4 Twigs', station: 'Science Machine', desc: '+8 inventory slots. Always carry.' },
+            { name: 'Umbrella', type: 'survival', recipe: '6 Twigs + 1 Pig Skin + 2 Silk', station: 'Science Machine', desc: 'Blocks rain. Essential for Spring.' },
+            { name: 'Tent', type: 'survival', recipe: '6 Silk + 4 Twigs + 3 Rope', station: 'Science Machine', desc: 'Sleep to restore health and sanity.' },
+            { name: 'Torch', type: 'survival', recipe: '2 Cut Grass + 2 Twigs', station: 'None', desc: 'Portable light. Always have one.' },
+            { name: 'Lantern', type: 'survival', recipe: '2 Light Bulbs + 3 Twigs + 2 Rope', station: 'Alchemy Engine', desc: 'Better portable light. Uses Light Bulbs.' },
+            
+            // Magic
+            { name: 'Prestihatitator', type: 'magic', recipe: '4 Rabbits + 4 Boards + 1 Top Hat', station: 'Alchemy Engine', desc: 'Tier 1 magic crafting.' },
+            { name: 'Shadow Manipulator', type: 'magic', recipe: '3 Living Logs + 7 Nightmare Fuel + 1 Purple Gem', station: 'Prestihatitator', desc: 'Tier 2 magic crafting.' },
+            { name: 'Meat Effigy', type: 'magic', recipe: '4 Boards + 4 Beard Hair + 4 Meat', station: 'Prestihatitator', desc: 'Resurrection. -30 max health while active.' },
+            { name: 'Pan Flute', type: 'magic', recipe: '5 Cut Reeds + 1 Mandrake + 1 Rope', station: 'Prestihatitator', desc: 'Puts nearby creatures to sleep.' }
+        ];
+
+        // =====================================
+        // APPLICATION LOGIC
+        // =====================================
+
+        // Navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Render Recipes
+        function renderRecipes(tierFilter = 'all', search = '', sortBy = null) {
+            const grid = document.getElementById('recipe-grid');
+            let filtered = RECIPES.filter(recipe => {
+                const tierMatch = tierFilter === 'all' || recipe.tier === tierFilter;
+                const searchMatch = search === '' || 
+                    recipe.name.toLowerCase().includes(search.toLowerCase()) ||
+                    recipe.ingredients.toLowerCase().includes(search.toLowerCase());
+                return tierMatch && searchMatch;
+            });
+
+            if (sortBy) {
+                filtered.sort((a, b) => b[sortBy] - a[sortBy]);
+            }
+
+            grid.innerHTML = filtered.map(recipe => `
+                <div class="recipe-card" onclick="showRecipeModal('${recipe.name}')">
+                    <div class="recipe-header">
+                        <span class="recipe-name">${recipe.name}</span>
+                        <span class="recipe-tier tier-${recipe.tier}">${recipe.tier.charAt(0).toUpperCase() + recipe.tier.slice(1)}</span>
+                    </div>
+                    <div class="recipe-stats">
+                        <span class="stat stat-health">❤️ ${recipe.health >= 0 ? '+' : ''}${recipe.health}</span>
+                        <span class="stat stat-hunger">🍖 +${recipe.hunger}</span>
+                        <span class="stat stat-sanity">🧠 +${recipe.sanity}</span>
+                        <span class="stat">📦 ${recipe.spoilTime}d</span>
+                    </div>
+                    <div class="recipe-ingredients"><strong>Recipe:</strong> ${recipe.ingredients}</div>
+                    <div class="recipe-notes">${recipe.notes}</div>
+                </div>
+            `).join('');
+        }
+
+        function showRecipeModal(recipeName) {
+            const recipe = RECIPES.find(r => r.name === recipeName);
+            if (!recipe) return;
+
+            document.getElementById('modal-title').textContent = recipe.name;
+            document.getElementById('modal-body').innerHTML = `
+                <div class="modal-section">
+                    <h4>Stats</h4>
+                    <div class="recipe-stats" style="justify-content: flex-start;">
+                        <span class="stat stat-health">❤️ Health: ${recipe.health >= 0 ? '+' : ''}${recipe.health}</span>
+                        <span class="stat stat-hunger">🍖 Hunger: +${recipe.hunger}</span>
+                        <span class="stat stat-sanity">🧠 Sanity: +${recipe.sanity}</span>
+                        <span class="stat">📦 Spoil: ${recipe.spoilTime} days</span>
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <h4>Recipe Requirements</h4>
+                    <p>${recipe.ingredients}</p>
+                </div>
+                <div class="modal-section">
+                    <h4>Example Combinations</h4>
+                    <ul>
+                        ${recipe.examples.map(ex => `<li>${ex}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="modal-section">
+                    <h4>Notes</h4>
+                    <p>${recipe.notes}</p>
+                </div>
+                <div class="modal-section">
+                    <h4>Priority</h4>
+                    <p>Recipe Priority: ${recipe.priority} (higher = more likely to be chosen over other valid recipes)</p>
+                </div>
+            `;
+            document.getElementById('modal-overlay').classList.add('active');
+        }
+
+        // Render Progression
+        function renderProgression() {
+            const timeline = document.getElementById('progression-timeline');
+            timeline.innerHTML = PROGRESSION.map(phase => `
+                <div class="timeline-item">
+                    <div class="timeline-day">${phase.day}</div>
+                    <div class="timeline-title">${phase.title}</div>
+                    <div class="timeline-content">
+                        <ul>
+                            ${phase.tasks.map(task => `<li>${task}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Seasons
+        function renderSeasons() {
+            const grid = document.getElementById('season-grid');
+            grid.innerHTML = SEASONS.map(season => `
+                <div class="season-card season-${season.color}">
+                    <div class="season-header">
+                        <span class="season-name">${season.name}</span>
+                        <span class="season-days">${season.days}</span>
+                    </div>
+                    <div class="season-content">
+                        <p><strong>Temperature:</strong> ${season.temp}</p>
+                        <p><strong>Boss:</strong> ${season.boss}</p>
+                        
+                        <h4>⚠️ Dangers</h4>
+                        <ul>${season.dangers.map(d => `<li>${d}</li>`).join('')}</ul>
+                        
+                        <h4>💡 Tips</h4>
+                        <ul>${season.tips.map(t => `<li>${t}</li>`).join('')}</ul>
+                        
+                        <h4>🎒 Preparation</h4>
+                        <ul>${season.prep.map(p => `<li>${p}</li>`).join('')}</ul>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Bosses
+        function renderBosses(typeFilter = 'all') {
+            const grid = document.getElementById('boss-grid');
+            const filtered = BOSSES.filter(boss => typeFilter === 'all' || boss.type === typeFilter);
+
+            grid.innerHTML = filtered.map(boss => `
+                <div class="boss-card">
+                    <div class="boss-header">
+                        <span class="boss-name">${boss.name}</span>
+                        <span class="boss-type">${boss.type} ${boss.season ? `(${boss.season})` : ''}</span>
+                    </div>
+                    <div class="boss-stats">
+                        <span class="boss-health">❤️ ${boss.health}</span>
+                        <span class="boss-damage">⚔️ ${boss.damage} dmg</span>
+                    </div>
+                    <div class="boss-loot"><strong>Loot:</strong> ${boss.loot.join(', ')}</div>
+                    <div class="boss-tips"><strong>Strategy:</strong> ${boss.strategy}</div>
+                    <div class="boss-tips"><strong>Tips:</strong> ${boss.tips}</div>
+                </div>
+            `).join('');
+        }
+
+        // Render Characters
+        function renderCharacters(tierFilter = 'all', search = '') {
+            const grid = document.getElementById('character-grid');
+            const filtered = CHARACTERS.filter(char => {
+                const tierMatch = tierFilter === 'all' || char.tier === tierFilter;
+                const searchMatch = search === '' || 
+                    char.name.toLowerCase().includes(search.toLowerCase()) ||
+                    char.role.toLowerCase().includes(search.toLowerCase());
+                return tierMatch && searchMatch;
+            });
+
+            grid.innerHTML = filtered.map(char => `
+                <div class="character-card">
+                    <div class="character-header">
+                        <span class="character-name">${char.name}</span>
+                        <span class="character-tier tier-${char.tier === 'S' ? 'essential' : char.tier === 'A' ? 'great' : char.tier === 'B' ? 'good' : 'niche'}">${char.tier}-Tier</span>
+                    </div>
+                    <div class="character-stats">
+                        <span class="stat stat-health">❤️ ${char.health}</span>
+                        <span class="stat stat-hunger">🍖 ${char.hunger}</span>
+                        <span class="stat stat-sanity">🧠 ${char.sanity}</span>
+                    </div>
+                    <div class="character-perk"><strong>Perk:</strong> ${char.perk}</div>
+                    <div>
+                        <span class="character-role">${char.role}</span>
+                        <span class="character-role" style="margin-left: 0.5rem;">Difficulty: ${char.difficulty}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render Crafting
+        function renderCrafting(typeFilter = 'all') {
+            const grid = document.getElementById('crafting-grid');
+            const filtered = CRAFTING.filter(item => typeFilter === 'all' || item.type === typeFilter);
+
+            grid.innerHTML = filtered.map(item => `
+                <div class="crafting-card">
+                    <div class="crafting-name">${item.name}</div>
+                    <div class="crafting-recipe"><strong>Recipe:</strong> ${item.recipe}</div>
+                    <div class="crafting-station"><strong>Station:</strong> ${item.station}</div>
+                    <div class="crafting-desc">${item.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        // Event Listeners
+        document.querySelectorAll('.recipe-filter').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.recipe-filter').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.stat-filter').forEach(b => b.classList.remove('active'));
+                renderRecipes(btn.dataset.tier, document.getElementById('recipe-search').value);
+            });
+        });
+
+        document.querySelectorAll('.stat-filter').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.stat-filter').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.recipe-filter').forEach(b => b.classList.remove('active'));
+                document.querySelector('.recipe-filter[data-tier="all"]').classList.add('active');
+                btn.classList.add('active');
+                renderRecipes('all', document.getElementById('recipe-search').value, btn.dataset.stat);
+            });
+        });
+
+        document.getElementById('recipe-search').addEventListener('input', (e) => {
+            const activeTier = document.querySelector('.recipe-filter.active')?.dataset.tier || 'all';
+            renderRecipes(activeTier, e.target.value);
+        });
+
+        document.querySelectorAll('.boss-filter').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.boss-filter').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderBosses(btn.dataset.type);
+            });
+        });
+
+        document.querySelectorAll('.char-filter').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.char-filter').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderCharacters(btn.dataset.tier, document.getElementById('char-search').value);
+            });
+        });
+
+        document.getElementById('char-search').addEventListener('input', (e) => {
+            const activeTier = document.querySelector('.char-filter.active')?.dataset.tier || 'all';
+            renderCharacters(activeTier, e.target.value);
+        });
+
+        document.querySelectorAll('.craft-filter').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.craft-filter').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderCrafting(btn.dataset.type);
+            });
+        });
+
+        // Modal Close
+        document.getElementById('modal-close').addEventListener('click', () => {
+            document.getElementById('modal-overlay').classList.remove('active');
+        });
+
+        document.getElementById('modal-overlay').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('modal-overlay')) {
+                document.getElementById('modal-overlay').classList.remove('active');
+            }
+        });
+
+        // Initialize
+        renderRecipes();
+        renderProgression();
+        renderSeasons();
+        renderBosses();
+        renderCharacters();
+        renderCrafting();
+
+        // =====================================
+        // CROCK POT SIMULATOR
+        // =====================================
+
+        // Comprehensive ingredient database with food values
+        const INGREDIENTS = {
+            // MEATS
+            meats: {
+                name: 'Meats',
+                items: [
+                    { name: 'Meat', icon: '🍖', meat: 1, monster: false },
+                    { name: 'Cooked Meat', icon: '🥩', meat: 1, monster: false },
+                    { name: 'Monster Meat', icon: '👾', meat: 1, monster: true },
+                    { name: 'Cooked Monster Meat', icon: '👿', meat: 1, monster: true },
+                    { name: 'Morsel', icon: '🍗', meat: 0.5, monster: false },
+                    { name: 'Cooked Morsel', icon: '🍗', meat: 0.5, monster: false },
+                    { name: 'Drumstick', icon: '🍗', meat: 0.5, monster: false },
+                    { name: 'Fried Drumstick', icon: '🍗', meat: 0.5, monster: false },
+                    { name: 'Frog Legs', icon: '🐸', meat: 0.5, monster: false },
+                    { name: 'Cooked Frog Legs', icon: '🐸', meat: 0.5, monster: false },
+                    { name: 'Batilisk Wing', icon: '🦇', meat: 0.5, monster: true },
+                    { name: 'Cooked Batilisk Wing', icon: '🦇', meat: 0.5, monster: true },
+                    { name: 'Leafy Meat', icon: '🥬', meat: 1, monster: false, veggie: 1 },
+                    { name: 'Cooked Leafy Meat', icon: '🥬', meat: 1, monster: false, veggie: 1 }
+                ]
+            },
+            // FISH
+            fish: {
+                name: 'Fish',
+                items: [
+                    { name: 'Fish', icon: '🐟', fish: 1, meat: 0.5 },
+                    { name: 'Cooked Fish', icon: '🐟', fish: 1, meat: 0.5 },
+                    { name: 'Eel', icon: '🐍', fish: 1, meat: 0.5 },
+                    { name: 'Cooked Eel', icon: '🐍', fish: 1, meat: 0.5 },
+                    { name: 'Wobster', icon: '🦞', fish: 2, meat: 0, wobster: true },
+                    { name: 'Dead Wobster', icon: '🦞', fish: 2, meat: 0, wobster: true },
+                    { name: 'Raw Fish', icon: '🐠', fish: 0.5, meat: 0.5 },
+                    { name: 'Fish Morsel', icon: '🐠', fish: 0.5, meat: 0.5 }
+                ]
+            },
+            // EGGS
+            eggs: {
+                name: 'Eggs',
+                items: [
+                    { name: 'Egg', icon: '🥚', egg: 1 },
+                    { name: 'Cooked Egg', icon: '🍳', egg: 1 },
+                    { name: 'Tallbird Egg', icon: '🪺', egg: 4, tallbirdegg: true },
+                    { name: 'Fried Tallbird Egg', icon: '🍳', egg: 4, tallbirdegg: true }
+                ]
+            },
+            // VEGETABLES
+            veggies: {
+                name: 'Vegetables',
+                items: [
+                    { name: 'Carrot', icon: '🥕', veggie: 1 },
+                    { name: 'Roasted Carrot', icon: '🥕', veggie: 1 },
+                    { name: 'Corn', icon: '🌽', veggie: 1 },
+                    { name: 'Popcorn', icon: '🍿', veggie: 1 },
+                    { name: 'Pumpkin', icon: '🎃', veggie: 1 },
+                    { name: 'Hot Pumpkin', icon: '🎃', veggie: 1 },
+                    { name: 'Eggplant', icon: '🍆', veggie: 1 },
+                    { name: 'Braised Eggplant', icon: '🍆', veggie: 1 },
+                    { name: 'Red Mushroom', icon: '🍄', veggie: 0.5 },
+                    { name: 'Green Mushroom', icon: '🍄', veggie: 0.5 },
+                    { name: 'Blue Mushroom', icon: '🍄', veggie: 0.5 },
+                    { name: 'Lichen', icon: '🌿', veggie: 1 },
+                    { name: 'Cactus Flesh', icon: '🌵', veggie: 1 },
+                    { name: 'Cooked Cactus Flesh', icon: '🌵', veggie: 1 },
+                    { name: 'Kelp Fronds', icon: '🌊', veggie: 0.5 },
+                    { name: 'Dried Kelp', icon: '🌊', veggie: 0.5 },
+                    { name: 'Asparagus', icon: '🥦', veggie: 1 },
+                    { name: 'Garlic', icon: '🧄', veggie: 0.5 },
+                    { name: 'Onion', icon: '🧅', veggie: 1 },
+                    { name: 'Pepper', icon: '🌶️', veggie: 1 },
+                    { name: 'Potato', icon: '🥔', veggie: 1 },
+                    { name: 'Tomato', icon: '🍅', veggie: 1 }
+                ]
+            },
+            // FRUITS
+            fruits: {
+                name: 'Fruits',
+                items: [
+                    { name: 'Berries', icon: '🫐', fruit: 0.5 },
+                    { name: 'Roasted Berries', icon: '🫐', fruit: 0.5 },
+                    { name: 'Juicy Berries', icon: '🍇', fruit: 0.5 },
+                    { name: 'Dragon Fruit', icon: '🐉', fruit: 1, dragonfruit: true },
+                    { name: 'Prepared Dragon Fruit', icon: '🐉', fruit: 1, dragonfruit: true },
+                    { name: 'Durian', icon: '🤢', fruit: 1, monster: true },
+                    { name: 'Extra Smelly Durian', icon: '🤢', fruit: 1, monster: true },
+                    { name: 'Pomegranate', icon: '🍎', fruit: 1 },
+                    { name: 'Sliced Pomegranate', icon: '🍎', fruit: 1 },
+                    { name: 'Watermelon', icon: '🍉', fruit: 1 },
+                    { name: 'Grilled Watermelon', icon: '🍉', fruit: 1 },
+                    { name: 'Cave Banana', icon: '🍌', fruit: 1 },
+                    { name: 'Cooked Cave Banana', icon: '🍌', fruit: 1 },
+                    { name: 'Roasted Birchnut', icon: '🌰', fruit: 0.5, birchnut: true }
+                ]
+            },
+            // SWEETENERS
+            sweets: {
+                name: 'Sweeteners',
+                items: [
+                    { name: 'Honey', icon: '🍯', sweetener: 1, honey: true },
+                    { name: 'Honeycomb', icon: '🐝', sweetener: 1 },
+                    { name: 'Royal Jelly', icon: '👑', sweetener: 3 }
+                ]
+            },
+            // DAIRY
+            dairy: {
+                name: 'Dairy',
+                items: [
+                    { name: 'Butter', icon: '🧈', dairy: 1, butter: true },
+                    { name: 'Electric Milk', icon: '🥛', dairy: 1 }
+                ]
+            },
+            // FILLERS & OTHER
+            other: {
+                name: 'Fillers & Other',
+                items: [
+                    { name: 'Ice', icon: '🧊', ice: true },
+                    { name: 'Twigs', icon: '🪵', inedible: true, twig: true },
+                    { name: 'Butterfly Wings', icon: '🦋', veggie: 0.5, butterflywings: true },
+                    { name: 'Mandrake', icon: '🌱', mandrake: true, veggie: 1 }
+                ]
+            }
+        };
+
+        // Simulator recipe definitions with actual game logic
+        const SIM_RECIPES = [
+            {
+                name: 'Monster Lasagna',
+                test: (v) => v.monster >= 2 && !v.inedible,
+                priority: 10,
+                health: -20,
+                hunger: 37.5,
+                sanity: -20,
+                warning: true
+            },
+            {
+                name: 'Mandrake Soup',
+                test: (v) => v.mandrake,
+                priority: 10,
+                health: 100,
+                hunger: 150,
+                sanity: 5
+            },
+            {
+                name: 'Dragonpie',
+                test: (v) => v.dragonfruit && v.meat === 0,
+                priority: 1,
+                health: 40,
+                hunger: 75,
+                sanity: 5
+            },
+            {
+                name: 'Wobster Dinner',
+                test: (v) => v.wobster && v.butter,
+                priority: 25,
+                health: 60,
+                hunger: 37.5,
+                sanity: 50
+            },
+            {
+                name: 'Surf \'n\' Turf',
+                test: (v) => v.meat >= 2.5 && v.fish >= 1.5 && !v.inedible,
+                priority: 30,
+                health: 60,
+                hunger: 37.5,
+                sanity: 33
+            },
+            {
+                name: 'Lobster Bisque',
+                test: (v) => v.wobster && v.ice,
+                priority: 30,
+                health: 60,
+                hunger: 25,
+                sanity: 10
+            },
+            {
+                name: 'Tall Scotch Eggs',
+                test: (v) => v.tallbirdegg && v.veggie >= 0.5,
+                priority: 10,
+                health: 60,
+                hunger: 150,
+                sanity: 5
+            },
+            {
+                name: 'Bacon and Eggs',
+                test: (v) => v.meat >= 1.5 && v.egg >= 2 && v.veggie === 0,
+                priority: 10,
+                health: 20,
+                hunger: 75,
+                sanity: 5
+            },
+            {
+                name: 'Pierogi',
+                test: (v) => v.meat >= 0.5 && v.egg >= 1 && v.veggie >= 0.5 && !v.twig,
+                priority: 5,
+                health: 40,
+                hunger: 37.5,
+                sanity: 5
+            },
+            {
+                name: 'Honey Ham',
+                test: (v) => v.meat >= 2 && v.honey && !v.twig && !v.inedible,
+                priority: 2,
+                health: 30,
+                hunger: 75,
+                sanity: 5
+            },
+            {
+                name: 'Honey Nuggets',
+                test: (v) => v.honey && v.meat >= 0.5 && v.meat < 2 && !v.twig && !v.inedible,
+                priority: 2,
+                health: 20,
+                hunger: 37.5,
+                sanity: 5
+            },
+            {
+                name: 'Taffy',
+                test: (v) => v.sweetener >= 3 && v.meat === 0,
+                priority: 10,
+                health: -3,
+                hunger: 25,
+                sanity: 15
+            },
+            {
+                name: 'Ice Cream',
+                test: (v) => v.dairy && v.ice && v.sweetener >= 1 && v.meat === 0 && v.egg === 0 && v.veggie === 0 && !v.twig,
+                priority: 10,
+                health: 0,
+                hunger: 25,
+                sanity: 50
+            },
+            {
+                name: 'Waffles',
+                test: (v) => v.butter && v.egg >= 1 && v.fruit >= 0.5,
+                priority: 10,
+                health: 60,
+                hunger: 37.5,
+                sanity: 5
+            },
+            {
+                name: 'Trail Mix',
+                test: (v) => v.birchnut && v.fruit >= 1 && v.meat === 0 && v.veggie === 0 && v.egg === 0 && v.dairy === 0,
+                priority: 0,
+                health: 30,
+                hunger: 12.5,
+                sanity: 5
+            },
+            {
+                name: 'Fish Sticks',
+                test: (v) => v.fish >= 0.5 && v.twig && v.fillers >= 1,
+                priority: 10,
+                health: 40,
+                hunger: 37.5,
+                sanity: 5
+            },
+            {
+                name: 'Fisherman\'s Catch',
+                test: (v) => v.fish >= 1.5 && v.twig,
+                priority: 40,
+                health: 40,
+                hunger: 75,
+                sanity: 5
+            },
+            {
+                name: 'Butter Muffin',
+                test: (v) => v.butterflywings && v.veggie >= 0.5 && v.meat === 0,
+                priority: 1,
+                health: 20,
+                hunger: 37.5,
+                sanity: 5
+            },
+            {
+                name: 'Froggle Bunwich',
+                test: (v) => v.froglegs && v.veggie >= 0.5,
+                priority: 1,
+                health: 20,
+                hunger: 37.5,
+                sanity: 5
+            },
+            {
+                name: 'Meaty Stew',
+                test: (v) => v.meat >= 3 && !v.inedible,
+                priority: 0,
+                health: 12,
+                hunger: 150,
+                sanity: 5
+            },
+            {
+                name: 'Bunny Stew',
+                test: (v) => v.meat >= 0.5 && !v.monster && v.iceCount >= 2 && !v.twig && !v.inedible,
+                priority: 1,
+                health: 20,
+                hunger: 37.5,
+                sanity: 5
+            },
+            {
+                name: 'Kabobs',
+                test: (v) => v.meat >= 0.5 && !v.monster && v.twig && !v.inedible,
+                priority: 5,
+                health: 3,
+                hunger: 37.5,
+                sanity: 5
+            },
+            {
+                name: 'Ratatouille',
+                test: (v) => v.veggie >= 0.5 && v.meat === 0 && !v.twig && !v.inedible,
+                priority: 0,
+                health: 3,
+                hunger: 25,
+                sanity: 5
+            },
+            {
+                name: 'Fruit Medley',
+                test: (v) => v.fruit >= 3 && v.meat === 0 && v.veggie === 0,
+                priority: 0,
+                health: 20,
+                hunger: 25,
+                sanity: 5
+            },
+            {
+                name: 'Meatballs',
+                test: (v) => v.meat >= 0.5 && !v.twig && !v.inedible,
+                priority: -1,
+                health: 3,
+                hunger: 62.5,
+                sanity: 5
+            },
+            {
+                name: 'Wet Goop',
+                test: () => true,
+                priority: -2,
+                health: 0,
+                hunger: 0,
+                sanity: 0,
+                warning: true
+            }
+        ];
+
+        // Simulator state
+        let crockpotSlots = [null, null, null, null];
+
+        // Calculate total values from ingredients in pot
+        function calculateValues(slots) {
+            const values = {
+                meat: 0,
+                fish: 0,
+                egg: 0,
+                veggie: 0,
+                fruit: 0,
+                sweetener: 0,
+                dairy: 0,
+                monster: 0,
+                inedible: false,
+                twig: false,
+                ice: false,
+                iceCount: 0,
+                honey: false,
+                butter: false,
+                dragonfruit: false,
+                mandrake: false,
+                tallbirdegg: false,
+                wobster: false,
+                birchnut: false,
+                butterflywings: false,
+                froglegs: false,
+                fillers: 0
+            };
+
+            slots.forEach(ing => {
+                if (!ing) return;
+                values.meat += ing.meat || 0;
+                values.fish += ing.fish || 0;
+                values.egg += ing.egg || 0;
+                values.veggie += ing.veggie || 0;
+                values.fruit += ing.fruit || 0;
+                values.sweetener += ing.sweetener || 0;
+                values.dairy += ing.dairy || 0;
+                if (ing.monster) values.monster++;
+                if (ing.inedible) values.inedible = true;
+                if (ing.twig) values.twig = true;
+                if (ing.ice) { values.ice = true; values.iceCount++; values.fillers++; }
+                if (ing.honey) values.honey = true;
+                if (ing.butter) values.butter = true;
+                if (ing.dragonfruit) values.dragonfruit = true;
+                if (ing.mandrake) values.mandrake = true;
+                if (ing.tallbirdegg) values.tallbirdegg = true;
+                if (ing.wobster) values.wobster = true;
+                if (ing.birchnut) values.birchnut = true;
+                if (ing.butterflywings) values.butterflywings = true;
+                if (ing.name && ing.name.includes('Frog Legs')) values.froglegs = true;
+            });
+
+            return values;
+        }
+
+        // Find matching recipes sorted by priority
+        function findRecipes(slots) {
+            const values = calculateValues(slots);
+            const matches = [];
+
+            for (const recipe of SIM_RECIPES) {
+                if (recipe.test(values)) {
+                    matches.push({
+                        ...recipe,
+                        values: values
+                    });
+                }
+            }
+
+            // Sort by priority (highest first)
+            matches.sort((a, b) => b.priority - a.priority);
+            return matches;
+        }
+
+        // Render ingredient categories
+        function renderIngredientCategories() {
+            const container = document.getElementById('ingredient-categories');
+            let html = '';
+
+            for (const [key, category] of Object.entries(INGREDIENTS)) {
+                html += `
+                    <div class="sim-category">
+                        <div class="sim-category-header">${category.name}</div>
+                        <div class="ingredient-grid">
+                            ${category.items.map(ing => `
+                                <button class="ingredient-btn" data-ingredient='${JSON.stringify(ing)}'>
+                                    <span class="ingredient-icon">${ing.icon || ''}</span>${ing.name}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+
+            // Add click handlers
+            container.querySelectorAll('.ingredient-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const ing = JSON.parse(btn.dataset.ingredient);
+                    addToPot(ing);
+                });
+            });
+        }
+
+        // Add ingredient to pot
+        function addToPot(ingredient) {
+            const emptySlot = crockpotSlots.findIndex(s => s === null);
+            if (emptySlot === -1) return; // Pot is full
+
+            crockpotSlots[emptySlot] = ingredient;
+            updatePotDisplay();
+            updateResults();
+        }
+
+        // Remove ingredient from pot
+        function removeFromPot(slotIndex) {
+            crockpotSlots[slotIndex] = null;
+            updatePotDisplay();
+            updateResults();
+        }
+
+        // Clear all slots
+        function clearPot() {
+            crockpotSlots = [null, null, null, null];
+            updatePotDisplay();
+            updateResults();
+        }
+
+        // Update the visual pot display
+        function updatePotDisplay() {
+            const slots = document.querySelectorAll('.crockpot-slot');
+            slots.forEach((slot, index) => {
+                const ing = crockpotSlots[index];
+                if (ing) {
+                    slot.textContent = ing.name;
+                    slot.classList.add('filled');
+                } else {
+                    slot.textContent = 'Empty';
+                    slot.classList.remove('filled');
+                }
+            });
+
+            // Update values display
+            const valuesDiv = document.getElementById('sim-values');
+            const filledSlots = crockpotSlots.filter(s => s !== null).length;
+
+            if (filledSlots > 0) {
+                valuesDiv.style.display = 'block';
+                const values = calculateValues(crockpotSlots);
+                document.getElementById('val-meat').textContent = values.meat.toFixed(1);
+                document.getElementById('val-fish').textContent = values.fish.toFixed(1);
+                document.getElementById('val-egg').textContent = values.egg.toFixed(1);
+                document.getElementById('val-veggie').textContent = values.veggie.toFixed(1);
+                document.getElementById('val-fruit').textContent = values.fruit.toFixed(1);
+                document.getElementById('val-sweet').textContent = values.sweetener.toFixed(1);
+            } else {
+                valuesDiv.style.display = 'none';
+            }
+        }
+
+        // Update results panel
+        function updateResults() {
+            const resultsDiv = document.getElementById('sim-results');
+            const filledSlots = crockpotSlots.filter(s => s !== null).length;
+
+            if (filledSlots < 4) {
+                resultsDiv.innerHTML = `<div class="sim-empty">Add ${4 - filledSlots} more ingredient${4 - filledSlots > 1 ? 's' : ''} to see results</div>`;
+                return;
+            }
+
+            const recipes = findRecipes(crockpotSlots);
+            const values = calculateValues(crockpotSlots);
+            let html = '';
+
+            // Warnings
+            if (values.monster >= 2) {
+                html += `
+                    <div class="sim-warning">
+                        <div class="sim-warning-title">Monster Lasagna Risk!</div>
+                        You have ${values.monster} monster ingredients. This will make Monster Lasagna unless another recipe has higher priority.
+                    </div>
+                `;
+            }
+
+            // Show the winning recipe
+            const winner = recipes[0];
+            if (winner) {
+                const isWarning = winner.warning || winner.name === 'Wet Goop' || winner.name === 'Monster Lasagna';
+                html += `
+                    <div class="sim-result-card ${isWarning ? 'warning' : 'best'}">
+                        <div class="sim-result-header">
+                            <span class="sim-result-name">${isWarning ? '⚠️ ' : '✨ '}${winner.name}</span>
+                            <span class="sim-result-priority">Priority: ${winner.priority}</span>
+                        </div>
+                        <div class="sim-result-stats">
+                            <span class="stat stat-health">❤️ ${winner.health >= 0 ? '+' : ''}${winner.health}</span>
+                            <span class="stat stat-hunger">🍖 +${winner.hunger}</span>
+                            <span class="stat stat-sanity">🧠 ${winner.sanity >= 0 ? '+' : ''}${winner.sanity}</span>
+                        </div>
+                        ${winner.name !== 'Wet Goop' && !isWarning ? `<div class="sim-efficiency">Efficiency: ${((winner.hunger + winner.health + winner.sanity) / 4).toFixed(1)} total stats per ingredient</div>` : ''}
+                        ${isWarning ? `<div class="sim-result-ingredients" style="color: var(--health-color);">This result is undesirable. Try different ingredients!</div>` : ''}
+                    </div>
+                `;
+            }
+
+            // Alternative recipes that could have been made
+            if (recipes.length > 1) {
+                html += `<h4 style="color: var(--text-secondary); margin: 1rem 0 0.5rem; font-size: 0.85rem;">Other possible recipes:</h4>`;
+                recipes.slice(1, 5).forEach(recipe => {
+                    if (recipe.name === 'Wet Goop') return;
+                    html += `
+                        <div class="sim-result-card">
+                            <div class="sim-result-header">
+                                <span class="sim-result-name">${recipe.name}</span>
+                                <span class="sim-result-priority">Priority: ${recipe.priority}</span>
+                            </div>
+                            <div class="sim-result-stats">
+                                <span class="stat stat-health">❤️ ${recipe.health >= 0 ? '+' : ''}${recipe.health}</span>
+                                <span class="stat stat-hunger">🍖 +${recipe.hunger}</span>
+                                <span class="stat stat-sanity">🧠 ${recipe.sanity >= 0 ? '+' : ''}${recipe.sanity}</span>
+                            </div>
+                            <div class="sim-result-ingredients">Lost to ${winner.name} due to lower priority</div>
+                        </div>
+                    `;
+                });
+            }
+
+            // Tips
+            if (winner && !winner.warning && winner.name !== 'Wet Goop') {
+                const tip = getRecipeTip(winner.name);
+                if (tip) {
+                    html += `
+                        <div class="sim-tip">
+                            <div class="sim-tip-title">Tip</div>
+                            ${tip}
+                        </div>
+                    `;
+                }
+            }
+
+            resultsDiv.innerHTML = html;
+        }
+
+        function getRecipeTip(recipeName) {
+            const tips = {
+                'Meatballs': 'The most efficient use of monster meat! 1 Monster Meat + 3 fillers (ice, berries, mushrooms) is the classic combo.',
+                'Meaty Stew': 'Best eaten when nearly starving (150 hunger). Consider if the extra meat is worth it vs multiple Meatballs.',
+                'Pierogi': 'One of the best healing foods! Keep a Bird Cage to convert meat to eggs.',
+                'Bacon and Eggs': '20 day spoil time makes this great for expeditions. No veggies allowed!',
+                'Honey Ham': 'Great balanced food once you have Bee Boxes producing.',
+                'Dragonpie': 'Best value recipe in the game. Farm Dragon Fruit ASAP!',
+                'Fish Sticks': 'Twigs count as a filler here. Good healing if you fish often.',
+                'Surf \'n\' Turf': 'The best all-around dish. Worth the fish investment.',
+                'Bunny Stew': 'Perfect for winter when ice is everywhere!',
+                'Taffy': 'Quick sanity restoration but costs 3 honey. Slight health loss.',
+                'Ice Cream': 'Best sanity food but spoils in 3 days. Also provides cooling!',
+                'Waffles': 'Highest healing food. Save your butter for this!',
+                'Trail Mix': 'Early game healing option. Roast the birchnuts first!'
+            };
+            return tips[recipeName];
+        }
+
+        // Initialize simulator
+        renderIngredientCategories();
+
+        // Slot click handlers
+        document.querySelectorAll('.crockpot-slot').forEach(slot => {
+            slot.addEventListener('click', () => {
+                const index = parseInt(slot.dataset.slot);
+                if (crockpotSlots[index]) {
+                    removeFromPot(index);
+                }
+            });
+        });
+
+        // Clear button
+        document.getElementById('clear-pot').addEventListener('click', clearPot);
+
+
+        // =====================================
+        // DAY TRACKER
+        // =====================================
+
+        const YEAR_LENGTH = 70;
+        const SEASON_DATA = [
+            { name: 'Autumn', start: 1, end: 20, length: 20, icon: '🍂', color: 'autumn' },
+            { name: 'Winter', start: 21, end: 35, length: 15, icon: '❄️', color: 'winter' },
+            { name: 'Spring', start: 36, end: 55, length: 20, icon: '🌸', color: 'spring' },
+            { name: 'Summer', start: 56, end: 70, length: 15, icon: '☀️', color: 'summer' }
+        ];
+
+        const BOSS_EVENTS = [
+            { name: 'Deerclops', day: 30, warning: 'Spawns at night. Lead away from base!', type: 'danger' },
+            { name: 'Moose/Goose', day: 36, warning: 'Appears at start of Spring near nest.', type: 'warning' },
+            { name: 'Bearger', day: 1, yearMin: 2, warning: 'Spawns in Autumn (Year 2+). Destroys everything!', type: 'danger' },
+            { name: 'Dragonfly', day: 56, warning: 'Found in desert during Summer.', type: 'warning' }
+        ];
+
+        function getSeasonForDay(day) {
+            const dayInYear = ((day - 1) % YEAR_LENGTH) + 1;
+            for (const season of SEASON_DATA) {
+                if (dayInYear >= season.start && dayInYear <= season.end) {
+                    const dayInSeason = dayInYear - season.start + 1;
+                    const daysRemaining = season.end - dayInYear;
+                    return { ...season, dayInSeason, daysRemaining, dayInYear };
+                }
+            }
+            return SEASON_DATA[0];
+        }
+
+        function getYear(day) {
+            return Math.floor((day - 1) / YEAR_LENGTH) + 1;
+        }
+
+        function getUpcomingEvents(day) {
+            const dayInYear = ((day - 1) % YEAR_LENGTH) + 1;
+            const year = getYear(day);
+            const events = [];
+            BOSS_EVENTS.forEach(boss => {
+                if (boss.yearMin && year < boss.yearMin) return;
+                let daysUntil = boss.day - dayInYear;
+                if (daysUntil < 0) daysUntil += YEAR_LENGTH;
+                if (daysUntil === 0) daysUntil = YEAR_LENGTH;
+                if (daysUntil <= 20) events.push({ ...boss, daysUntil });
+            });
+            const season = getSeasonForDay(day);
+            if (season.daysRemaining <= 10) {
+                const nextSeasonIdx = (SEASON_DATA.findIndex(s => s.name === season.name) + 1) % 4;
+                const nextSeason = SEASON_DATA[nextSeasonIdx];
+                events.push({ name: nextSeason.name + ' begins', daysUntil: season.daysRemaining + 1, warning: 'Prepare for ' + nextSeason.name + '!', type: 'info' });
+            }
+            return events.sort((a, b) => a.daysUntil - b.daysUntil);
+        }
+
+        function getTasksForDay(day) {
+            const season = getSeasonForDay(day);
+            const year = getYear(day);
+            const tasks = [];
+            if (day <= 5) {
+                tasks.push({ text: 'Explore and gather basic resources', priority: 'high' });
+                tasks.push({ text: 'Find gold and rocks', priority: 'high' });
+                tasks.push({ text: 'Scout for a base location', priority: 'medium' });
+            } else if (day <= 10) {
+                tasks.push({ text: 'Build Science Machine', priority: 'high' });
+                tasks.push({ text: 'Set up Fire Pit at base', priority: 'high' });
+                tasks.push({ text: 'Build Crock Pot', priority: 'medium' });
+            } else if (day <= 15) {
+                tasks.push({ text: 'Build Alchemy Engine', priority: 'high' });
+                tasks.push({ text: 'Craft Thermal Stone', priority: 'high' });
+                tasks.push({ text: 'Find Gears for Ice Box', priority: 'medium' });
+            } else if (day <= 20) {
+                tasks.push({ text: 'Stock food for Winter', priority: 'high' });
+                tasks.push({ text: 'Craft warm clothing', priority: 'high' });
+                tasks.push({ text: 'Find Walrus Camp locations', priority: 'medium' });
+            } else if (season.name === 'Winter') {
+                tasks.push({ text: 'Keep Thermal Stone warm', priority: 'high' });
+                if (day >= 25 && day <= 35) tasks.push({ text: 'Hunt MacTusk for Walking Cane', priority: 'medium' });
+                if (day >= 28 && day <= 32) tasks.push({ text: 'Prepare for Deerclops!', priority: 'high' });
+                tasks.push({ text: 'Collect Ice for storage', priority: 'low' });
+            } else if (season.name === 'Spring') {
+                tasks.push({ text: 'Carry Umbrella or Eyebrella', priority: 'high' });
+                tasks.push({ text: 'Watch for Frog Rain', priority: 'medium' });
+                tasks.push({ text: 'Expand base and farms', priority: 'low' });
+            } else if (season.name === 'Summer') {
+                tasks.push({ text: 'Stay cool - Thermal Stone in Ice Box', priority: 'high' });
+                tasks.push({ text: 'Build Endothermic Fire Pit', priority: 'high' });
+                tasks.push({ text: 'Consider cave exploration', priority: 'medium' });
+            } else if (season.name === 'Autumn' && year >= 2) {
+                tasks.push({ text: 'Watch for Bearger', priority: 'high' });
+                tasks.push({ text: 'Prepare for upcoming bosses', priority: 'medium' });
+                tasks.push({ text: 'Stock resources for winter', priority: 'medium' });
+            }
+            return tasks;
+        }
+
+        function updateDayTracker() {
+            const dayInput = document.getElementById('current-day');
+            if (!dayInput) return;
+            const day = parseInt(dayInput.value) || 1;
+            const season = getSeasonForDay(day);
+            const year = getYear(day);
+
+            document.getElementById('season-icon').textContent = season.icon;
+            const seasonLabel = document.getElementById('season-name');
+            seasonLabel.textContent = season.name;
+            seasonLabel.className = 'season-label ' + season.color;
+            document.getElementById('season-subtext').innerHTML = 'Day ' + season.dayInSeason + ' of ' + season.length + ' <span style="color: var(--text-secondary)">| Year ' + year + '</span>';
+
+            const progress = document.getElementById('season-progress');
+            progress.style.width = ((season.dayInSeason / season.length) * 100) + '%';
+            progress.className = 'season-progress-fill ' + season.color;
+            document.getElementById('season-progress-text').textContent = season.daysRemaining + ' days until ' + SEASON_DATA[(SEASON_DATA.findIndex(s => s.name === season.name) + 1) % 4].name;
+
+            document.getElementById('timeline-marker').style.left = (((season.dayInYear - 1) / YEAR_LENGTH) * 100) + '%';
+
+            const alertsDiv = document.getElementById('tracker-alerts');
+            let alertsHtml = '';
+            const events = getUpcomingEvents(day);
+
+            events.forEach(event => {
+                if (event.daysUntil <= 5 && event.type === 'danger') {
+                    alertsHtml += '<div class="tracker-alert danger"><div class="tracker-alert-title">⚠️ ' + event.name + ' in ' + event.daysUntil + ' day' + (event.daysUntil !== 1 ? 's' : '') + '!</div><div class="tracker-alert-text">' + event.warning + '</div></div>';
+                } else if (event.daysUntil <= 3 && event.type === 'info') {
+                    alertsHtml += '<div class="tracker-alert info"><div class="tracker-alert-title">📅 ' + event.name + '</div><div class="tracker-alert-text">' + event.warning + '</div></div>';
+                }
+            });
+
+            if (season.name === 'Autumn' && season.daysRemaining <= 5) {
+                alertsHtml += '<div class="tracker-alert warning"><div class="tracker-alert-title">❄️ Winter is coming!</div><div class="tracker-alert-text">Make sure you have: Thermal Stone, warm clothing, and stockpiled food.</div></div>';
+            }
+            if (season.name === 'Winter' && day >= 28 && day <= 32) {
+                alertsHtml += '<div class="tracker-alert danger"><div class="tracker-alert-title">👁️ Deerclops Warning!</div><div class="tracker-alert-text">Deerclops spawns around Day 30. Stay near base at night but be ready to lead it away!</div></div>';
+            }
+
+            alertsDiv.innerHTML = alertsHtml || '<div class="tracker-alert success"><div class="tracker-alert-title">✓ No immediate threats</div><div class="tracker-alert-text">Focus on your current tasks.</div></div>';
+
+            const tasks = getTasksForDay(day);
+            document.getElementById('tracker-tasks').innerHTML = '<div class="tracker-tasks-title">What You Should Be Doing</div>' + tasks.map(t => '<div class="tracker-task-item"><span class="tracker-task-priority priority-' + t.priority + '">' + t.priority.toUpperCase() + '</span><span>' + t.text + '</span></div>').join('');
+
+            const upcomingEvents = events.filter(e => e.daysUntil > 0).slice(0, 5);
+            document.getElementById('upcoming-events').innerHTML = upcomingEvents.length ? '<div class="tracker-tasks-title">Upcoming Events</div>' + upcomingEvents.map(e => '<div class="event-item"><span class="event-name">' + e.name + '</span><span class="event-days ' + (e.daysUntil <= 3 ? 'soon' : e.daysUntil <= 7 ? 'upcoming' : 'later') + '">' + e.daysUntil + ' day' + (e.daysUntil !== 1 ? 's' : '') + '</span></div>').join('') : '';
+        }
+
+        function adjustDay(amount) {
+            const input = document.getElementById('current-day');
+            input.value = Math.max(1, parseInt(input.value) + amount);
+            updateDayTracker();
+            localStorage.setItem('dst-current-day', input.value);
+        }
+
+        document.getElementById('current-day').addEventListener('input', () => {
+            updateDayTracker();
+            localStorage.setItem('dst-current-day', document.getElementById('current-day').value);
+        });
+
+        const savedDay = localStorage.getItem('dst-current-day');
+        if (savedDay) document.getElementById('current-day').value = savedDay;
+        updateDayTracker();
+
+
+        // =====================================
+        // CHECKLISTS
+        // =====================================
+
+        const CHECKLIST_DATA = {
+            'first-winter': [
+                { id: 'thermal-stone', text: 'Thermal Stone', note: 'Essential' },
+                { id: 'winter-hat', text: 'Winter Hat OR Beefalo Hat', note: 'Head slot' },
+                { id: 'puffy-vest', text: 'Puffy Vest OR Beefalo Vest', note: 'Chest slot' },
+                { id: 'heat-source', text: 'Fire Pit at base', note: 'Stay warm' },
+                { id: 'ice-box', text: 'Ice Box', note: 'Food storage' },
+                { id: 'food-stock', text: '20+ days of food', note: 'Meatballs, etc.' },
+                { id: 'walrus-camp', text: 'Located Walrus Camp', note: 'Walking Cane!' },
+                { id: 'weapon', text: 'Ham Bat OR Spear', note: 'For Deerclops' }
+            ],
+            'summer-prep': [
+                { id: 'thermal-stone-s', text: 'Thermal Stone', note: 'Keep in Ice Box' },
+                { id: 'ice-stockpile', text: 'Ice stockpile (20+)', note: 'For Endothermic' },
+                { id: 'endo-fire', text: 'Endothermic Fire Pit', note: 'Cooling' },
+                { id: 'summer-hat', text: 'Eyebrella OR Summer Frest', note: 'Head slot' },
+                { id: 'flingo', text: 'Ice Flingomatic', note: 'Fire protection' },
+                { id: 'umbrella', text: 'Umbrella OR Eyebrella', note: 'Overheating' },
+                { id: 'cave-base', text: 'Cave base (optional)', note: 'No overheating' }
+            ],
+            'deerclops': [
+                { id: 'dc-armor', text: 'Log Suit', note: '80% protection' },
+                { id: 'dc-helmet', text: 'Football Helmet', note: '80% protection' },
+                { id: 'dc-weapon', text: 'Ham Bat OR Dark Sword', note: 'High damage' },
+                { id: 'dc-food', text: '4+ Pierogi OR Healing', note: '40 HP each' },
+                { id: 'dc-kite', text: 'Know kite pattern', note: '2-3 hits, dodge' },
+                { id: 'dc-location', text: 'Lead away from base!', note: 'He destroys!' }
+            ],
+            'dragonfly': [
+                { id: 'df-armor', text: 'Log Suit x2', note: 'Long fight' },
+                { id: 'df-helmet', text: 'Football Helmet x2', note: 'Long fight' },
+                { id: 'df-weapon', text: 'Dark Sword OR Ham Bat x2', note: 'High DPS' },
+                { id: 'df-food', text: '10+ Pierogi', note: 'Heal often' },
+                { id: 'df-ash', text: 'Ash (20+)', note: 'To spawn her' },
+                { id: 'df-walls', text: 'Wall maze (optional)', note: 'Cheese strategy' },
+                { id: 'df-pan', text: 'Pan Flute (optional)', note: 'Sleep adds' }
+            ],
+            'bearger': [
+                { id: 'bg-armor', text: 'Log Suit', note: '80% protection' },
+                { id: 'bg-helmet', text: 'Football Helmet', note: '80% protection' },
+                { id: 'bg-weapon', text: 'Ham Bat OR Dark Sword', note: 'High damage' },
+                { id: 'bg-food', text: '4+ Pierogi', note: 'Healing' },
+                { id: 'bg-trees', text: 'Lead to forest', note: 'Free logs!' }
+            ],
+            'moosegoose': [
+                { id: 'mg-armor', text: 'Log Suit', note: '80% protection' },
+                { id: 'mg-helmet', text: 'Football Helmet', note: '80% protection' },
+                { id: 'mg-weapon', text: 'Ham Bat', note: 'Good damage' },
+                { id: 'mg-food', text: '4+ Pierogi', note: 'Healing' },
+                { id: 'mg-moslings', text: 'Kill Moslings too!', note: 'Or more spawn' }
+            ],
+            'essential-base': [
+                { id: 'eb-fire', text: 'Fire Pit', note: 'Light & warmth' },
+                { id: 'eb-science', text: 'Science Machine', note: 'Tier 1 crafting' },
+                { id: 'eb-alchemy', text: 'Alchemy Engine', note: 'Tier 2 crafting' },
+                { id: 'eb-crock', text: 'Crock Pot', note: 'Cooking' },
+                { id: 'eb-icebox', text: 'Ice Box', note: 'Food storage' },
+                { id: 'eb-chest', text: 'Chests x4+', note: 'Storage' },
+                { id: 'eb-lightning', text: 'Lightning Rod', note: 'Fire prevention' },
+                { id: 'eb-tent', text: 'Tent OR Siesta Lean-to', note: 'Health regen' },
+                { id: 'eb-wall', text: 'Basic walls', note: 'Hound protection' },
+                { id: 'eb-bird', text: 'Bird Cage', note: 'Eggs from meat' }
+            ],
+            'advanced-base': [
+                { id: 'ab-shadow', text: 'Shadow Manipulator', note: 'Magic crafting' },
+                { id: 'ab-prestihat', text: 'Prestihatitator', note: 'Magic crafting' },
+                { id: 'ab-flingo', text: 'Ice Flingomatic', note: 'Summer fires' },
+                { id: 'ab-endo', text: 'Endothermic Fire Pit', note: 'Summer cooling' },
+                { id: 'ab-scales', text: 'Scaled Furnace', note: 'Permanent heat' },
+                { id: 'ab-bundling', text: 'Bundling Wrap station', note: 'Food preservation' },
+                { id: 'ab-mushplanter', text: 'Mushroom Planters', note: 'Mushroom farm' },
+                { id: 'ab-saltbox', text: 'Salt Box', note: 'Better preservation' },
+                { id: 'ab-ocuvigil', text: 'Ocuvigil', note: 'Map reveal' },
+                { id: 'ab-moonrock', text: 'Moon Rock Walls', note: 'Best walls' }
+            ],
+            'food-production': [
+                { id: 'fp-farms', text: 'Farm Plots x6+', note: 'Vegetables' },
+                { id: 'fp-beeboxes', text: 'Bee Boxes x4+', note: 'Honey' },
+                { id: 'fp-berries', text: 'Berry Bushes x10+', note: 'Transplanted' },
+                { id: 'fp-grass', text: 'Grass Tufts x20+', note: 'Transplanted' },
+                { id: 'fp-saplings', text: 'Saplings x10+', note: 'Transplanted' },
+                { id: 'fp-drying', text: 'Drying Racks x4+', note: 'Jerky' },
+                { id: 'fp-birdcage', text: 'Bird Cage', note: 'Meat to eggs' },
+                { id: 'fp-bunny', text: 'Bunny Farm (optional)', note: 'Meat source' }
+            ]
+        };
+
+        let checklistState = {};
+
+        function loadChecklistState() {
+            const saved = localStorage.getItem('dst-checklists');
+            if (saved) {
+                checklistState = JSON.parse(saved);
+            }
+        }
+
+        function saveChecklistState() {
+            localStorage.setItem('dst-checklists', JSON.stringify(checklistState));
+        }
+
+        function renderChecklist(checklistId) {
+            const container = document.getElementById('checklist-' + checklistId);
+            const items = CHECKLIST_DATA[checklistId];
+            if (!container || !items) return;
+
+            if (!checklistState[checklistId]) {
+                checklistState[checklistId] = {};
+            }
+
+            let html = '';
+            items.forEach(item => {
+                const isChecked = checklistState[checklistId][item.id] || false;
+                html += '<div class="checklist-item ' + (isChecked ? 'checked' : '') + '" data-checklist="' + checklistId + '" data-item="' + item.id + '">';
+                html += '<div class="checklist-checkbox">' + (isChecked ? '✓' : '') + '</div>';
+                html += '<span class="checklist-item-text">' + item.text + '</span>';
+                if (item.note) {
+                    html += '<span class="checklist-item-note">' + item.note + '</span>';
+                }
+                html += '</div>';
+            });
+
+            container.innerHTML = html;
+            updateChecklistProgress(checklistId);
+
+            container.querySelectorAll('.checklist-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const clId = item.dataset.checklist;
+                    const itemId = item.dataset.item;
+                    toggleChecklistItem(clId, itemId);
+                });
+            });
+        }
+
+        function toggleChecklistItem(checklistId, itemId) {
+            if (!checklistState[checklistId]) {
+                checklistState[checklistId] = {};
+            }
+            checklistState[checklistId][itemId] = !checklistState[checklistId][itemId];
+            saveChecklistState();
+            renderChecklist(checklistId);
+        }
+
+        function updateChecklistProgress(checklistId) {
+            const items = CHECKLIST_DATA[checklistId];
+            const state = checklistState[checklistId] || {};
+            const total = items.length;
+            const checked = items.filter(item => state[item.id]).length;
+
+            const progressEl = document.getElementById('progress-' + checklistId);
+            if (progressEl) {
+                progressEl.textContent = checked + '/' + total;
+                if (checked === total) {
+                    progressEl.classList.add('complete');
+                } else {
+                    progressEl.classList.remove('complete');
+                }
+            }
+        }
+
+        function resetChecklist(checklistId) {
+            checklistState[checklistId] = {};
+            saveChecklistState();
+            renderChecklist(checklistId);
+        }
+
+        // Global reset all checklists with custom modal
+        function showResetAllModal() {
+            document.getElementById('modal-title').textContent = '⚠️ Reset All Checklists';
+            document.getElementById('modal-body').innerHTML = `
+                <div style="text-align: center; padding: 1rem;">
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 1rem;">
+                        Are you sure you want to reset <strong>ALL</strong> checklists?<br>
+                        This will clear all your progress and cannot be undone.
+                    </p>
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <button onclick="closeModal()" style="padding: 10px 24px; background: var(--bg-tertiary); border: none; border-radius: 6px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem;">Cancel</button>
+                        <button onclick="resetAllChecklists()" style="padding: 10px 24px; background: linear-gradient(135deg, #c0392b, #e74c3c); border: none; border-radius: 6px; color: white; cursor: pointer; font-size: 0.9rem; font-weight: 600;">Reset All</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('modal-overlay').classList.add('active');
+        }
+
+        function resetAllChecklists() {
+            Object.keys(CHECKLIST_DATA).forEach(checklistId => {
+                checklistState[checklistId] = {};
+            });
+            saveChecklistState();
+            Object.keys(CHECKLIST_DATA).forEach(checklistId => {
+                renderChecklist(checklistId);
+            });
+            closeModal();
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('active');
+        }
+
+        // Search clear functions
+        function clearRecipeSearch() {
+            const input = document.getElementById('recipe-search');
+            input.value = '';
+            document.getElementById('recipe-search-clear').classList.remove('visible');
+            renderRecipes('all', '');
+        }
+
+        function clearCharSearch() {
+            const input = document.getElementById('char-search');
+            input.value = '';
+            document.getElementById('char-search-clear').classList.remove('visible');
+            renderCharacters('all', '');
+        }
+
+        // Toggle search clear button visibility
+        document.getElementById('recipe-search').addEventListener('input', function() {
+            const clearBtn = document.getElementById('recipe-search-clear');
+            if (this.value.length > 0) {
+                clearBtn.classList.add('visible');
+            } else {
+                clearBtn.classList.remove('visible');
+            }
+        });
+
+        document.getElementById('char-search').addEventListener('input', function() {
+            const clearBtn = document.getElementById('char-search-clear');
+            if (this.value.length > 0) {
+                clearBtn.classList.add('visible');
+            } else {
+                clearBtn.classList.remove('visible');
+            }
+        });
+
+        function initChecklists() {
+            loadChecklistState();
+            Object.keys(CHECKLIST_DATA).forEach(checklistId => {
+                renderChecklist(checklistId);
+            });
+        }
+
+        initChecklists();
+    </script>
+</body>
+</html>

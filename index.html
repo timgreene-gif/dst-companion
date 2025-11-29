@@ -1809,24 +1809,31 @@
             <h2 class="section-title">Survival Checklists</h2>
             <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Track your progress with interactive checklists. Your progress is saved automatically!</p>
 
-            <div class="print-header">Don't Starve Together - Survival Checklists</div>
-            <div class="print-date"></div>
-
-            <div class="checklist-controls">
-                <div class="checklist-filter">
-                    <label for="checklist-type-filter">Show:</label>
-                    <select id="checklist-type-filter" onchange="filterChecklists(this.value)">
-                        <option value="all">All Checklists</option>
-                        <option value="seasonal">Seasonal Preparation</option>
-                        <option value="boss">Boss Preparation</option>
-                        <option value="raid">Raid Bosses</option>
-                        <option value="base">Base Building</option>
-                    </select>
-                </div>
-                <div class="checklist-buttons">
-                    <button class="print-btn" onclick="printChecklists()">🖨️ Print</button>
-                    <button class="global-reset-btn" onclick="showResetAllModal()">🗑️ Reset All</button>
-                </div>
+            <div class="checklist-filter-boxes">
+                <button class="filter-box active" data-filter="all" onclick="filterChecklists('all')">
+                    <span class="filter-icon">📋</span>
+                    <span class="filter-label">All</span>
+                </button>
+                <button class="filter-box" data-filter="seasonal" onclick="filterChecklists('seasonal')">
+                    <span class="filter-icon">🌡️</span>
+                    <span class="filter-label">Seasonal</span>
+                </button>
+                <button class="filter-box" data-filter="boss" onclick="filterChecklists('boss')">
+                    <span class="filter-icon">👹</span>
+                    <span class="filter-label">Bosses</span>
+                </button>
+                <button class="filter-box" data-filter="raid" onclick="filterChecklists('raid')">
+                    <span class="filter-icon">⚔️</span>
+                    <span class="filter-label">Raid</span>
+                </button>
+                <button class="filter-box" data-filter="base" onclick="filterChecklists('base')">
+                    <span class="filter-icon">🏠</span>
+                    <span class="filter-label">Base</span>
+                </button>
+                <button class="filter-box reset-box" onclick="showResetAllModal()">
+                    <span class="filter-icon">🗑️</span>
+                    <span class="filter-label">Reset</span>
+                </button>
             </div>
 
             <h3 class="checklist-section-title" data-category="seasonal">Seasonal Preparation</h3>

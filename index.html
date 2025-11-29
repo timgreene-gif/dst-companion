@@ -1589,14 +1589,6 @@
                 <span>Recipes • Progression • Survival Guide</span>
             </div>
             <div class="header-controls">
-                <div class="character-picker">
-                    <button class="character-picker-btn" onclick="toggleCharacterPicker()" title="Select your character">
-                        <span class="picker-icon" id="selected-char-icon">👤</span>
-                        <span class="picker-name" id="selected-char-name">Select Character</span>
-                        <span class="picker-arrow">▼</span>
-                    </button>
-                    <div class="character-picker-dropdown" id="character-dropdown"></div>
-                </div>
                 <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
                     <span class="theme-icon">🌙</span>
                 </button>
@@ -1619,13 +1611,6 @@
         <!-- Crock Pot Recipes Section -->
         <section id="recipes" class="section active">
             <h2 class="section-title">Crock Pot Recipes</h2>
-            <div class="character-tips-banner" data-tip-type="recipes">
-                <div class="tips-header">
-                    <span class="tips-char-icon">👤</span>
-                    <span class="tips-char-name">Character Tips</span>
-                </div>
-                <div class="tips-content"></div>
-            </div>
             <div class="filter-bar">
                 <div class="filter-group">
                     <button class="filter-btn recipe-filter active" data-tier="all">All</button>
@@ -1650,14 +1635,6 @@
         <!-- Progression Section -->
         <section id="progression" class="section">
             <h2 class="section-title">Progression Guide</h2>
-            <div class="character-tips-banner" data-tip-type="progression">
-                <div class="tips-header">
-                    <span class="tips-char-icon">👤</span>
-                    <span class="tips-char-name">Character Tips</span>
-                </div>
-                <div class="tips-content"></div>
-            </div>
-
             <div class="priority-legend">
                 <div class="legend-item">
                     <span class="priority-badge critical">critical</span>
@@ -1690,13 +1667,6 @@
         <!-- Bosses Section -->
         <section id="bosses" class="section">
             <h2 class="section-title">Boss Guide</h2>
-            <div class="character-tips-banner" data-tip-type="bosses">
-                <div class="tips-header">
-                    <span class="tips-char-icon">👤</span>
-                    <span class="tips-char-name">Character Tips</span>
-                </div>
-                <div class="tips-content"></div>
-            </div>
             <div class="filter-bar">
                 <div class="filter-group">
                     <button class="filter-btn boss-filter active" data-type="all">All</button>
@@ -4420,215 +4390,6 @@
 
         initChecklists();
         renderSynergies();
-
-        // Character picker data
-        const CHARACTER_ICONS = {
-            'Wilson': '🧔',
-            'Willow': '🔥',
-            'Wolfgang': '💪',
-            'Wendy': '👻',
-            'WX-78': '🤖',
-            'Wickerbottom': '📚',
-            'Woodie': '🪓',
-            'Wes': '🎈',
-            'Maxwell': '🎩',
-            'Wigfrid': '⚔️',
-            'Webber': '🕷️',
-            'Warly': '👨‍🍳',
-            'Wormwood': '🌱',
-            'Winona': '🔧',
-            'Wurt': '🐸',
-            'Walter': '🐕',
-            'Wanda': '⏰',
-            'Wortox': '😈'
-        };
-
-        const CHARACTER_TIPS = {
-            'Wilson': {
-                recipes: 'Wilson has no food restrictions. Focus on Meatballs early, then Pierogi for healing.',
-                progression: 'Grow your beard for 16 days, then shave for Beard Hair to make a Meat Effigy.',
-                bosses: 'Standard combat approach. Your beard provides winter insulation.',
-                general: 'Great for learning! No special needs, just survive and craft your Meat Effigy.'
-            },
-            'Willow': {
-                recipes: 'No restrictions. Bernie helps with sanity, so prioritize hunger foods like Meaty Stew.',
-                progression: 'Use your lighter for free light. Bernie activates at low sanity to distract shadows.',
-                bosses: 'Fire immunity helps vs Dragonfly! Let Bernie tank shadow creatures.',
-                general: 'Keep Bernie repaired. Your fire immunity makes summer easier.'
-            },
-            'Wolfgang': {
-                recipes: 'HIGH PRIORITY: You need lots of food! Meatballs, Bacon and Eggs, Meaty Stew. Stay mighty!',
-                progression: 'Rush food production. Your hunger drains faster when mighty but damage is 2x!',
-                bosses: 'You are THE boss killer when mighty. Stock 20+ Pierogi before fights.',
-                general: 'Always stay above 220 hunger for mighty form. Potato farming is excellent.'
-            },
-            'Wendy': {
-                recipes: 'Abigail does the killing - focus on sanity foods. Taffy and Ice Cream help.',
-                progression: 'Let Abigail clear spider dens for easy silk and monster meat.',
-                bosses: 'Abigail shines against swarms. Use her for Bee Queen and spider bosses.',
-                general: 'Craft Sisturn to heal Abigail. She is weaker during day, stronger at night.'
-            },
-            'WX-78': {
-                recipes: 'Eat Gears for stats! Otherwise no restrictions. Stale food is fine for you.',
-                progression: 'Hunt clockworks for Gears. Each Gear adds +25 to all stats permanently.',
-                bosses: 'Get overcharged by lightning for speed boost. Ruins have lots of Gears!',
-                general: 'AVOID WATER - you take damage from rain and wetness. Stay dry!'
-            },
-            'Wickerbottom': {
-                recipes: 'You CANNOT sleep or eat stale/spoiled food! Prioritize fresh Pierogi and Dragonpie.',
-                progression: 'Rush Papyrus for books. Applied Horticulture = infinite food.',
-                bosses: 'Sleepytime Stories can cheese some fights. On Tentacles for damage.',
-                general: 'Your books are game-changing. Manage sanity with cooked green mushrooms.'
-            },
-            'Woodie': {
-                recipes: 'Eat anything! Werebeaver form drains your log meter, not hunger.',
-                progression: 'Lucy the Axe never breaks. Werebeaver clears forests instantly.',
-                bosses: 'Weremoose form is tanky. Use Weregoose for scouting.',
-                general: 'Collect Kitschy Idols to control transformations. Full moon = forced transform.'
-            },
-            'Wes': {
-                recipes: 'CHALLENGE MODE: You deal 25% less damage and have 25% more hunger drain!',
-                progression: 'Everything is harder. Master kiting and food management.',
-                bosses: 'Bring extra gear. Fights take longer with your reduced damage.',
-                general: 'Wes is hard mode. If you can survive as Wes, you can play anyone.'
-            },
-            'Maxwell': {
-                recipes: 'Low health (75 HP) so Pierogi healing is crucial. Sanity regen helps with shadows.',
-                progression: 'Shadow workers gather for you! Codex Umbra + Nightmare Fuel = free labor.',
-                bosses: 'You are fragile! Let shadows fight, kite carefully, always have escape plan.',
-                general: 'Your 6 sanity/min regen is huge. Shadow miners and loggers = infinite resources.'
-            },
-            'Wigfrid': {
-                recipes: 'MEAT ONLY! No veggies or fruits. Meatballs, Meaty Stew, Pierogi (egg counts).',
-                progression: 'Craft Battle Helm and Battle Spear day 1. You gain health/sanity on hit.',
-                bosses: 'Born for combat! Lifesteal on hit keeps you healthy. Tank for your team.',
-                general: 'Drying racks for jerky are essential. Koalefant trunk makes great meals.'
-            },
-            'Webber': {
-                recipes: 'Monster meat is safe for you! Eat it raw or cook Monster Lasagna.',
-                progression: 'Befriend spiders with meat. Build spider dens at base for army.',
-                bosses: 'Spider army can swarm bosses. Nurse spiders heal your spiders.',
-                general: 'Pigs and Bunnymen are hostile! Stick to spider territory.'
-            },
-            'Warly': {
-                recipes: 'CHEF LIFE: Foods give less hunger if repeated within 2 days. Variety is key!',
-                progression: 'Portable Crock Pot from day 1! Spices buff your team significantly.',
-                bosses: 'Volt Goat Chaud-Froid + Chili Flakes = massive damage boost for team.',
-                general: 'You are the team chef. Plan meals in advance, never repeat dishes.'
-            },
-            'Wormwood': {
-                recipes: 'You CANNOT heal from food! Use Healing Salves, Honey Poultice, or Bee Queen Crown.',
-                progression: 'Plant seeds directly without farms. Bloom in spring for sanity.',
-                bosses: 'Bring lots of healing items - Salves and Poultice, not food!',
-                general: 'Befriend plants. Craft Living Logs from your own health when needed.'
-            },
-            'Winona': {
-                recipes: 'No restrictions. Keep hunger up for faster crafting speed.',
-                progression: 'Build Catapults and Generators at base. Spotlight grid for safety.',
-                bosses: 'Catapult kill chambers can cheese bosses! Set up in advance.',
-                general: 'Your structures need Gems for generators. Explore ruins for gems.'
-            },
-            'Wurt': {
-                recipes: 'VEGETARIAN ONLY! No meat at all. Dragonpie, Ratatouille, Veggie foods.',
-                progression: 'Build Merm houses, craft Royal Tapestry for Merm King buffs.',
-                bosses: 'Merm army with King buffs is strong. Command them in battle.',
-                general: 'Swamp is home. Merms are friendly, pigs are hostile to you.'
-            },
-            'Walter': {
-                recipes: 'No restrictions but losing health = losing sanity! Prioritize safe foods.',
-                progression: 'Gather ammo materials. Marble and Gold rounds for Slingshot.',
-                bosses: 'Ranged attacks with Slingshot are safe. Feed Woby to make her big for riding.',
-                general: 'No sanity loss from monsters but damage hurts your mind. Stay healthy!'
-            },
-            'Wanda': {
-                recipes: 'AGE IS HEALTH! Food heals sanity but not age. Use Watches for healing.',
-                progression: 'Craft Alarming Clock ASAP for emergency age reset.',
-                bosses: 'Backstep Watch for dodging. Shadow weapons scale with age (older = stronger).',
-                general: 'Complex mechanics. Younger = more health but weaker attacks. Balance your age.'
-            },
-            'Wortox': {
-                recipes: 'Food only gives HALF value! Souls heal you and allies. Farm souls constantly.',
-                progression: 'Kill creatures for souls (max 20). Soul hop for fast travel.',
-                bosses: 'Your soul healing supports the team! Stay near combat for soul drops.',
-                general: 'Hostile to Bunnymen and Pigs. Gather double the food or rely on souls.'
-            }
-        };
-
-        let selectedCharacter = localStorage.getItem('dst-selected-character') || null;
-
-        function toggleCharacterPicker() {
-            const dropdown = document.getElementById('character-dropdown');
-            dropdown.classList.toggle('active');
-        }
-
-        function renderCharacterDropdown() {
-            const dropdown = document.getElementById('character-dropdown');
-            const chars = Object.keys(CHARACTER_ICONS);
-
-            let html = chars.map(name => `
-                <div class="picker-option ${selectedCharacter === name ? 'selected' : ''}" onclick="selectCharacter('${name}')">
-                    <span class="picker-option-icon">${CHARACTER_ICONS[name]}</span>
-                    <div class="picker-option-info">
-                        <div class="picker-option-name">${name}</div>
-                    </div>
-                </div>
-            `).join('');
-
-            html += '<div class="picker-clear" onclick="selectCharacter(null)">Clear Selection</div>';
-            dropdown.innerHTML = html;
-        }
-
-        function selectCharacter(name) {
-            selectedCharacter = name;
-            if (name) {
-                localStorage.setItem('dst-selected-character', name);
-                document.getElementById('selected-char-icon').textContent = CHARACTER_ICONS[name];
-                document.getElementById('selected-char-name').textContent = name;
-            } else {
-                localStorage.removeItem('dst-selected-character');
-                document.getElementById('selected-char-icon').textContent = '👤';
-                document.getElementById('selected-char-name').textContent = 'Select Character';
-            }
-            document.getElementById('character-dropdown').classList.remove('active');
-            renderCharacterDropdown();
-            updateCharacterTips();
-        }
-
-        function updateCharacterTips() {
-            const banners = document.querySelectorAll('.character-tips-banner');
-            banners.forEach(banner => {
-                if (selectedCharacter && CHARACTER_TIPS[selectedCharacter]) {
-                    const tipType = banner.dataset.tipType;
-                    const tips = CHARACTER_TIPS[selectedCharacter];
-                    if (tips[tipType]) {
-                        banner.querySelector('.tips-char-icon').textContent = CHARACTER_ICONS[selectedCharacter];
-                        banner.querySelector('.tips-char-name').textContent = selectedCharacter + ' Tips';
-                        banner.querySelector('.tips-content').innerHTML = tips[tipType];
-                        banner.classList.add('active');
-                    } else {
-                        banner.classList.remove('active');
-                    }
-                } else {
-                    banner.classList.remove('active');
-                }
-            });
-        }
-
-        function initCharacterPicker() {
-            renderCharacterDropdown();
-            if (selectedCharacter) {
-                document.getElementById('selected-char-icon').textContent = CHARACTER_ICONS[selectedCharacter];
-                document.getElementById('selected-char-name').textContent = selectedCharacter;
-            }
-            updateCharacterTips();
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.character-picker')) {
-                    document.getElementById('character-dropdown').classList.remove('active');
-                }
-            });
-        }
 
         // Theme handling
         function toggleTheme() {

@@ -1218,6 +1218,61 @@
             margin-right: 4px;
         }
 
+        /* Season Modifier Toggle */
+        .season-modifier-toggle {
+            margin: 1rem 0;
+            padding: 0.75rem 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            gap: 12px;
+        }
+
+        .toggle-label input {
+            display: none;
+        }
+
+        .toggle-slider {
+            width: 44px;
+            height: 24px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .toggle-slider::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: var(--text-secondary);
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: all 0.3s;
+        }
+
+        .toggle-label input:checked + .toggle-slider {
+            background: var(--accent-primary);
+        }
+
+        .toggle-label input:checked + .toggle-slider::after {
+            transform: translateX(20px);
+            background: white;
+        }
+
+        .toggle-text {
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+
         .checklist-section-title {
             font-size: 1.3rem;
             color: var(--accent-primary);
@@ -1319,6 +1374,10 @@
                 </div>
             </div>
             <div class="character-grid" id="character-grid"></div>
+
+            <h3 class="section-title" style="margin-top: 2rem; font-size: 1.3rem;">🤝 Party Synergies</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Best character combinations for multiplayer. Click any character above to see their synergies!</p>
+            <div class="synergy-grid" id="synergy-grid"></div>
         </section>
 
         <!-- Crafting Section -->
@@ -1413,6 +1472,14 @@
                             <button class="day-btn" onclick="adjustDay(1)">+</button>
                             <button class="day-btn" onclick="adjustDay(5)">+5</button>
                         </div>
+                    </div>
+
+                    <div class="season-modifier-toggle">
+                        <label class="toggle-label">
+                            <input type="checkbox" id="extended-seasons" onchange="toggleExtendedSeasons()">
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-text">Extended Seasons (50 days each)</span>
+                        </label>
                     </div>
 
                     <div class="current-season-display" id="season-display">
@@ -2123,6 +2190,86 @@
             
             // Challenge Tier
             { name: 'Wes', tier: 'C', health: 113, hunger: 113, sanity: 150, perk: 'Challenge character. 25% less damage, 25% more hunger drain.', role: 'Challenge', difficulty: 'Very Hard' }
+        ];
+
+
+        // Party Synergies - Great character combinations
+        const PARTY_SYNERGIES = [
+            {
+                name: 'The Dream Team',
+                members: ['Wolfgang', 'Wickerbottom', 'Wortox'],
+                description: 'Wolfgang deals massive damage, Wickerbottom provides tentacles/crops, Wortox keeps everyone healed. Unstoppable combo for all content.'
+            },
+            {
+                name: 'Spider Army',
+                members: ['Webber', 'Wendy'],
+                description: 'Webber befriends spiders while Wendy's Abigail protects from threats. Both benefit from spider farming.'
+            },
+            {
+                name: 'The Gatherers',
+                members: ['Maxwell', 'Woodie'],
+                description: 'Shadow puppets and Werebeaver form clear forests and mine entire biomes. Resource gathering at maximum speed.'
+            },
+            {
+                name: 'Combat Duo',
+                members: ['Wolfgang', 'Wigfrid'],
+                description: 'Two powerhouse fighters. Wigfrid provides Battle Helms for the team, Wolfgang provides raw damage. Boss killers.'
+            },
+            {
+                name: 'Farm Masters',
+                members: ['Wormwood', 'Wickerbottom'],
+                description: 'Wormwood plants without tools, Wickerbottom force-grows with Applied Horticulture. Infinite food production.'
+            },
+            {
+                name: 'Sustain Squad',
+                members: ['Wortox', 'Warly'],
+                description: 'Wortox provides soul healing, Warly provides buffing dishes. Team stays fed and healthy indefinitely.'
+            },
+            {
+                name: 'Army Commanders',
+                members: ['Webber', 'Wurt'],
+                description: 'Spider army meets Merm army. Two player-controlled armies can overwhelm any boss or threat.'
+            },
+            {
+                name: 'Base Builders',
+                members: ['Winona', 'Maxwell'],
+                description: 'Winona crafts faster and builds catapults, Maxwell's puppets gather all materials. Efficient base building.'
+            },
+            {
+                name: 'The Tanks',
+                members: ['Wolfgang', 'WX-78'],
+                description: 'Both have high health potential. Wolfgang mighty form + WX-78 overcharge = destruction. Great for Raid bosses.'
+            },
+            {
+                name: 'Night Owls',
+                members: ['Willow', 'Wendy'],
+                description: 'Willow's Bernie and Wendy's Abigail both handle shadow creatures. Night exploration made easy.'
+            },
+            {
+                name: 'Support Core',
+                members: ['Wickerbottom', 'Warly', 'Wortox'],
+                description: 'Books, food buffs, and healing. The ultimate support trio for keeping a large server alive.'
+            },
+            {
+                name: 'Explorer's Guild',
+                members: ['Woodie', 'Walter'],
+                description: 'Weregoose and Woby for fast exploration. Map the entire world quickly and safely.'
+            },
+            {
+                name: 'Fire and Ice',
+                members: ['Willow', 'WX-78'],
+                description: 'Willow immune to fire (Summer/Dragonfly), WX-78 loves rain (overcharge). Cover all seasons.'
+            },
+            {
+                name: 'Eternal Kitchen',
+                members: ['Warly', 'Wormwood', 'Wickerbottom'],
+                description: 'Wormwood plants, Wickerbottom grows, Warly cooks. Restaurant-quality food production line.'
+            },
+            {
+                name: 'The Carry Comp',
+                members: ['Wolfgang', 'Wickerbottom', 'Wortox', 'Warly'],
+                description: 'The ultimate 4-player team. Wolfgang DPS, Wickerbottom utility, Wortox healing, Warly buffs. Can clear all content.'
+            }
         ];
 
         const CRAFTING = [
@@ -3055,13 +3202,55 @@
         // DAY TRACKER
         // =====================================
 
+        // Season configuration - default (70 day year) vs extended (200 day year)
+        let extendedSeasons = localStorage.getItem('dst-extended-seasons') === 'true';
+        
+        const SEASON_CONFIGS = {
+            default: {
+                yearLength: 70,
+                seasons: [
+                    { name: 'Autumn', start: 1, end: 20, length: 20, icon: '🍂', color: 'autumn' },
+                    { name: 'Winter', start: 21, end: 35, length: 15, icon: '❄️', color: 'winter' },
+                    { name: 'Spring', start: 36, end: 55, length: 20, icon: '🌸', color: 'spring' },
+                    { name: 'Summer', start: 56, end: 70, length: 15, icon: '☀️', color: 'summer' }
+                ]
+            },
+            extended: {
+                yearLength: 200,
+                seasons: [
+                    { name: 'Autumn', start: 1, end: 50, length: 50, icon: '🍂', color: 'autumn' },
+                    { name: 'Winter', start: 51, end: 100, length: 50, icon: '❄️', color: 'winter' },
+                    { name: 'Spring', start: 101, end: 150, length: 50, icon: '🌸', color: 'spring' },
+                    { name: 'Summer', start: 151, end: 200, length: 50, icon: '☀️', color: 'summer' }
+                ]
+            }
+        };
+
+        function getYearLength() {
+            return extendedSeasons ? SEASON_CONFIGS.extended.yearLength : SEASON_CONFIGS.default.yearLength;
+        }
+
+        function getSeasonData() {
+            return extendedSeasons ? SEASON_CONFIGS.extended.seasons : SEASON_CONFIGS.default.seasons;
+        }
+
+        // Legacy compatibility
         const YEAR_LENGTH = 70;
-        const SEASON_DATA = [
-            { name: 'Autumn', start: 1, end: 20, length: 20, icon: '🍂', color: 'autumn' },
-            { name: 'Winter', start: 21, end: 35, length: 15, icon: '❄️', color: 'winter' },
-            { name: 'Spring', start: 36, end: 55, length: 20, icon: '🌸', color: 'spring' },
-            { name: 'Summer', start: 56, end: 70, length: 15, icon: '☀️', color: 'summer' }
-        ];
+        const SEASON_DATA = SEASON_CONFIGS.default.seasons;
+
+        function toggleExtendedSeasons() {
+            extendedSeasons = document.getElementById('extended-seasons').checked;
+            localStorage.setItem('dst-extended-seasons', extendedSeasons);
+            updateTimelineLabels();
+            updateDayTracker();
+        }
+
+        function updateTimelineLabels() {
+            const labels = document.querySelector('.timeline-labels');
+            if (!labels) return;
+            const seasons = getSeasonData();
+            labels.innerHTML = '<span>Day 1</span><span>Day ' + seasons[0].end + '</span><span>Day ' + seasons[1].end + '</span><span>Day ' + seasons[2].end + '</span><span>Day ' + getYearLength() + '</span>';
+        }
 
         const BOSS_EVENTS = [
             { name: 'Deerclops', day: 30, warning: 'Spawns at night. Lead away from base!', type: 'danger' },
@@ -3071,30 +3260,39 @@
         ];
 
         function getSeasonForDay(day) {
-            const dayInYear = ((day - 1) % YEAR_LENGTH) + 1;
-            for (const season of SEASON_DATA) {
+            const yearLen = getYearLength();
+            const seasons = getSeasonData();
+            const dayInYear = ((day - 1) % yearLen) + 1;
+            for (const season of seasons) {
                 if (dayInYear >= season.start && dayInYear <= season.end) {
                     const dayInSeason = dayInYear - season.start + 1;
                     const daysRemaining = season.end - dayInYear;
                     return { ...season, dayInSeason, daysRemaining, dayInYear };
                 }
             }
-            return SEASON_DATA[0];
+            return seasons[0];
         }
 
         function getYear(day) {
-            return Math.floor((day - 1) / YEAR_LENGTH) + 1;
+            return Math.floor((day - 1) / getYearLength()) + 1;
         }
 
         function getUpcomingEvents(day) {
-            const dayInYear = ((day - 1) % YEAR_LENGTH) + 1;
+            const yearLen = getYearLength();
+            const dayInYear = ((day - 1) % yearLen) + 1;
             const year = getYear(day);
             const events = [];
             BOSS_EVENTS.forEach(boss => {
                 if (boss.yearMin && year < boss.yearMin) return;
-                let daysUntil = boss.day - dayInYear;
-                if (daysUntil < 0) daysUntil += YEAR_LENGTH;
-                if (daysUntil === 0) daysUntil = YEAR_LENGTH;
+                // Adjust boss day for extended seasons
+                let bossDay = boss.day;
+                if (extendedSeasons) {
+                    // Scale boss days proportionally
+                    bossDay = Math.round((boss.day / 70) * 200);
+                }
+                let daysUntil = bossDay - dayInYear;
+                if (daysUntil < 0) daysUntil += yearLen;
+                if (daysUntil === 0) daysUntil = yearLen;
                 if (daysUntil <= 20) events.push({ ...boss, daysUntil });
             });
             const season = getSeasonForDay(day);
@@ -3163,9 +3361,10 @@
             const progress = document.getElementById('season-progress');
             progress.style.width = ((season.dayInSeason / season.length) * 100) + '%';
             progress.className = 'season-progress-fill ' + season.color;
-            document.getElementById('season-progress-text').textContent = season.daysRemaining + ' days until ' + SEASON_DATA[(SEASON_DATA.findIndex(s => s.name === season.name) + 1) % 4].name;
+            const seasonData = getSeasonData();
+            document.getElementById('season-progress-text').textContent = season.daysRemaining + ' days until ' + seasonData[(seasonData.findIndex(s => s.name === season.name) + 1) % 4].name;
 
-            document.getElementById('timeline-marker').style.left = (((season.dayInYear - 1) / YEAR_LENGTH) * 100) + '%';
+            document.getElementById('timeline-marker').style.left = (((season.dayInYear - 1) / getYearLength()) * 100) + '%';
 
             const alertsDiv = document.getElementById('tracker-alerts');
             let alertsHtml = '';
@@ -3209,6 +3408,14 @@
 
         const savedDay = localStorage.getItem('dst-current-day');
         if (savedDay) document.getElementById('current-day').value = savedDay;
+        
+        // Init extended seasons toggle
+        const extendedToggle = document.getElementById('extended-seasons');
+        if (extendedToggle) {
+            extendedToggle.checked = extendedSeasons;
+            updateTimelineLabels();
+        }
+        
         updateDayTracker();
 
 
@@ -3456,6 +3663,7 @@
         }
 
         initChecklists();
+        renderSynergies();
     </script>
 </body>
 </html>

@@ -1219,57 +1219,106 @@
         }
 
         /* Season Modifier Toggle */
-        .season-modifier-toggle {
+        .season-modifier-panel {
             margin: 1rem 0;
-            padding: 0.75rem 1rem;
+            padding: 1rem;
             background: var(--bg-tertiary);
             border-radius: 8px;
         }
 
-        .toggle-label {
+        .season-modifier-title {
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .season-length-controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .season-length-item {
             display: flex;
             align-items: center;
-            cursor: pointer;
-            gap: 12px;
-        }
-
-        .toggle-label input {
-            display: none;
-        }
-
-        .toggle-slider {
-            width: 44px;
-            height: 24px;
+            gap: 0.5rem;
+            padding: 0.5rem;
             background: var(--bg-secondary);
-            border-radius: 12px;
-            position: relative;
-            transition: all 0.3s;
+            border-radius: 6px;
+            border-left: 3px solid;
         }
 
-        .toggle-slider::after {
-            content: '';
-            position: absolute;
-            width: 18px;
-            height: 18px;
-            background: var(--text-secondary);
-            border-radius: 50%;
-            top: 3px;
-            left: 3px;
-            transition: all 0.3s;
+        .season-length-item.autumn { border-color: var(--season-autumn); }
+        .season-length-item.winter { border-color: var(--season-winter); }
+        .season-length-item.spring { border-color: var(--season-spring); }
+        .season-length-item.summer { border-color: var(--season-summer); }
+
+        .season-length-icon {
+            font-size: 1.1rem;
         }
 
-        .toggle-label input:checked + .toggle-slider {
-            background: var(--accent-primary);
-        }
-
-        .toggle-label input:checked + .toggle-slider::after {
-            transform: translateX(20px);
-            background: white;
-        }
-
-        .toggle-text {
+        .season-length-name {
+            flex: 1;
+            font-size: 0.85rem;
             color: var(--text-primary);
-            font-size: 0.9rem;
+        }
+
+        .season-length-input {
+            width: 50px;
+            padding: 4px 6px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--bg-primary);
+            border-radius: 4px;
+            color: var(--text-primary);
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .season-length-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .season-length-unit {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .season-presets {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .preset-btn {
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--bg-primary);
+            border-radius: 4px;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .preset-btn:hover {
+            background: var(--accent-primary);
+            color: #1a1a1a;
+            border-color: var(--accent-primary);
+        }
+
+        .year-total {
+            margin-top: 0.75rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .year-total span {
+            font-weight: 600;
+            color: var(--accent-primary);
         }
 
 
@@ -1474,12 +1523,40 @@
                         </div>
                     </div>
 
-                    <div class="season-modifier-toggle">
-                        <label class="toggle-label">
-                            <input type="checkbox" id="extended-seasons" onchange="toggleExtendedSeasons()">
-                            <span class="toggle-slider"></span>
-                            <span class="toggle-text">Extended Seasons (50 days each)</span>
-                        </label>
+                    <div class="season-modifier-panel">
+                        <div class="season-modifier-title">Season Length Settings</div>
+                        <div class="season-length-controls">
+                            <div class="season-length-item autumn">
+                                <span class="season-length-icon">🍂</span>
+                                <span class="season-length-name">Autumn</span>
+                                <input type="number" id="autumn-length" class="season-length-input" value="20" min="5" max="100" onchange="updateSeasonLength()">
+                                <span class="season-length-unit">days</span>
+                            </div>
+                            <div class="season-length-item winter">
+                                <span class="season-length-icon">❄️</span>
+                                <span class="season-length-name">Winter</span>
+                                <input type="number" id="winter-length" class="season-length-input" value="15" min="5" max="100" onchange="updateSeasonLength()">
+                                <span class="season-length-unit">days</span>
+                            </div>
+                            <div class="season-length-item spring">
+                                <span class="season-length-icon">🌸</span>
+                                <span class="season-length-name">Spring</span>
+                                <input type="number" id="spring-length" class="season-length-input" value="20" min="5" max="100" onchange="updateSeasonLength()">
+                                <span class="season-length-unit">days</span>
+                            </div>
+                            <div class="season-length-item summer">
+                                <span class="season-length-icon">☀️</span>
+                                <span class="season-length-name">Summer</span>
+                                <input type="number" id="summer-length" class="season-length-input" value="15" min="5" max="100" onchange="updateSeasonLength()">
+                                <span class="season-length-unit">days</span>
+                            </div>
+                        </div>
+                        <div class="season-presets">
+                            <button class="preset-btn" onclick="setSeasonPreset('default')">Default (70 days)</button>
+                            <button class="preset-btn" onclick="setSeasonPreset('long')">Long (50 each)</button>
+                            <button class="preset-btn" onclick="setSeasonPreset('endless-summer')">Endless Summer</button>
+                        </div>
+                        <div class="year-total">Year Length: <span id="year-total">70</span> days</div>
                     </div>
 
                     <div class="current-season-display" id="season-display">
@@ -3468,12 +3545,9 @@
         const savedDay = localStorage.getItem('dst-current-day');
         if (savedDay) document.getElementById('current-day').value = savedDay;
         
-        // Init extended seasons toggle
-        const extendedToggle = document.getElementById('extended-seasons');
-        if (extendedToggle) {
-            extendedToggle.checked = extendedSeasons;
-            updateTimelineLabels();
-        }
+        // Init season length controls
+        initSeasonControls();
+        updateTimelineLabels();
         
         updateDayTracker();
 

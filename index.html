@@ -1815,13 +1815,25 @@
             <div class="print-header">Don't Starve Together - Survival Checklists</div>
             <div class="print-date"></div>
 
-            <div class="print-btn-container">
-                <button class="print-btn" onclick="printChecklists()">🖨️ Print Checklists</button>
-                <button class="global-reset-btn" onclick="showResetAllModal()" style="margin-left: 0.5rem;">🗑️ Reset All Checklists</button>
+            <div class="checklist-controls">
+                <div class="checklist-filter">
+                    <label for="checklist-type-filter">Show:</label>
+                    <select id="checklist-type-filter" onchange="filterChecklists(this.value)">
+                        <option value="all">All Checklists</option>
+                        <option value="seasonal">Seasonal Preparation</option>
+                        <option value="boss">Boss Preparation</option>
+                        <option value="raid">Raid Bosses</option>
+                        <option value="base">Base Building</option>
+                    </select>
+                </div>
+                <div class="checklist-buttons">
+                    <button class="print-btn" onclick="printChecklists()">🖨️ Print</button>
+                    <button class="global-reset-btn" onclick="showResetAllModal()">🗑️ Reset All</button>
+                </div>
             </div>
 
-            <h3 class="checklist-section-title">Seasonal Preparation</h3>
-            <div class="checklists-container">
+            <h3 class="checklist-section-title" data-category="seasonal">Seasonal Preparation</h3>
+            <div class="checklists-container" data-category="seasonal">
                 <!-- First Winter Checklist -->
                 <div class="checklist-card winter" data-checklist="first-winter">
                     <div class="checklist-header">
@@ -1843,8 +1855,8 @@
                 </div>
             </div>
 
-            <h3 class="checklist-section-title">Boss Preparation</h3>
-            <div class="checklists-container">
+            <h3 class="checklist-section-title" data-category="boss">Boss Preparation</h3>
+            <div class="checklists-container" data-category="boss">
                 <!-- Deerclops Kit -->
                 <div class="checklist-card boss" data-checklist="deerclops">
                     <div class="checklist-header">
@@ -1886,8 +1898,8 @@
                 </div>
             </div>
 
-            <h3 class="checklist-section-title">Raid Bosses</h3>
-            <div class="checklists-container">
+            <h3 class="checklist-section-title" data-category="raid">Raid Bosses</h3>
+            <div class="checklists-container" data-category="raid">
                 <!-- Ancient Guardian Kit -->
                 <div class="checklist-card boss raid" data-checklist="ancient-guardian">
                     <div class="checklist-header">
@@ -1929,8 +1941,8 @@
                 </div>
             </div>
 
-            <h3 class="checklist-section-title">Base Building</h3>
-            <div class="checklists-container">
+            <h3 class="checklist-section-title" data-category="base">Base Building</h3>
+            <div class="checklists-container" data-category="base">
                 <!-- Essential Base -->
                 <div class="checklist-card base" data-checklist="essential-base">
                     <div class="checklist-header">

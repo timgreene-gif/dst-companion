@@ -1218,110 +1218,6 @@
             margin-right: 4px;
         }
 
-        /* Season Modifier Toggle */
-        .season-modifier-panel {
-            margin: 1rem 0;
-            padding: 1rem;
-            background: var(--bg-tertiary);
-            border-radius: 8px;
-        }
-
-        .season-modifier-title {
-            font-weight: 600;
-            color: var(--accent-primary);
-            margin-bottom: 0.75rem;
-            font-size: 0.95rem;
-        }
-
-        .season-length-controls {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.5rem;
-        }
-
-        .season-length-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem;
-            background: var(--bg-secondary);
-            border-radius: 6px;
-            border-left: 3px solid;
-        }
-
-        .season-length-item.autumn { border-color: var(--season-autumn); }
-        .season-length-item.winter { border-color: var(--season-winter); }
-        .season-length-item.spring { border-color: var(--season-spring); }
-        .season-length-item.summer { border-color: var(--season-summer); }
-
-        .season-length-icon {
-            font-size: 1.1rem;
-        }
-
-        .season-length-name {
-            flex: 1;
-            font-size: 0.85rem;
-            color: var(--text-primary);
-        }
-
-        .season-length-input {
-            width: 50px;
-            padding: 4px 6px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--bg-primary);
-            border-radius: 4px;
-            color: var(--text-primary);
-            text-align: center;
-            font-size: 0.85rem;
-        }
-
-        .season-length-input:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-        }
-
-        .season-length-unit {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        .season-presets {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        .preset-btn {
-            padding: 6px 12px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--bg-primary);
-            border-radius: 4px;
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .preset-btn:hover {
-            background: var(--accent-primary);
-            color: #1a1a1a;
-            border-color: var(--accent-primary);
-        }
-
-        .year-total {
-            margin-top: 0.75rem;
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .year-total span {
-            font-weight: 600;
-            color: var(--accent-primary);
-        }
-
-
         .checklist-section-title {
             font-size: 1.3rem;
             color: var(--accent-primary);
@@ -1423,10 +1319,6 @@
                 </div>
             </div>
             <div class="character-grid" id="character-grid"></div>
-
-            <h3 class="section-title" style="margin-top: 2rem; font-size: 1.3rem;">🤝 Party Synergies</h3>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Best character combinations for multiplayer. Click any character above to see their synergies!</p>
-            <div class="synergy-grid" id="synergy-grid"></div>
         </section>
 
         <!-- Crafting Section -->
@@ -1521,42 +1413,6 @@
                             <button class="day-btn" onclick="adjustDay(1)">+</button>
                             <button class="day-btn" onclick="adjustDay(5)">+5</button>
                         </div>
-                    </div>
-
-                    <div class="season-modifier-panel">
-                        <div class="season-modifier-title">Season Length Settings</div>
-                        <div class="season-length-controls">
-                            <div class="season-length-item autumn">
-                                <span class="season-length-icon">🍂</span>
-                                <span class="season-length-name">Autumn</span>
-                                <input type="number" id="autumn-length" class="season-length-input" value="20" min="5" max="100" onchange="updateSeasonLength()">
-                                <span class="season-length-unit">days</span>
-                            </div>
-                            <div class="season-length-item winter">
-                                <span class="season-length-icon">❄️</span>
-                                <span class="season-length-name">Winter</span>
-                                <input type="number" id="winter-length" class="season-length-input" value="15" min="5" max="100" onchange="updateSeasonLength()">
-                                <span class="season-length-unit">days</span>
-                            </div>
-                            <div class="season-length-item spring">
-                                <span class="season-length-icon">🌸</span>
-                                <span class="season-length-name">Spring</span>
-                                <input type="number" id="spring-length" class="season-length-input" value="20" min="5" max="100" onchange="updateSeasonLength()">
-                                <span class="season-length-unit">days</span>
-                            </div>
-                            <div class="season-length-item summer">
-                                <span class="season-length-icon">☀️</span>
-                                <span class="season-length-name">Summer</span>
-                                <input type="number" id="summer-length" class="season-length-input" value="15" min="5" max="100" onchange="updateSeasonLength()">
-                                <span class="season-length-unit">days</span>
-                            </div>
-                        </div>
-                        <div class="season-presets">
-                            <button class="preset-btn" onclick="setSeasonPreset('default')">Default (70 days)</button>
-                            <button class="preset-btn" onclick="setSeasonPreset('long')">Long (50 each)</button>
-                            <button class="preset-btn" onclick="setSeasonPreset('endless-summer')">Endless Summer</button>
-                        </div>
-                        <div class="year-total">Year Length: <span id="year-total">70</span> days</div>
                     </div>
 
                     <div class="current-season-display" id="season-display">
@@ -2241,112 +2097,32 @@
             }
         ];
 
-                const CHARACTERS = [
+        const CHARACTERS = [
             // S-Tier
-            { name: 'Wolfgang', tier: 'S', health: 200, hunger: 200, sanity: 200, perk: 'Gains massive damage when well-fed (up to 2x)', role: 'Combat', difficulty: 'Medium', startingTasks: ['Gather food immediately - stay mighty', 'Hunt Koalefants for Trunk Steak', 'Build Crock Pot ASAP for Meatballs', 'Stockpile Jerky for hunger/health', 'Practice kiting - you are boss killer'] },
-            { name: 'Wickerbottom', tier: 'S', health: 150, hunger: 150, sanity: 250, perk: 'Crafts magical books. Cannot sleep.', role: 'Support/Utility', difficulty: 'Hard', startingTasks: ['Rush Science Machine + Alchemy Engine', 'Gather Papyrus for books', 'Make Applied Horticulture book', 'Build Drying Racks (no spoilage)', 'Stock Green Mushrooms for sanity'] },
-            { name: 'WX-78', tier: 'S', health: 150, hunger: 150, sanity: 150, perk: 'Upgrades with Gears. Lightning overcharge.', role: 'Flexible', difficulty: 'Medium', startingTasks: ['Locate Clockwork setpieces', 'Kill Clockworks for Gears', 'Eat Gears to upgrade stats', 'Build Lightning Rod at base', 'Avoid Wetness - you take damage'] },
-            { name: 'Maxwell', tier: 'S', health: 75, hunger: 150, sanity: 200, perk: 'Shadow puppets for resource gathering', role: 'Resource Gathering', difficulty: 'Hard', startingTasks: ['Get Nightmare Fuel ASAP', 'Craft Shadow Logger and Miner', 'Let puppets work while exploring', 'Always carry armor - 75 HP is fragile', 'Stay mobile - puppets do work'] },
-
+            { name: 'Wolfgang', tier: 'S', health: 200, hunger: 200, sanity: 200, perk: 'Gains massive damage when well-fed (up to 2x)', role: 'Combat', difficulty: 'Medium' },
+            { name: 'Wickerbottom', tier: 'S', health: 150, hunger: 150, sanity: 250, perk: 'Crafts magical books. Can\'t sleep.', role: 'Support/Utility', difficulty: 'Hard' },
+            { name: 'WX-78', tier: 'S', health: 150, hunger: 150, sanity: 150, perk: 'Upgrades with Gears. Lightning overcharge.', role: 'Flexible', difficulty: 'Medium' },
+            { name: 'Maxwell', tier: 'S', health: 75, hunger: 150, sanity: 200, perk: 'Shadow puppets for resource gathering', role: 'Resource Gathering', difficulty: 'Hard' },
+            
             // A-Tier
-            { name: 'Wigfrid', tier: 'A', health: 200, hunger: 120, sanity: 120, perk: 'Heals on hit. Meat only diet.', role: 'Combat', difficulty: 'Easy', startingTasks: ['Hunt constantly - meat only', 'Craft Battle Helm and Spear', 'Build Drying Racks for Jerky', 'Clear Spider Dens for Meat+Silk', 'Tank for team - heal on hit'] },
-            { name: 'Wendy', tier: 'A', health: 150, hunger: 150, sanity: 200, perk: 'Ghost sister Abigail fights for her', role: 'Combat/Farming', difficulty: 'Easy', startingTasks: ['Summon Abigail with flower', 'Farm Spider Dens with Abigail', 'Collect Nightmare Fuel for upgrades', 'Craft Sisturn for Abigail healing', 'Use Abigail for mob clearing'] },
-            { name: 'Wortox', tier: 'A', health: 150, hunger: 175, sanity: 150, perk: 'Souls for healing/teleport. Half food value.', role: 'Support', difficulty: 'Medium', startingTasks: ['Kill creatures for souls (20 max)', 'Heal teammates with souls', 'Soul hop for fast travel/kiting', 'Gather double food - half value', 'Stay near combat for souls'] },
-            { name: 'Warly', tier: 'A', health: 150, hunger: 250, sanity: 200, perk: 'Portable crock pot. Special spices.', role: 'Support/Food', difficulty: 'Hard', startingTasks: ['Use Portable Crock Pot day 1', 'Gather diverse ingredients', 'Craft Spices for team buffs', 'Never eat same dish twice in 2 days', 'Feed team - you are the chef'] },
-            { name: 'Wanda', tier: 'A', health: 'Age', hunger: 175, sanity: 200, perk: 'Time magic. Age = health.', role: 'Combat', difficulty: 'Very Hard', startingTasks: ['Learn age mechanics', 'Craft Alarming Clock for reset', 'Get Nightmare Fuel for abilities', 'Backstep Watch for dodging', 'No healing items work on you'] },
-            { name: 'Webber', tier: 'A', health: 175, hunger: 175, sanity: 100, perk: 'Befriends spiders. Grows beard.', role: 'Resource/Combat', difficulty: 'Medium', startingTasks: ['Feed spiders meat to befriend', 'Build Spider Dens at base', 'Shave beard for silk', 'Use spider army for bosses', 'Pigs/Bunnymen are hostile to you'] },
-
+            { name: 'Wigfrid', tier: 'A', health: 200, hunger: 120, sanity: 120, perk: 'Heals on hit. Meat only diet.', role: 'Combat', difficulty: 'Easy' },
+            { name: 'Wendy', tier: 'A', health: 150, hunger: 150, sanity: 200, perk: 'Ghost sister Abigail fights for her', role: 'Combat/Farming', difficulty: 'Easy' },
+            { name: 'Wortox', tier: 'A', health: 150, hunger: 175, sanity: 150, perk: 'Souls for healing/teleport. Half food value.', role: 'Support', difficulty: 'Medium' },
+            { name: 'Warly', tier: 'A', health: 150, hunger: 250, sanity: 200, perk: 'Portable crock pot. Special spices.', role: 'Support/Food', difficulty: 'Hard' },
+            { name: 'Wanda', tier: 'A', health: 'Age', hunger: 175, sanity: 200, perk: 'Time magic. Age = health.', role: 'Combat', difficulty: 'Very Hard' },
+            { name: 'Webber', tier: 'A', health: 175, hunger: 175, sanity: 100, perk: 'Befriends spiders. Grows beard.', role: 'Resource/Combat', difficulty: 'Medium' },
+            
             // B-Tier
-            { name: 'Wilson', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Grows beard for warmth and Meat Effigy', role: 'Balanced', difficulty: 'Easy', startingTasks: ['Grow beard for Winter warmth', 'Shave at Day 16 for Beard Hair', 'Craft Meat Effigy for resurrection', 'Build standard base setup', 'Learn mechanics - Wilson is forgiving'] },
-            { name: 'Woodie', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Lucy axe. Were-transformations.', role: 'Resource Gathering', difficulty: 'Medium', startingTasks: ['Use Lucy for infinite chopping', 'Gather Idols for transformations', 'Werebeaver for tree/rock clearing', 'Weremoose for combat', 'Manage transformation meter'] },
-            { name: 'Wormwood', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Plant crops without tools. Cannot heal from food.', role: 'Farming', difficulty: 'Hard', startingTasks: ['Plant seeds directly anywhere', 'Bloom in Spring for sanity', 'Craft Living Logs from health', 'Use Healing Salves and Glands', 'Cannot heal from food!'] },
-            { name: 'Winona', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Builds Catapults and Spotlights', role: 'Building', difficulty: 'Medium', startingTasks: ['Rush Alchemy Engine for Tape', 'Build Generator for power', 'Place Catapults for defense', 'Set up Spotlight grid', 'Create catapult kill chambers'] },
-            { name: 'Wurt', tier: 'B', health: 150, hunger: 200, sanity: 150, perk: 'Befriends Merms. Vegetarian.', role: 'Army Building', difficulty: 'Hard', startingTasks: ['Find Swamp and befriend Merms', 'Build Merm Houses at base', 'Craft Royal Tapestry for King', 'NO MEAT - vegetarian only', 'Merm army can fight bosses'] },
-            { name: 'Walter', tier: 'B', health: 130, hunger: 110, sanity: 200, perk: 'Slingshot. Dog companion Woby.', role: 'Ranged Combat', difficulty: 'Medium', startingTasks: ['Gather Slingshot ammo materials', 'Craft Marble and Gold ammo', 'Ride Woby for fast travel', 'Feed Woby monster meat to grow', 'Avoid damage - lose sanity when hit'] },
-            { name: 'Willow', tier: 'B', health: 150, hunger: 150, sanity: 120, perk: 'Fire immunity. Bernie bear.', role: 'Situational', difficulty: 'Easy', startingTasks: ['Use lighter for infinite light', 'Bernie distracts shadows', 'Immune to fire damage', 'Can cook with lighter', 'Good for Summer/Dragonfly'] },
-
+            { name: 'Wilson', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Grows beard for warmth and Meat Effigy', role: 'Balanced', difficulty: 'Easy' },
+            { name: 'Woodie', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Lucy axe. Were-transformations.', role: 'Resource Gathering', difficulty: 'Medium' },
+            { name: 'Wormwood', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Plant crops without tools. Can\'t heal from food.', role: 'Farming', difficulty: 'Hard' },
+            { name: 'Winona', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Builds Catapults and Spotlights', role: 'Building', difficulty: 'Medium' },
+            { name: 'Wurt', tier: 'B', health: 150, hunger: 200, sanity: 150, perk: 'Befriends Merms. Vegetarian.', role: 'Army Building', difficulty: 'Hard' },
+            { name: 'Walter', tier: 'B', health: 130, hunger: 110, sanity: 200, perk: 'Slingshot. Dog companion Woby.', role: 'Ranged Combat', difficulty: 'Medium' },
+            { name: 'Willow', tier: 'B', health: 150, hunger: 150, sanity: 120, perk: 'Fire immunity. Bernie bear.', role: 'Situational', difficulty: 'Easy' },
+            
             // Challenge Tier
-            { name: 'Wes', tier: 'C', health: 113, hunger: 113, sanity: 150, perk: 'Challenge character. 25% less damage, 25% more hunger drain.', role: 'Challenge', difficulty: 'Very Hard', startingTasks: ['Accept everything is harder', 'Gather extra food - 25% more drain', 'Avoid combat - 25% less damage', 'Use balloons for decoration', 'Flex on friends by surviving'] }
-        ];
-
-
-        // Party Synergies - Great character combinations
-        const PARTY_SYNERGIES = [
-            {
-                name: 'The Dream Team',
-                members: ['Wolfgang', 'Wickerbottom', 'Wortox'],
-                description: 'Wolfgang deals massive damage, Wickerbottom provides tentacles/crops, Wortox keeps everyone healed. Unstoppable combo for all content.'
-            },
-            {
-                name: 'Spider Army',
-                members: ['Webber', 'Wendy'],
-                description: 'Webber befriends spiders while Wendys Abigail protects from threats. Both benefit from spider farming.'
-            },
-            {
-                name: 'The Gatherers',
-                members: ['Maxwell', 'Woodie'],
-                description: 'Shadow puppets and Werebeaver form clear forests and mine entire biomes. Resource gathering at maximum speed.'
-            },
-            {
-                name: 'Combat Duo',
-                members: ['Wolfgang', 'Wigfrid'],
-                description: 'Two powerhouse fighters. Wigfrid provides Battle Helms for the team, Wolfgang provides raw damage. Boss killers.'
-            },
-            {
-                name: 'Farm Masters',
-                members: ['Wormwood', 'Wickerbottom'],
-                description: 'Wormwood plants without tools, Wickerbottom force-grows with Applied Horticulture. Infinite food production.'
-            },
-            {
-                name: 'Sustain Squad',
-                members: ['Wortox', 'Warly'],
-                description: 'Wortox provides soul healing, Warly provides buffing dishes. Team stays fed and healthy indefinitely.'
-            },
-            {
-                name: 'Army Commanders',
-                members: ['Webber', 'Wurt'],
-                description: 'Spider army meets Merm army. Two player-controlled armies can overwhelm any boss or threat.'
-            },
-            {
-                name: 'Base Builders',
-                members: ['Winona', 'Maxwell'],
-                description: 'Winona crafts faster and builds catapults, Maxwells puppets gather all materials. Efficient base building.'
-            },
-            {
-                name: 'The Tanks',
-                members: ['Wolfgang', 'WX-78'],
-                description: 'Both have high health potential. Wolfgang mighty form + WX-78 overcharge = destruction. Great for Raid bosses.'
-            },
-            {
-                name: 'Night Owls',
-                members: ['Willow', 'Wendy'],
-                description: 'Willows Bernie and Wendys Abigail both handle shadow creatures. Night exploration made easy.'
-            },
-            {
-                name: 'Support Core',
-                members: ['Wickerbottom', 'Warly', 'Wortox'],
-                description: 'Books, food buffs, and healing. The ultimate support trio for keeping a large server alive.'
-            },
-            {
-                name: 'Explorers Guild',
-                members: ['Woodie', 'Walter'],
-                description: 'Weregoose and Woby for fast exploration. Map the entire world quickly and safely.'
-            },
-            {
-                name: 'Fire and Ice',
-                members: ['Willow', 'WX-78'],
-                description: 'Willow immune to fire (Summer/Dragonfly), WX-78 loves rain (overcharge). Cover all seasons.'
-            },
-            {
-                name: 'Eternal Kitchen',
-                members: ['Warly', 'Wormwood', 'Wickerbottom'],
-                description: 'Wormwood plants, Wickerbottom grows, Warly cooks. Restaurant-quality food production line.'
-            },
-            {
-                name: 'The Carry Comp',
-                members: ['Wolfgang', 'Wickerbottom', 'Wortox', 'Warly'],
-                description: 'The ultimate 4-player team. Wolfgang DPS, Wickerbottom utility, Wortox healing, Warly buffs. Can clear all content.'
-            }
+            { name: 'Wes', tier: 'C', health: 113, hunger: 113, sanity: 150, perk: 'Challenge character. 25% less damage, 25% more hunger drain.', role: 'Challenge', difficulty: 'Very Hard' }
         ];
 
         const CRAFTING = [
@@ -2545,7 +2321,7 @@
             });
 
             grid.innerHTML = filtered.map(char => `
-                <div class="character-card" onclick="showCharacterModal('${char.name}')" style="cursor: pointer;">
+                <div class="character-card">
                     <div class="character-header">
                         <span class="character-name">${char.name}</span>
                         <span class="character-tier tier-${char.tier === 'S' ? 'essential' : char.tier === 'A' ? 'great' : char.tier === 'B' ? 'good' : 'niche'}">${char.tier}-Tier</span>
@@ -2560,67 +2336,8 @@
                         <span class="character-role">${char.role}</span>
                         <span class="character-role" style="margin-left: 0.5rem;">Difficulty: ${char.difficulty}</span>
                     </div>
-                    <div class="character-tasks-hint">Click for starting tasks →</div>
                 </div>
             `).join('');
-        }
-
-
-        function showCharacterModal(charName) {
-            const char = CHARACTERS.find(c => c.name === charName);
-            if (!char) return;
-
-            const synergies = PARTY_SYNERGIES.filter(s => s.members.includes(charName));
-
-            document.getElementById('modal-title').textContent = char.name;
-            document.getElementById('modal-body').innerHTML =
-                '<div class="modal-section">' +
-                    '<h4>Stats</h4>' +
-                    '<div class="recipe-stats" style="justify-content: flex-start;">' +
-                        '<span class="stat stat-health">❤️ Health: ' + char.health + '</span>' +
-                        '<span class="stat stat-hunger">🍖 Hunger: ' + char.hunger + '</span>' +
-                        '<span class="stat stat-sanity">🧠 Sanity: ' + char.sanity + '</span>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="modal-section">' +
-                    '<h4>Role & Difficulty</h4>' +
-                    '<p><strong>Role:</strong> ' + char.role + ' | <strong>Difficulty:</strong> ' + char.difficulty + '</p>' +
-                    '<p><strong>Perk:</strong> ' + char.perk + '</p>' +
-                '</div>' +
-                '<div class="modal-section">' +
-                    '<h4>📋 Starting Tasks</h4>' +
-                    '<ul class="starting-tasks-list">' +
-                        (char.startingTasks ? char.startingTasks.map(function(task) { return '<li>' + task + '</li>'; }).join('') : '<li>No specific starting tasks</li>') +
-                    '</ul>' +
-                '</div>' +
-                (synergies.length > 0 ?
-                    '<div class="modal-section">' +
-                        '<h4>🤝 Party Synergies</h4>' +
-                        synergies.map(function(s) {
-                            return '<div class="synergy-item">' +
-                                '<div class="synergy-name">' + s.name + '</div>' +
-                                '<div class="synergy-members">' + s.members.join(' + ') + '</div>' +
-                                '<div class="synergy-desc">' + s.description + '</div>' +
-                            '</div>';
-                        }).join('') +
-                    '</div>'
-                : '');
-            document.getElementById('modal-overlay').classList.add('active');
-        }
-
-        function renderSynergies() {
-            const grid = document.getElementById('synergy-grid');
-            if (!grid) return;
-
-            grid.innerHTML = PARTY_SYNERGIES.map(function(synergy) {
-                return '<div class="synergy-card">' +
-                    '<div class="synergy-card-name">' + synergy.name + '</div>' +
-                    '<div class="synergy-card-members">' +
-                        synergy.members.map(function(m) { return '<span class="synergy-member-tag">' + m + '</span>'; }).join('') +
-                    '</div>' +
-                    '<div class="synergy-card-desc">' + synergy.description + '</div>' +
-                '</div>';
-            }).join('');
         }
 
         // Render Crafting
@@ -3338,33 +3055,6 @@
         // DAY TRACKER
         // =====================================
 
-                // Season configuration - customizable per season
-        let seasonLengths = JSON.parse(localStorage.getItem('dst-season-lengths')) || {
-            autumn: 20,
-            winter: 15,
-            spring: 20,
-            summer: 15
-        };
-
-        function getYearLength() {
-            return seasonLengths.autumn + seasonLengths.winter + seasonLengths.spring + seasonLengths.summer;
-        }
-
-        function getSeasonData() {
-            const autumn = seasonLengths.autumn;
-            const winter = seasonLengths.winter;
-            const spring = seasonLengths.spring;
-            const summer = seasonLengths.summer;
-
-            return [
-                { name: 'Autumn', start: 1, end: autumn, length: autumn, icon: '🍂', color: 'autumn' },
-                { name: 'Winter', start: autumn + 1, end: autumn + winter, length: winter, icon: '❄️', color: 'winter' },
-                { name: 'Spring', start: autumn + winter + 1, end: autumn + winter + spring, length: spring, icon: '🌸', color: 'spring' },
-                { name: 'Summer', start: autumn + winter + spring + 1, end: autumn + winter + spring + summer, length: summer, icon: '☀️', color: 'summer' }
-            ];
-        }
-
-        // Legacy compatibility
         const YEAR_LENGTH = 70;
         const SEASON_DATA = [
             { name: 'Autumn', start: 1, end: 20, length: 20, icon: '🍂', color: 'autumn' },
@@ -3372,56 +3062,6 @@
             { name: 'Spring', start: 36, end: 55, length: 20, icon: '🌸', color: 'spring' },
             { name: 'Summer', start: 56, end: 70, length: 15, icon: '☀️', color: 'summer' }
         ];
-
-        function updateSeasonLength() {
-            seasonLengths.autumn = parseInt(document.getElementById('autumn-length').value) || 20;
-            seasonLengths.winter = parseInt(document.getElementById('winter-length').value) || 15;
-            seasonLengths.spring = parseInt(document.getElementById('spring-length').value) || 20;
-            seasonLengths.summer = parseInt(document.getElementById('summer-length').value) || 15;
-
-            localStorage.setItem('dst-season-lengths', JSON.stringify(seasonLengths));
-            document.getElementById('year-total').textContent = getYearLength();
-            updateTimelineLabels();
-            updateDayTracker();
-        }
-
-        function setSeasonPreset(preset) {
-            if (preset === 'default') {
-                seasonLengths = { autumn: 20, winter: 15, spring: 20, summer: 15 };
-            } else if (preset === 'long') {
-                seasonLengths = { autumn: 50, winter: 50, spring: 50, summer: 50 };
-            } else if (preset === 'endless-summer') {
-                seasonLengths = { autumn: 5, winter: 5, spring: 5, summer: 100 };
-            }
-
-            document.getElementById('autumn-length').value = seasonLengths.autumn;
-            document.getElementById('winter-length').value = seasonLengths.winter;
-            document.getElementById('spring-length').value = seasonLengths.spring;
-            document.getElementById('summer-length').value = seasonLengths.summer;
-
-            localStorage.setItem('dst-season-lengths', JSON.stringify(seasonLengths));
-            document.getElementById('year-total').textContent = getYearLength();
-            updateTimelineLabels();
-            updateDayTracker();
-        }
-
-        function initSeasonControls() {
-            const autumnInput = document.getElementById('autumn-length');
-            if (autumnInput) {
-                autumnInput.value = seasonLengths.autumn;
-                document.getElementById('winter-length').value = seasonLengths.winter;
-                document.getElementById('spring-length').value = seasonLengths.spring;
-                document.getElementById('summer-length').value = seasonLengths.summer;
-                document.getElementById('year-total').textContent = getYearLength();
-            }
-        }
-
-        function updateTimelineLabels() {
-            const labels = document.querySelector('.timeline-labels');
-            if (!labels) return;
-            const seasons = getSeasonData();
-            labels.innerHTML = '<span>Day 1</span><span>Day ' + seasons[0].end + '</span><span>Day ' + seasons[1].end + '</span><span>Day ' + seasons[2].end + '</span><span>Day ' + getYearLength() + '</span>';
-        }
 
         const BOSS_EVENTS = [
             { name: 'Deerclops', day: 30, warning: 'Spawns at night. Lead away from base!', type: 'danger' },
@@ -3431,35 +3071,30 @@
         ];
 
         function getSeasonForDay(day) {
-            const yearLen = getYearLength();
-            const seasons = getSeasonData();
-            const dayInYear = ((day - 1) % yearLen) + 1;
-            for (const season of seasons) {
+            const dayInYear = ((day - 1) % YEAR_LENGTH) + 1;
+            for (const season of SEASON_DATA) {
                 if (dayInYear >= season.start && dayInYear <= season.end) {
                     const dayInSeason = dayInYear - season.start + 1;
                     const daysRemaining = season.end - dayInYear;
                     return { ...season, dayInSeason, daysRemaining, dayInYear };
                 }
             }
-            return seasons[0];
+            return SEASON_DATA[0];
         }
 
         function getYear(day) {
-            return Math.floor((day - 1) / getYearLength()) + 1;
+            return Math.floor((day - 1) / YEAR_LENGTH) + 1;
         }
 
         function getUpcomingEvents(day) {
-            const yearLen = getYearLength();
-            const dayInYear = ((day - 1) % yearLen) + 1;
+            const dayInYear = ((day - 1) % YEAR_LENGTH) + 1;
             const year = getYear(day);
             const events = [];
             BOSS_EVENTS.forEach(boss => {
                 if (boss.yearMin && year < boss.yearMin) return;
-                // Adjust boss day for custom season lengths
-                let bossDay = Math.round((boss.day / 70) * yearLen);
-                let daysUntil = bossDay - dayInYear;
-                if (daysUntil < 0) daysUntil += yearLen;
-                if (daysUntil === 0) daysUntil = yearLen;
+                let daysUntil = boss.day - dayInYear;
+                if (daysUntil < 0) daysUntil += YEAR_LENGTH;
+                if (daysUntil === 0) daysUntil = YEAR_LENGTH;
                 if (daysUntil <= 20) events.push({ ...boss, daysUntil });
             });
             const season = getSeasonForDay(day);
@@ -3528,10 +3163,9 @@
             const progress = document.getElementById('season-progress');
             progress.style.width = ((season.dayInSeason / season.length) * 100) + '%';
             progress.className = 'season-progress-fill ' + season.color;
-            const seasonData = getSeasonData();
-            document.getElementById('season-progress-text').textContent = season.daysRemaining + ' days until ' + seasonData[(seasonData.findIndex(s => s.name === season.name) + 1) % 4].name;
+            document.getElementById('season-progress-text').textContent = season.daysRemaining + ' days until ' + SEASON_DATA[(SEASON_DATA.findIndex(s => s.name === season.name) + 1) % 4].name;
 
-            document.getElementById('timeline-marker').style.left = (((season.dayInYear - 1) / getYearLength()) * 100) + '%';
+            document.getElementById('timeline-marker').style.left = (((season.dayInYear - 1) / YEAR_LENGTH) * 100) + '%';
 
             const alertsDiv = document.getElementById('tracker-alerts');
             let alertsHtml = '';
@@ -3575,11 +3209,6 @@
 
         const savedDay = localStorage.getItem('dst-current-day');
         if (savedDay) document.getElementById('current-day').value = savedDay;
-        
-        // Init season length controls
-        initSeasonControls();
-        updateTimelineLabels();
-        
         updateDayTracker();
 
 
@@ -3827,7 +3456,6 @@
         }
 
         initChecklists();
-        renderSynergies();
     </script>
 </body>
 </html>

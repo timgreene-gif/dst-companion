@@ -1153,6 +1153,68 @@
         .tracker-alert.warning .tracker-alert-title { color: var(--hunger-color); }
         .tracker-alert.info .tracker-alert-title { color: var(--season-winter); }
         .tracker-alert.success .tracker-alert-title { color: var(--season-spring); }
+
+        .checklist-warning-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .checklist-warning-bar > span {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        .checklist-warning-progress {
+            flex: 1;
+            height: 8px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .checklist-warning-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .checklist-jump-btn {
+            padding: 0.25rem 0.6rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--accent-secondary);
+            border-radius: 4px;
+            color: var(--accent-primary);
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .checklist-jump-btn:hover {
+            background: var(--accent-primary);
+            color: #1a1a1a;
+        }
+
+        .checklist-warning-tip {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: 0.25rem;
+        }
+
+        .checklist-card.highlight {
+            animation: highlight-pulse 0.5s ease-in-out 3;
+            box-shadow: 0 0 20px var(--accent-primary);
+        }
+
+        @keyframes highlight-pulse {
+            0%, 100% { box-shadow: 0 0 10px var(--accent-primary); }
+            50% { box-shadow: 0 0 25px var(--accent-primary); }
+        }
         .tracker-alert-text { font-size: 0.85rem; color: var(--text-secondary); }
         .tracker-tasks { background: var(--bg-tertiary); border-radius: var(--border-radius); padding: 1rem; }
         .tracker-tasks-title { font-size: 1rem; color: var(--accent-primary); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--bg-secondary); }
@@ -1597,7 +1659,6 @@
         <nav class="nav-tabs">
             <button class="nav-tab active" data-tab="recipes">Crock Pot Recipes</button>
             <button class="nav-tab" data-tab="progression">Progression</button>
-            <button class="nav-tab" data-tab="seasons">Seasons</button>
             <button class="nav-tab" data-tab="bosses">Bosses</button>
             <button class="nav-tab" data-tab="characters">Characters</button>
             <button class="nav-tab" data-tab="crafting">Crafting</button>
@@ -1656,12 +1717,6 @@
             </div>
 
             <div class="timeline" id="progression-timeline"></div>
-        </section>
-
-        <!-- Seasons Section -->
-        <section id="seasons" class="section">
-            <h2 class="section-title">Seasons Guide</h2>
-            <div class="season-grid" id="season-grid"></div>
         </section>
 
         <!-- Bosses Section -->
@@ -2437,48 +2492,7 @@
             }
         ];
 
-        const SEASONS = [
-            {
-                name: 'Autumn',
-                color: 'autumn',
-                days: 'Days 1-20 (20 days)',
-                temp: 'Mild',
-                boss: 'Bearger (Year 2+)',
-                dangers: ['Bearger destroys structures', 'Hound attacks'],
-                tips: ['Best time to explore', 'Gather resources', 'Build base', 'No temperature management needed'],
-                prep: ['Stock food', 'Build structures', 'Find important biomes']
-            },
-            {
-                name: 'Winter',
-                color: 'winter',
-                days: 'Days 21-35 (15 days)',
-                temp: 'Very Cold',
-                boss: 'Deerclops (Day 30)',
-                dangers: ['Freezing damage', 'Deerclops destroys structures', 'No plant growth'],
-                tips: ['Keep Thermal Stone warm', 'Stay near fires', 'Hunt for food'],
-                prep: ['Thermal Stone', 'Winter Hat/Beefalo Hat', 'Food stockpile', 'Fire near base']
-            },
-            {
-                name: 'Spring',
-                color: 'spring',
-                days: 'Days 36-55 (20 days)',
-                temp: 'Cool',
-                boss: 'Moose/Goose',
-                dangers: ['Constant rain', 'Frog Rain', 'Bees aggressive', 'Wetness reduces sanity'],
-                tips: ['Carry Umbrella', 'Eyebrella best item', 'Avoid Frog Rain'],
-                prep: ['Umbrella or Eyebrella', 'Rain Hat', 'Tent for sanity']
-            },
-            {
-                name: 'Summer',
-                color: 'summer',
-                days: 'Days 56-70 (15 days)',
-                temp: 'Very Hot',
-                boss: 'Dragonfly (in desert)',
-                dangers: ['Overheating', 'Spontaneous fires', 'Drought'],
-                tips: ['Cool Thermal Stone in Ice Box', 'Stay underground', 'Endothermic fires'],
-                prep: ['Endothermic Fire Pit', 'Ice Flingomatic', 'Cooling items']
-            }
-        ];
+
 
         const BOSSES = [
             // Seasonal Bosses
@@ -3107,7 +3121,6 @@
         // Initialize
         renderRecipes();
         renderProgression();
-        renderSeasons();
         renderBosses();
         renderCharacters();
         renderCrafting();
@@ -3946,11 +3959,108 @@
                 }
             });
 
-            if (season.name === 'Autumn' && season.daysRemaining <= 5) {
-                alertsHtml += '<div class="tracker-alert warning"><div class="tracker-alert-title">❄️ Winter is coming!</div><div class="tracker-alert-text">Make sure you have: Thermal Stone, warm clothing, and stockpiled food.</div></div>';
+            // Checklist-aware seasonal warnings
+            if (season.name === 'Autumn' && season.daysRemaining <= 10) {
+                const winterCheck = getChecklistProgress('first-winter');
+                if (winterCheck.total > 0) {
+                    const pct = Math.round((winterCheck.done / winterCheck.total) * 100);
+                    let alertType = pct >= 80 ? 'success' : pct >= 50 ? 'warning' : 'danger';
+                    let icon = pct >= 80 ? '✓' : '❄️';
+                    alertsHtml += '<div class="tracker-alert ' + alertType + '">';
+                    alertsHtml += '<div class="tracker-alert-title">' + icon + ' Winter in ' + season.daysRemaining + ' days</div>';
+                    alertsHtml += '<div class="tracker-alert-text">';
+                    alertsHtml += '<div class="checklist-warning-bar"><span>First Winter Kit: ' + winterCheck.done + '/' + winterCheck.total + '</span>';
+                    alertsHtml += '<div class="checklist-warning-progress"><div class="checklist-warning-fill" style="width:' + pct + '%;background:' + (pct >= 80 ? 'var(--season-spring)' : pct >= 50 ? 'var(--hunger-color)' : 'var(--health-color)') + '"></div></div>';
+                    alertsHtml += '<button class="checklist-jump-btn" onclick="jumpToChecklist(\'first-winter\')">View</button></div>';
+                    if (pct < 80) alertsHtml += '<div class="checklist-warning-tip">Get your thermal stone and warm clothes ready!</div>';
+                    alertsHtml += '</div></div>';
+                }
             }
-            if (season.name === 'Winter' && day >= 28 && day <= 32) {
-                alertsHtml += '<div class="tracker-alert danger"><div class="tracker-alert-title">👁️ Deerclops Warning!</div><div class="tracker-alert-text">Deerclops spawns around Day 30. Stay near base at night but be ready to lead it away!</div></div>';
+
+            // Summer prep warning
+            if (season.name === 'Spring' && season.daysRemaining <= 10) {
+                const summerCheck = getChecklistProgress('summer-prep');
+                if (summerCheck.total > 0) {
+                    const pct = Math.round((summerCheck.done / summerCheck.total) * 100);
+                    let alertType = pct >= 80 ? 'success' : pct >= 50 ? 'warning' : 'danger';
+                    let icon = pct >= 80 ? '✓' : '☀️';
+                    alertsHtml += '<div class="tracker-alert ' + alertType + '">';
+                    alertsHtml += '<div class="tracker-alert-title">' + icon + ' Summer in ' + season.daysRemaining + ' days</div>';
+                    alertsHtml += '<div class="tracker-alert-text">';
+                    alertsHtml += '<div class="checklist-warning-bar"><span>Summer Prep: ' + summerCheck.done + '/' + summerCheck.total + '</span>';
+                    alertsHtml += '<div class="checklist-warning-progress"><div class="checklist-warning-fill" style="width:' + pct + '%;background:' + (pct >= 80 ? 'var(--season-spring)' : pct >= 50 ? 'var(--hunger-color)' : 'var(--health-color)') + '"></div></div>';
+                    alertsHtml += '<button class="checklist-jump-btn" onclick="jumpToChecklist(\'summer-prep\')">View</button></div>';
+                    if (pct < 80) alertsHtml += '<div class="checklist-warning-tip">Build Endothermic Fire and Ice Flingomatic!</div>';
+                    alertsHtml += '</div></div>';
+                }
+            }
+
+            // Deerclops warning with checklist
+            if (season.name === 'Winter' && day >= 25 && day <= 32) {
+                const deerclopsCheck = getChecklistProgress('deerclops');
+                if (deerclopsCheck.total > 0) {
+                    const pct = Math.round((deerclopsCheck.done / deerclopsCheck.total) * 100);
+                    let alertType = pct >= 80 ? 'warning' : 'danger';
+                    alertsHtml += '<div class="tracker-alert ' + alertType + '">';
+                    alertsHtml += '<div class="tracker-alert-title">👁️ Deerclops Coming!</div>';
+                    alertsHtml += '<div class="tracker-alert-text">';
+                    alertsHtml += '<div class="checklist-warning-bar"><span>Deerclops Kit: ' + deerclopsCheck.done + '/' + deerclopsCheck.total + '</span>';
+                    alertsHtml += '<div class="checklist-warning-progress"><div class="checklist-warning-fill" style="width:' + pct + '%;background:' + (pct >= 80 ? 'var(--season-spring)' : pct >= 50 ? 'var(--hunger-color)' : 'var(--health-color)') + '"></div></div>';
+                    alertsHtml += '<button class="checklist-jump-btn" onclick="jumpToChecklist(\'deerclops\')">View</button></div>';
+                    if (pct < 80) alertsHtml += '<div class="checklist-warning-tip">Get armor, weapon, and food ready! Lead him away from base!</div>';
+                    alertsHtml += '</div></div>';
+                }
+            }
+
+            // Bearger warning (Year 2+ Autumn)
+            if (season.name === 'Autumn' && year >= 2 && season.dayInSeason <= 10) {
+                const beargerCheck = getChecklistProgress('bearger');
+                if (beargerCheck.total > 0) {
+                    const pct = Math.round((beargerCheck.done / beargerCheck.total) * 100);
+                    if (pct < 100) {
+                        alertsHtml += '<div class="tracker-alert warning">';
+                        alertsHtml += '<div class="tracker-alert-title">🐻 Bearger Season!</div>';
+                        alertsHtml += '<div class="tracker-alert-text">';
+                        alertsHtml += '<div class="checklist-warning-bar"><span>Bearger Kit: ' + beargerCheck.done + '/' + beargerCheck.total + '</span>';
+                        alertsHtml += '<div class="checklist-warning-progress"><div class="checklist-warning-fill" style="width:' + pct + '%;background:' + (pct >= 80 ? 'var(--season-spring)' : 'var(--hunger-color)') + '"></div></div>';
+                        alertsHtml += '<button class="checklist-jump-btn" onclick="jumpToChecklist(\'bearger\')">View</button></div>';
+                        alertsHtml += '</div></div>';
+                    }
+                }
+            }
+
+            // Moose/Goose warning (Spring)
+            if (season.name === 'Spring' && season.dayInSeason <= 5) {
+                const mooseCheck = getChecklistProgress('moosegoose');
+                if (mooseCheck.total > 0) {
+                    const pct = Math.round((mooseCheck.done / mooseCheck.total) * 100);
+                    if (pct < 100) {
+                        alertsHtml += '<div class="tracker-alert warning">';
+                        alertsHtml += '<div class="tracker-alert-title">🦆 Moose/Goose Season!</div>';
+                        alertsHtml += '<div class="tracker-alert-text">';
+                        alertsHtml += '<div class="checklist-warning-bar"><span>Moose/Goose Kit: ' + mooseCheck.done + '/' + mooseCheck.total + '</span>';
+                        alertsHtml += '<div class="checklist-warning-progress"><div class="checklist-warning-fill" style="width:' + pct + '%;background:' + (pct >= 80 ? 'var(--season-spring)' : 'var(--hunger-color)') + '"></div></div>';
+                        alertsHtml += '<button class="checklist-jump-btn" onclick="jumpToChecklist(\'moosegoose\')">View</button></div>';
+                        alertsHtml += '</div></div>';
+                    }
+                }
+            }
+
+            // Dragonfly warning (Summer)
+            if (season.name === 'Summer' && season.dayInSeason <= 5) {
+                const dragonflyCheck = getChecklistProgress('dragonfly');
+                if (dragonflyCheck.total > 0) {
+                    const pct = Math.round((dragonflyCheck.done / dragonflyCheck.total) * 100);
+                    if (pct < 100) {
+                        alertsHtml += '<div class="tracker-alert warning">';
+                        alertsHtml += '<div class="tracker-alert-title">🔥 Dragonfly Active!</div>';
+                        alertsHtml += '<div class="tracker-alert-text">';
+                        alertsHtml += '<div class="checklist-warning-bar"><span>Dragonfly Kit: ' + dragonflyCheck.done + '/' + dragonflyCheck.total + '</span>';
+                        alertsHtml += '<div class="checklist-warning-progress"><div class="checklist-warning-fill" style="width:' + pct + '%;background:' + (pct >= 80 ? 'var(--season-spring)' : 'var(--hunger-color)') + '"></div></div>';
+                        alertsHtml += '<button class="checklist-jump-btn" onclick="jumpToChecklist(\'dragonfly\')">View</button></div>';
+                        alertsHtml += '</div></div>';
+                    }
+                }
             }
 
             alertsDiv.innerHTML = alertsHtml || '<div class="tracker-alert success"><div class="tracker-alert-title">✓ No immediate threats</div><div class="tracker-alert-text">Focus on your current tasks.</div></div>';
@@ -4271,6 +4381,36 @@
             document.getElementById('modal-title').textContent = '📖 ' + recipe.name;
             document.getElementById('modal-body').innerHTML = content;
             document.getElementById('modal-overlay').classList.add('active');
+        }
+
+        function getChecklistProgress(checklistId) {
+            const items = CHECKLIST_DATA[checklistId];
+            if (!items) return { done: 0, total: 0 };
+            const state = checklistState[checklistId] || {};
+            const total = items.length;
+            const done = items.filter(item => state[item.id]).length;
+            return { done, total };
+        }
+
+        function jumpToChecklist(checklistId) {
+            // Switch to checklists tab
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelector('.nav-tab[data-tab="checklists"]').classList.add('active');
+            document.getElementById('checklists').classList.add('active');
+
+            // Reset filter to show all
+            filterChecklists('all');
+
+            // Scroll to the checklist and highlight it
+            setTimeout(function() {
+                const card = document.querySelector('[data-checklist="' + checklistId + '"]');
+                if (card) {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    card.classList.add('highlight');
+                    setTimeout(function() { card.classList.remove('highlight'); }, 2000);
+                }
+            }, 100);
         }
 
         function filterChecklists(category) {

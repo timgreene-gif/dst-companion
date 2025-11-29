@@ -3988,104 +3988,137 @@
         // CHECKLISTS
         // =====================================
 
+        // Recipe/Crafting data for checklist items
+        const ITEM_RECIPES = {
+            'thermal-stone': { name: 'Thermal Stone', type: 'craft', station: 'Science Machine', ingredients: [['Pickaxe', 1], ['Rocks', 10], ['Flint', 3]] },
+            'winter-hat': { name: 'Winter Hat', type: 'craft', station: 'Science Machine', ingredients: [['Beefalo Wool', 4], ['Silk', 4]] },
+            'beefalo-hat': { name: 'Beefalo Hat', type: 'craft', station: 'Science Machine', ingredients: [['Beefalo Horn', 1], ['Beefalo Wool', 8]] },
+            'puffy-vest': { name: 'Puffy Vest', type: 'craft', station: 'Science Machine', ingredients: [['Winter Koalefant Trunk', 1], ['Silk', 8], ['Beefalo Wool', 2]] },
+            'fire-pit': { name: 'Fire Pit', type: 'craft', station: 'None', ingredients: [['Logs', 2], ['Rocks', 12]] },
+            'ice-box': { name: 'Ice Box', type: 'craft', station: 'Alchemy Engine', ingredients: [['Gold Nugget', 2], ['Gears', 1], ['Boards', 1]] },
+            'meatballs': { name: 'Meatballs', type: 'food', cooktime: '15 sec', ingredients: [['Any Meat', 0.5], ['Filler x3', 0]], stats: { health: 3, hunger: 62.5, sanity: 5 } },
+            'ham-bat': { name: 'Ham Bat', type: 'craft', station: 'Alchemy Engine', ingredients: [['Pig Skin', 1], ['Meat', 2], ['Twigs', 2]] },
+            'spear': { name: 'Spear', type: 'craft', station: 'Science Machine', ingredients: [['Twigs', 2], ['Rope', 1], ['Flint', 1]] },
+            'log-suit': { name: 'Log Suit', type: 'craft', station: 'Science Machine', ingredients: [['Logs', 8], ['Rope', 2]] },
+            'football-helmet': { name: 'Football Helmet', type: 'craft', station: 'Science Machine', ingredients: [['Pig Skin', 1], ['Rope', 1]] },
+            'dark-sword': { name: 'Dark Sword', type: 'craft', station: 'Shadow Manipulator', ingredients: [['Nightmare Fuel', 5], ['Living Log', 1]] },
+            'pierogi': { name: 'Pierogi', type: 'food', cooktime: '20 sec', ingredients: [['Egg', 1], ['Meat', 0.5], ['Veggie', 0.5]], stats: { health: 40, hunger: 37.5, sanity: 5 } },
+            'endo-fire': { name: 'Endothermic Fire Pit', type: 'craft', station: 'Alchemy Engine', ingredients: [['Rocks', 12], ['Nitre', 2], ['Electrical Doodad', 2]] },
+            'eyebrella': { name: 'Eyebrella', type: 'craft', station: 'Alchemy Engine', ingredients: [['Deerclops Eyeball', 1], ['Twigs', 15], ['Bone Shards', 4]] },
+            'flingo': { name: 'Ice Flingomatic', type: 'craft', station: 'Alchemy Engine', ingredients: [['Gears', 2], ['Ice', 15], ['Electrical Doodad', 2]] },
+            'umbrella': { name: 'Umbrella', type: 'craft', station: 'Science Machine', ingredients: [['Twigs', 6], ['Pig Skin', 1], ['Silk', 2]] },
+            'pan-flute': { name: 'Pan Flute', type: 'craft', station: 'Shadow Manipulator', ingredients: [['Cut Reeds', 5], ['Mandrake', 1], ['Rope', 1]] },
+            'lantern': { name: 'Lantern', type: 'craft', station: 'Alchemy Engine', ingredients: [['Twigs', 3], ['Rope', 2], ['Light Bulb', 2]] },
+            'miner-hat': { name: 'Miner Hat', type: 'craft', station: 'Science Machine', ingredients: [['Straw Hat', 1], ['Gold Nugget', 1], ['Fireflies', 1]] },
+            'walking-cane': { name: 'Walking Cane', type: 'drop', source: 'MacTusk (Walrus)', droprate: '25%' },
+            'thulecite-crown': { name: 'Thulecite Crown', type: 'craft', station: 'Ancient Pseudoscience', ingredients: [['Thulecite', 4], ['Nightmare Fuel', 4]] },
+            'night-armor': { name: 'Night Armor', type: 'craft', station: 'Shadow Manipulator', ingredients: [['Nightmare Fuel', 5], ['Papyrus', 3]] },
+            'magilumi': { name: 'Magiluminescence', type: 'craft', station: 'Ancient Pseudoscience', ingredients: [['Thulecite', 5], ['Nightmare Fuel', 3], ['Yellow Gem', 1]] },
+            'life-amulet': { name: 'Life Giving Amulet', type: 'craft', station: 'Prestihatitator', ingredients: [['Gold Nugget', 3], ['Nightmare Fuel', 2], ['Red Gem', 1]] },
+            'meat-effigy': { name: 'Meat Effigy', type: 'craft', station: 'Prestihatitator', ingredients: [['Boards', 4], ['Beard Hair', 4], ['Meat', 4]] },
+            'fire-staff': { name: 'Fire Staff', type: 'craft', station: 'Shadow Manipulator', ingredients: [['Nightmare Fuel', 2], ['Spear', 1], ['Red Gem', 1]] },
+            'jellybeans': { name: 'Jellybeans', type: 'food', cooktime: '40 sec', ingredients: [['Royal Jelly', 1], ['Filler x3', 0]], stats: { health: '120 over 2 min', hunger: 0, sanity: 5 } },
+            'coffee': { name: 'Coffee', type: 'food', cooktime: '10 sec', ingredients: [['Roasted Coffee Beans', 3], ['Sweetener', 1]], stats: { health: 3, hunger: 9.4, sanity: -5, speed: '+25% for 4 min' } }
+        };
+
         const CHECKLIST_DATA = {
             'first-winter': [
-                { id: 'thermal-stone', text: 'Thermal Stone', note: 'Essential' },
-                { id: 'winter-hat', text: 'Winter Hat OR Beefalo Hat', note: 'Head slot' },
-                { id: 'puffy-vest', text: 'Puffy Vest OR Beefalo Vest', note: 'Chest slot' },
-                { id: 'heat-source', text: 'Fire Pit at base', note: 'Stay warm' },
-                { id: 'ice-box', text: 'Ice Box', note: 'Food storage' },
-                { id: 'food-stock', text: '20+ days of food', note: 'Meatballs, etc.' },
-                { id: 'walrus-camp', text: 'Located Walrus Camp', note: 'Walking Cane!' },
-                { id: 'weapon', text: 'Ham Bat OR Spear', note: 'For Deerclops' }
+                { id: 'thermal-stone', text: 'Thermal Stone', note: 'Essential', recipe: 'thermal-stone' },
+                { id: 'winter-hat', text: 'Winter Hat OR Beefalo Hat', note: 'Head slot', recipe: 'winter-hat' },
+                { id: 'puffy-vest', text: 'Puffy Vest OR Beefalo Vest', note: 'Chest slot', recipe: 'puffy-vest' },
+                { id: 'heat-source', text: 'Fire Pit at base', note: 'Stay warm', recipe: 'fire-pit' },
+                { id: 'ice-box', text: 'Ice Box', note: 'Food storage', recipe: 'ice-box' },
+                { id: 'food-stock', text: '20+ days of food', note: 'Meatballs, etc.', recipe: 'meatballs' },
+                { id: 'walrus-camp', text: 'Located Walrus Camp', note: 'Walking Cane!', recipe: 'walking-cane' },
+                { id: 'weapon', text: 'Ham Bat OR Spear', note: 'For Deerclops', recipe: 'ham-bat' }
             ],
             'summer-prep': [
-                { id: 'thermal-stone-s', text: 'Thermal Stone', note: 'Keep in Ice Box' },
+                { id: 'thermal-stone-s', text: 'Thermal Stone', note: 'Keep in Ice Box', recipe: 'thermal-stone' },
                 { id: 'ice-stockpile', text: 'Ice stockpile (20+)', note: 'For Endothermic' },
-                { id: 'endo-fire', text: 'Endothermic Fire Pit', note: 'Cooling' },
-                { id: 'summer-hat', text: 'Eyebrella OR Summer Frest', note: 'Head slot' },
-                { id: 'flingo', text: 'Ice Flingomatic', note: 'Fire protection' },
-                { id: 'umbrella', text: 'Umbrella OR Eyebrella', note: 'Overheating' },
+                { id: 'endo-fire', text: 'Endothermic Fire Pit', note: 'Cooling', recipe: 'endo-fire' },
+                { id: 'summer-hat', text: 'Eyebrella OR Summer Frest', note: 'Head slot', recipe: 'eyebrella' },
+                { id: 'flingo', text: 'Ice Flingomatic', note: 'Fire protection', recipe: 'flingo' },
+                { id: 'umbrella', text: 'Umbrella OR Eyebrella', note: 'Overheating', recipe: 'umbrella' },
                 { id: 'cave-base', text: 'Cave base (optional)', note: 'No overheating' }
             ],
             'deerclops': [
-                { id: 'dc-armor', text: 'Log Suit', note: '80% protection' },
-                { id: 'dc-helmet', text: 'Football Helmet', note: '80% protection' },
-                { id: 'dc-weapon', text: 'Ham Bat OR Dark Sword', note: 'High damage' },
-                { id: 'dc-food', text: '4+ Pierogi OR Healing', note: '40 HP each' },
+                { id: 'dc-armor', text: 'Log Suit', note: '80% protection', recipe: 'log-suit' },
+                { id: 'dc-helmet', text: 'Football Helmet', note: '80% protection', recipe: 'football-helmet' },
+                { id: 'dc-weapon', text: 'Ham Bat OR Dark Sword', note: 'High damage', recipe: 'ham-bat' },
+                { id: 'dc-food', text: '4+ Pierogi OR Healing', note: '40 HP each', recipe: 'pierogi' },
                 { id: 'dc-kite', text: 'Know kite pattern', note: '2-3 hits, dodge' },
                 { id: 'dc-location', text: 'Lead away from base!', note: 'He destroys!' }
             ],
             'dragonfly': [
-                { id: 'df-armor', text: 'Log Suit x2', note: 'Long fight' },
-                { id: 'df-helmet', text: 'Football Helmet x2', note: 'Long fight' },
-                { id: 'df-weapon', text: 'Dark Sword OR Ham Bat x2', note: 'High DPS' },
-                { id: 'df-food', text: '10+ Pierogi', note: 'Heal often' },
+                { id: 'df-armor', text: 'Log Suit x2', note: 'Long fight', recipe: 'log-suit' },
+                { id: 'df-helmet', text: 'Football Helmet x2', note: 'Long fight', recipe: 'football-helmet' },
+                { id: 'df-weapon', text: 'Dark Sword OR Ham Bat x2', note: 'High DPS', recipe: 'dark-sword' },
+                { id: 'df-food', text: '10+ Pierogi', note: 'Heal often', recipe: 'pierogi' },
                 { id: 'df-ash', text: 'Ash (20+)', note: 'To spawn her' },
                 { id: 'df-walls', text: 'Wall maze (optional)', note: 'Cheese strategy' },
-                { id: 'df-pan', text: 'Pan Flute (optional)', note: 'Sleep adds' }
+                { id: 'df-pan', text: 'Pan Flute (optional)', note: 'Sleep adds', recipe: 'pan-flute' }
             ],
             'bearger': [
-                { id: 'bg-armor', text: 'Log Suit', note: '80% protection' },
-                { id: 'bg-helmet', text: 'Football Helmet', note: '80% protection' },
-                { id: 'bg-weapon', text: 'Ham Bat OR Dark Sword', note: 'High damage' },
-                { id: 'bg-food', text: '4+ Pierogi', note: 'Healing' },
+                { id: 'bg-armor', text: 'Log Suit', note: '80% protection', recipe: 'log-suit' },
+                { id: 'bg-helmet', text: 'Football Helmet', note: '80% protection', recipe: 'football-helmet' },
+                { id: 'bg-weapon', text: 'Ham Bat OR Dark Sword', note: 'High damage', recipe: 'ham-bat' },
+                { id: 'bg-food', text: '4+ Pierogi', note: 'Healing', recipe: 'pierogi' },
                 { id: 'bg-trees', text: 'Lead to forest', note: 'Free logs!' }
             ],
             'moosegoose': [
-                { id: 'mg-armor', text: 'Log Suit', note: '80% protection' },
-                { id: 'mg-helmet', text: 'Football Helmet', note: '80% protection' },
-                { id: 'mg-weapon', text: 'Ham Bat', note: 'Good damage' },
-                { id: 'mg-food', text: '4+ Pierogi', note: 'Healing' },
+                { id: 'mg-armor', text: 'Log Suit', note: '80% protection', recipe: 'log-suit' },
+                { id: 'mg-helmet', text: 'Football Helmet', note: '80% protection', recipe: 'football-helmet' },
+                { id: 'mg-weapon', text: 'Ham Bat', note: 'Good damage', recipe: 'ham-bat' },
+                { id: 'mg-food', text: '4+ Pierogi', note: 'Healing', recipe: 'pierogi' },
                 { id: 'mg-moslings', text: 'Kill Moslings too!', note: 'Or more spawn' }
             ],
             'ancient-guardian': [
-                { id: 'ag-armor', text: 'Thulecite Crown OR Night Armor', note: 'Best protection' },
-                { id: 'ag-armor2', text: 'Log Suit x2 backup', note: 'Long fight' },
-                { id: 'ag-weapon', text: 'Dark Sword x2', note: 'High DPS needed' },
-                { id: 'ag-food', text: '20+ Pierogi', note: 'Heal often!' },
-                { id: 'ag-light', text: 'Lantern OR Miner Hat', note: 'Its dark down there' },
-                { id: 'ag-magilumi', text: 'Magiluminescence (optional)', note: 'Speed boost' },
-                { id: 'ag-revive', text: 'Life Giving Amulet', note: 'Insurance' },
-                { id: 'ag-lazarus', text: 'Meat Effigy at surface', note: 'Backup plan' }
+                { id: 'ag-armor', text: 'Thulecite Crown OR Night Armor', note: 'Best protection', recipe: 'thulecite-crown' },
+                { id: 'ag-armor2', text: 'Log Suit x2 backup', note: 'Long fight', recipe: 'log-suit' },
+                { id: 'ag-weapon', text: 'Dark Sword x2', note: 'High DPS needed', recipe: 'dark-sword' },
+                { id: 'ag-food', text: '20+ Pierogi', note: 'Heal often!', recipe: 'pierogi' },
+                { id: 'ag-light', text: 'Lantern OR Miner Hat', note: 'Its dark down there', recipe: 'lantern' },
+                { id: 'ag-magilumi', text: 'Magiluminescence (optional)', note: 'Speed boost', recipe: 'magilumi' },
+                { id: 'ag-revive', text: 'Life Giving Amulet', note: 'Insurance', recipe: 'life-amulet' },
+                { id: 'ag-lazarus', text: 'Meat Effigy at surface', note: 'Backup plan', recipe: 'meat-effigy' }
             ],
             'bee-queen': [
-                { id: 'bq-armor', text: 'Log Suit x3', note: 'Very long fight' },
-                { id: 'bq-helmet', text: 'Football Helmet x2', note: 'Very long fight' },
-                { id: 'bq-weapon', text: 'Dark Sword x2 OR Ham Bat x3', note: 'High DPS' },
-                { id: 'bq-food', text: '30+ Pierogi', note: 'Lots of healing' },
-                { id: 'bq-panflute', text: 'Pan Flute', note: 'Sleep the bees!' },
+                { id: 'bq-armor', text: 'Log Suit x3', note: 'Very long fight', recipe: 'log-suit' },
+                { id: 'bq-helmet', text: 'Football Helmet x2', note: 'Very long fight', recipe: 'football-helmet' },
+                { id: 'bq-weapon', text: 'Dark Sword x2 OR Ham Bat x3', note: 'High DPS', recipe: 'dark-sword' },
+                { id: 'bq-food', text: '30+ Pierogi', note: 'Lots of healing', recipe: 'pierogi' },
+                { id: 'bq-panflute', text: 'Pan Flute', note: 'Sleep the bees!', recipe: 'pan-flute' },
                 { id: 'bq-walls', text: 'Boat arena OR Wall trap', note: 'Cheese strat' },
-                { id: 'bq-speed', text: 'Walking Cane OR Coffee', note: 'Kiting help' },
+                { id: 'bq-speed', text: 'Walking Cane OR Coffee', note: 'Kiting help', recipe: 'walking-cane' },
                 { id: 'bq-backup', text: 'Backup gear at base', note: 'Long walk back' }
             ],
             'klaus': [
-                { id: 'kl-armor', text: 'Log Suit x2', note: 'Multi-phase' },
-                { id: 'kl-helmet', text: 'Football Helmet x2', note: 'Multi-phase' },
-                { id: 'kl-weapon', text: 'Dark Sword x2', note: 'High DPS' },
-                { id: 'kl-food', text: '15+ Pierogi', note: 'Healing' },
+                { id: 'kl-armor', text: 'Log Suit x2', note: 'Multi-phase', recipe: 'log-suit' },
+                { id: 'kl-helmet', text: 'Football Helmet x2', note: 'Multi-phase', recipe: 'football-helmet' },
+                { id: 'kl-weapon', text: 'Dark Sword x2', note: 'High DPS', recipe: 'dark-sword' },
+                { id: 'kl-food', text: '15+ Pierogi', note: 'Healing', recipe: 'pierogi' },
                 { id: 'kl-deer', text: 'Find Deer (for antler)', note: 'Unlocks sack' },
-                { id: 'kl-fire', text: 'Fire Staff OR Fire Darts', note: 'Kill Krampii' },
-                { id: 'kl-light', text: 'Lantern', note: 'Winter nights' },
-                { id: 'kl-thermal', text: 'Thermal Stone', note: 'Stay warm' }
+                { id: 'kl-fire', text: 'Fire Staff OR Fire Darts', note: 'Kill Krampii', recipe: 'fire-staff' },
+                { id: 'kl-light', text: 'Lantern', note: 'Winter nights', recipe: 'lantern' },
+                { id: 'kl-thermal', text: 'Thermal Stone', note: 'Stay warm', recipe: 'thermal-stone' }
             ],
             'toadstool': [
-                { id: 'ts-armor', text: 'Log Suit x4+', note: 'Extremely long' },
-                { id: 'ts-helmet', text: 'Football Helmet x3+', note: 'Extremely long' },
-                { id: 'ts-weapon', text: 'Dark Sword x3+', note: 'DPS race' },
-                { id: 'ts-food', text: '40+ Pierogi OR Jellybeans', note: 'Marathon fight' },
-                { id: 'ts-light', text: 'Lantern + Miner Hat', note: 'Spore darkness' },
-                { id: 'ts-speed', text: 'Walking Cane + Magilumi', note: 'Essential kiting' },
-                { id: 'ts-panflute', text: 'Pan Flute x2', note: 'Control mushrooms' },
+                { id: 'ts-armor', text: 'Log Suit x4+', note: 'Extremely long', recipe: 'log-suit' },
+                { id: 'ts-helmet', text: 'Football Helmet x3+', note: 'Extremely long', recipe: 'football-helmet' },
+                { id: 'ts-weapon', text: 'Dark Sword x3+', note: 'DPS race', recipe: 'dark-sword' },
+                { id: 'ts-food', text: '40+ Pierogi OR Jellybeans', note: 'Marathon fight', recipe: 'pierogi' },
+                { id: 'ts-light', text: 'Lantern + Miner Hat', note: 'Spore darkness', recipe: 'lantern' },
+                { id: 'ts-speed', text: 'Walking Cane + Magilumi', note: 'Essential kiting', recipe: 'walking-cane' },
+                { id: 'ts-panflute', text: 'Pan Flute x2', note: 'Control mushrooms', recipe: 'pan-flute' },
                 { id: 'ts-walls', text: 'Wall arena setup', note: 'Highly recommended' },
                 { id: 'ts-friends', text: 'Bring friends!', note: 'Multiplayer helps' }
             ],
             'essential-base': [
-                { id: 'eb-fire', text: 'Fire Pit', note: 'Light & warmth' },
+                { id: 'eb-fire', text: 'Fire Pit', note: 'Light & warmth', recipe: 'fire-pit' },
                 { id: 'eb-science', text: 'Science Machine', note: 'Tier 1 crafting' },
                 { id: 'eb-alchemy', text: 'Alchemy Engine', note: 'Tier 2 crafting' },
                 { id: 'eb-crock', text: 'Crock Pot', note: 'Cooking' },
-                { id: 'eb-icebox', text: 'Ice Box', note: 'Food storage' },
+                { id: 'eb-icebox', text: 'Ice Box', note: 'Food storage', recipe: 'ice-box' },
                 { id: 'eb-chest', text: 'Chests x4+', note: 'Storage' },
                 { id: 'eb-lightning', text: 'Lightning Rod', note: 'Fire prevention' },
                 { id: 'eb-tent', text: 'Tent OR Siesta Lean-to', note: 'Health regen' },
@@ -4095,8 +4128,8 @@
             'advanced-base': [
                 { id: 'ab-shadow', text: 'Shadow Manipulator', note: 'Magic crafting' },
                 { id: 'ab-prestihat', text: 'Prestihatitator', note: 'Magic crafting' },
-                { id: 'ab-flingo', text: 'Ice Flingomatic', note: 'Summer fires' },
-                { id: 'ab-endo', text: 'Endothermic Fire Pit', note: 'Summer cooling' },
+                { id: 'ab-flingo', text: 'Ice Flingomatic', note: 'Summer fires', recipe: 'flingo' },
+                { id: 'ab-endo', text: 'Endothermic Fire Pit', note: 'Summer cooling', recipe: 'endo-fire' },
                 { id: 'ab-scales', text: 'Scaled Furnace', note: 'Permanent heat' },
                 { id: 'ab-bundling', text: 'Bundling Wrap station', note: 'Food preservation' },
                 { id: 'ab-mushplanter', text: 'Mushroom Planters', note: 'Mushroom farm' },
@@ -4147,6 +4180,9 @@
                 if (item.note) {
                     html += '<span class="checklist-item-note">' + item.note + '</span>';
                 }
+                if (item.recipe && ITEM_RECIPES[item.recipe]) {
+                    html += '<button class="recipe-link-btn" onclick="event.stopPropagation(); showItemRecipe(\'' + item.recipe + '\')">📖</button>';
+                }
                 html += '</div>';
             });
 
@@ -4154,7 +4190,8 @@
             updateChecklistProgress(checklistId);
 
             container.querySelectorAll('.checklist-item').forEach(item => {
-                item.addEventListener('click', () => {
+                item.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('recipe-link-btn')) return;
                     const clId = item.dataset.checklist;
                     const itemId = item.dataset.item;
                     toggleChecklistItem(clId, itemId);
@@ -4186,6 +4223,54 @@
                     progressEl.classList.remove('complete');
                 }
             }
+        }
+
+        function showItemRecipe(recipeId) {
+            const recipe = ITEM_RECIPES[recipeId];
+            if (!recipe) return;
+
+            let content = '<div class="recipe-modal-content">';
+            content += '<div class="recipe-modal-name">' + recipe.name + '</div>';
+
+            if (recipe.type === 'craft') {
+                content += '<div class="recipe-modal-station">🔧 Crafted at: ' + recipe.station + '</div>';
+                content += '<div class="recipe-modal-section">Ingredients:</div>';
+                content += '<div class="recipe-modal-ingredients">';
+                recipe.ingredients.forEach(function(ing) {
+                    content += '<div class="recipe-modal-ingredient"><span>' + ing[0] + '</span><span class="ing-amount">x' + ing[1] + '</span></div>';
+                });
+                content += '</div>';
+            } else if (recipe.type === 'food') {
+                content += '<div class="recipe-modal-station">🍳 Crock Pot (' + recipe.cooktime + ')</div>';
+                content += '<div class="recipe-modal-section">Ingredients:</div>';
+                content += '<div class="recipe-modal-ingredients">';
+                recipe.ingredients.forEach(function(ing) {
+                    if (ing[1] > 0) {
+                        content += '<div class="recipe-modal-ingredient"><span>' + ing[0] + '</span><span class="ing-amount">' + ing[1] + '</span></div>';
+                    } else {
+                        content += '<div class="recipe-modal-ingredient"><span>' + ing[0] + '</span></div>';
+                    }
+                });
+                content += '</div>';
+                content += '<div class="recipe-modal-section">Stats:</div>';
+                content += '<div class="recipe-modal-stats">';
+                content += '<span class="stat stat-health">❤️ ' + recipe.stats.health + '</span>';
+                content += '<span class="stat stat-hunger">🍖 ' + recipe.stats.hunger + '</span>';
+                content += '<span class="stat stat-sanity">🧠 ' + recipe.stats.sanity + '</span>';
+                if (recipe.stats.speed) {
+                    content += '<span class="stat stat-speed">👟 ' + recipe.stats.speed + '</span>';
+                }
+                content += '</div>';
+            } else if (recipe.type === 'drop') {
+                content += '<div class="recipe-modal-station">💀 Dropped by: ' + recipe.source + '</div>';
+                content += '<div class="recipe-modal-droprate">Drop rate: ' + recipe.droprate + '</div>';
+            }
+
+            content += '</div>';
+
+            document.getElementById('modal-title').textContent = '📖 ' + recipe.name;
+            document.getElementById('modal-body').innerHTML = content;
+            document.getElementById('modal-overlay').classList.add('active');
         }
 
         function filterChecklists(category) {

@@ -2164,32 +2164,32 @@
             }
         ];
 
-        const CHARACTERS = [
+                const CHARACTERS = [
             // S-Tier
-            { name: 'Wolfgang', tier: 'S', health: 200, hunger: 200, sanity: 200, perk: 'Gains massive damage when well-fed (up to 2x)', role: 'Combat', difficulty: 'Medium' },
-            { name: 'Wickerbottom', tier: 'S', health: 150, hunger: 150, sanity: 250, perk: 'Crafts magical books. Can\'t sleep.', role: 'Support/Utility', difficulty: 'Hard' },
-            { name: 'WX-78', tier: 'S', health: 150, hunger: 150, sanity: 150, perk: 'Upgrades with Gears. Lightning overcharge.', role: 'Flexible', difficulty: 'Medium' },
-            { name: 'Maxwell', tier: 'S', health: 75, hunger: 150, sanity: 200, perk: 'Shadow puppets for resource gathering', role: 'Resource Gathering', difficulty: 'Hard' },
-            
+            { name: 'Wolfgang', tier: 'S', health: 200, hunger: 200, sanity: 200, perk: 'Gains massive damage when well-fed (up to 2x)', role: 'Combat', difficulty: 'Medium', startingTasks: ['Gather food immediately - stay mighty', 'Hunt Koalefants for Trunk Steak', 'Build Crock Pot ASAP for Meatballs', 'Stockpile Jerky for hunger/health', 'Practice kiting - you are boss killer'] },
+            { name: 'Wickerbottom', tier: 'S', health: 150, hunger: 150, sanity: 250, perk: 'Crafts magical books. Cannot sleep.', role: 'Support/Utility', difficulty: 'Hard', startingTasks: ['Rush Science Machine + Alchemy Engine', 'Gather Papyrus for books', 'Make Applied Horticulture book', 'Build Drying Racks (no spoilage)', 'Stock Green Mushrooms for sanity'] },
+            { name: 'WX-78', tier: 'S', health: 150, hunger: 150, sanity: 150, perk: 'Upgrades with Gears. Lightning overcharge.', role: 'Flexible', difficulty: 'Medium', startingTasks: ['Locate Clockwork setpieces', 'Kill Clockworks for Gears', 'Eat Gears to upgrade stats', 'Build Lightning Rod at base', 'Avoid Wetness - you take damage'] },
+            { name: 'Maxwell', tier: 'S', health: 75, hunger: 150, sanity: 200, perk: 'Shadow puppets for resource gathering', role: 'Resource Gathering', difficulty: 'Hard', startingTasks: ['Get Nightmare Fuel ASAP', 'Craft Shadow Logger and Miner', 'Let puppets work while exploring', 'Always carry armor - 75 HP is fragile', 'Stay mobile - puppets do work'] },
+
             // A-Tier
-            { name: 'Wigfrid', tier: 'A', health: 200, hunger: 120, sanity: 120, perk: 'Heals on hit. Meat only diet.', role: 'Combat', difficulty: 'Easy' },
-            { name: 'Wendy', tier: 'A', health: 150, hunger: 150, sanity: 200, perk: 'Ghost sister Abigail fights for her', role: 'Combat/Farming', difficulty: 'Easy' },
-            { name: 'Wortox', tier: 'A', health: 150, hunger: 175, sanity: 150, perk: 'Souls for healing/teleport. Half food value.', role: 'Support', difficulty: 'Medium' },
-            { name: 'Warly', tier: 'A', health: 150, hunger: 250, sanity: 200, perk: 'Portable crock pot. Special spices.', role: 'Support/Food', difficulty: 'Hard' },
-            { name: 'Wanda', tier: 'A', health: 'Age', hunger: 175, sanity: 200, perk: 'Time magic. Age = health.', role: 'Combat', difficulty: 'Very Hard' },
-            { name: 'Webber', tier: 'A', health: 175, hunger: 175, sanity: 100, perk: 'Befriends spiders. Grows beard.', role: 'Resource/Combat', difficulty: 'Medium' },
-            
+            { name: 'Wigfrid', tier: 'A', health: 200, hunger: 120, sanity: 120, perk: 'Heals on hit. Meat only diet.', role: 'Combat', difficulty: 'Easy', startingTasks: ['Hunt constantly - meat only', 'Craft Battle Helm and Spear', 'Build Drying Racks for Jerky', 'Clear Spider Dens for Meat+Silk', 'Tank for team - heal on hit'] },
+            { name: 'Wendy', tier: 'A', health: 150, hunger: 150, sanity: 200, perk: 'Ghost sister Abigail fights for her', role: 'Combat/Farming', difficulty: 'Easy', startingTasks: ['Summon Abigail with flower', 'Farm Spider Dens with Abigail', 'Collect Nightmare Fuel for upgrades', 'Craft Sisturn for Abigail healing', 'Use Abigail for mob clearing'] },
+            { name: 'Wortox', tier: 'A', health: 150, hunger: 175, sanity: 150, perk: 'Souls for healing/teleport. Half food value.', role: 'Support', difficulty: 'Medium', startingTasks: ['Kill creatures for souls (20 max)', 'Heal teammates with souls', 'Soul hop for fast travel/kiting', 'Gather double food - half value', 'Stay near combat for souls'] },
+            { name: 'Warly', tier: 'A', health: 150, hunger: 250, sanity: 200, perk: 'Portable crock pot. Special spices.', role: 'Support/Food', difficulty: 'Hard', startingTasks: ['Use Portable Crock Pot day 1', 'Gather diverse ingredients', 'Craft Spices for team buffs', 'Never eat same dish twice in 2 days', 'Feed team - you are the chef'] },
+            { name: 'Wanda', tier: 'A', health: 'Age', hunger: 175, sanity: 200, perk: 'Time magic. Age = health.', role: 'Combat', difficulty: 'Very Hard', startingTasks: ['Learn age mechanics', 'Craft Alarming Clock for reset', 'Get Nightmare Fuel for abilities', 'Backstep Watch for dodging', 'No healing items work on you'] },
+            { name: 'Webber', tier: 'A', health: 175, hunger: 175, sanity: 100, perk: 'Befriends spiders. Grows beard.', role: 'Resource/Combat', difficulty: 'Medium', startingTasks: ['Feed spiders meat to befriend', 'Build Spider Dens at base', 'Shave beard for silk', 'Use spider army for bosses', 'Pigs/Bunnymen are hostile to you'] },
+
             // B-Tier
-            { name: 'Wilson', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Grows beard for warmth and Meat Effigy', role: 'Balanced', difficulty: 'Easy' },
-            { name: 'Woodie', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Lucy axe. Were-transformations.', role: 'Resource Gathering', difficulty: 'Medium' },
-            { name: 'Wormwood', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Plant crops without tools. Can\'t heal from food.', role: 'Farming', difficulty: 'Hard' },
-            { name: 'Winona', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Builds Catapults and Spotlights', role: 'Building', difficulty: 'Medium' },
-            { name: 'Wurt', tier: 'B', health: 150, hunger: 200, sanity: 150, perk: 'Befriends Merms. Vegetarian.', role: 'Army Building', difficulty: 'Hard' },
-            { name: 'Walter', tier: 'B', health: 130, hunger: 110, sanity: 200, perk: 'Slingshot. Dog companion Woby.', role: 'Ranged Combat', difficulty: 'Medium' },
-            { name: 'Willow', tier: 'B', health: 150, hunger: 150, sanity: 120, perk: 'Fire immunity. Bernie bear.', role: 'Situational', difficulty: 'Easy' },
-            
+            { name: 'Wilson', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Grows beard for warmth and Meat Effigy', role: 'Balanced', difficulty: 'Easy', startingTasks: ['Grow beard for Winter warmth', 'Shave at Day 16 for Beard Hair', 'Craft Meat Effigy for resurrection', 'Build standard base setup', 'Learn mechanics - Wilson is forgiving'] },
+            { name: 'Woodie', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Lucy axe. Were-transformations.', role: 'Resource Gathering', difficulty: 'Medium', startingTasks: ['Use Lucy for infinite chopping', 'Gather Idols for transformations', 'Werebeaver for tree/rock clearing', 'Weremoose for combat', 'Manage transformation meter'] },
+            { name: 'Wormwood', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Plant crops without tools. Cannot heal from food.', role: 'Farming', difficulty: 'Hard', startingTasks: ['Plant seeds directly anywhere', 'Bloom in Spring for sanity', 'Craft Living Logs from health', 'Use Healing Salves and Glands', 'Cannot heal from food!'] },
+            { name: 'Winona', tier: 'B', health: 150, hunger: 150, sanity: 200, perk: 'Builds Catapults and Spotlights', role: 'Building', difficulty: 'Medium', startingTasks: ['Rush Alchemy Engine for Tape', 'Build Generator for power', 'Place Catapults for defense', 'Set up Spotlight grid', 'Create catapult kill chambers'] },
+            { name: 'Wurt', tier: 'B', health: 150, hunger: 200, sanity: 150, perk: 'Befriends Merms. Vegetarian.', role: 'Army Building', difficulty: 'Hard', startingTasks: ['Find Swamp and befriend Merms', 'Build Merm Houses at base', 'Craft Royal Tapestry for King', 'NO MEAT - vegetarian only', 'Merm army can fight bosses'] },
+            { name: 'Walter', tier: 'B', health: 130, hunger: 110, sanity: 200, perk: 'Slingshot. Dog companion Woby.', role: 'Ranged Combat', difficulty: 'Medium', startingTasks: ['Gather Slingshot ammo materials', 'Craft Marble and Gold ammo', 'Ride Woby for fast travel', 'Feed Woby monster meat to grow', 'Avoid damage - lose sanity when hit'] },
+            { name: 'Willow', tier: 'B', health: 150, hunger: 150, sanity: 120, perk: 'Fire immunity. Bernie bear.', role: 'Situational', difficulty: 'Easy', startingTasks: ['Use lighter for infinite light', 'Bernie distracts shadows', 'Immune to fire damage', 'Can cook with lighter', 'Good for Summer/Dragonfly'] },
+
             // Challenge Tier
-            { name: 'Wes', tier: 'C', health: 113, hunger: 113, sanity: 150, perk: 'Challenge character. 25% less damage, 25% more hunger drain.', role: 'Challenge', difficulty: 'Very Hard' }
+            { name: 'Wes', tier: 'C', health: 113, hunger: 113, sanity: 150, perk: 'Challenge character. 25% less damage, 25% more hunger drain.', role: 'Challenge', difficulty: 'Very Hard', startingTasks: ['Accept everything is harder', 'Gather extra food - 25% more drain', 'Avoid combat - 25% less damage', 'Use balloons for decoration', 'Flex on friends by surviving'] }
         ];
 
 
@@ -2468,7 +2468,7 @@
             });
 
             grid.innerHTML = filtered.map(char => `
-                <div class="character-card">
+                <div class="character-card" onclick="showCharacterModal('${char.name}')" style="cursor: pointer;">
                     <div class="character-header">
                         <span class="character-name">${char.name}</span>
                         <span class="character-tier tier-${char.tier === 'S' ? 'essential' : char.tier === 'A' ? 'great' : char.tier === 'B' ? 'good' : 'niche'}">${char.tier}-Tier</span>
@@ -2483,8 +2483,67 @@
                         <span class="character-role">${char.role}</span>
                         <span class="character-role" style="margin-left: 0.5rem;">Difficulty: ${char.difficulty}</span>
                     </div>
+                    <div class="character-tasks-hint">Click for starting tasks →</div>
                 </div>
             `).join('');
+        }
+
+
+        function showCharacterModal(charName) {
+            const char = CHARACTERS.find(c => c.name === charName);
+            if (!char) return;
+
+            const synergies = PARTY_SYNERGIES.filter(s => s.members.includes(charName));
+
+            document.getElementById('modal-title').textContent = char.name;
+            document.getElementById('modal-body').innerHTML =
+                '<div class="modal-section">' +
+                    '<h4>Stats</h4>' +
+                    '<div class="recipe-stats" style="justify-content: flex-start;">' +
+                        '<span class="stat stat-health">❤️ Health: ' + char.health + '</span>' +
+                        '<span class="stat stat-hunger">🍖 Hunger: ' + char.hunger + '</span>' +
+                        '<span class="stat stat-sanity">🧠 Sanity: ' + char.sanity + '</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="modal-section">' +
+                    '<h4>Role & Difficulty</h4>' +
+                    '<p><strong>Role:</strong> ' + char.role + ' | <strong>Difficulty:</strong> ' + char.difficulty + '</p>' +
+                    '<p><strong>Perk:</strong> ' + char.perk + '</p>' +
+                '</div>' +
+                '<div class="modal-section">' +
+                    '<h4>📋 Starting Tasks</h4>' +
+                    '<ul class="starting-tasks-list">' +
+                        (char.startingTasks ? char.startingTasks.map(function(task) { return '<li>' + task + '</li>'; }).join('') : '<li>No specific starting tasks</li>') +
+                    '</ul>' +
+                '</div>' +
+                (synergies.length > 0 ?
+                    '<div class="modal-section">' +
+                        '<h4>🤝 Party Synergies</h4>' +
+                        synergies.map(function(s) {
+                            return '<div class="synergy-item">' +
+                                '<div class="synergy-name">' + s.name + '</div>' +
+                                '<div class="synergy-members">' + s.members.join(' + ') + '</div>' +
+                                '<div class="synergy-desc">' + s.description + '</div>' +
+                            '</div>';
+                        }).join('') +
+                    '</div>'
+                : '');
+            document.getElementById('modal-overlay').classList.add('active');
+        }
+
+        function renderSynergies() {
+            const grid = document.getElementById('synergy-grid');
+            if (!grid) return;
+
+            grid.innerHTML = PARTY_SYNERGIES.map(function(synergy) {
+                return '<div class="synergy-card">' +
+                    '<div class="synergy-card-name">' + synergy.name + '</div>' +
+                    '<div class="synergy-card-members">' +
+                        synergy.members.map(function(m) { return '<span class="synergy-member-tag">' + m + '</span>'; }).join('') +
+                    '</div>' +
+                    '<div class="synergy-card-desc">' + synergy.description + '</div>' +
+                '</div>';
+            }).join('');
         }
 
         // Render Crafting

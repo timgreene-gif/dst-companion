@@ -285,18 +285,24 @@
 
         .timeline-item {
             position: relative;
-            margin-bottom: 2rem;
-            padding: 1.25rem;
+            margin-bottom: 1rem;
             background: var(--bg-secondary);
             border-radius: var(--border-radius);
             border-left: 4px solid var(--accent-primary);
+            overflow: hidden;
         }
+
+        .timeline-item.timeline-autumn { border-left-color: var(--season-autumn); }
+        .timeline-item.timeline-winter { border-left-color: var(--season-winter); }
+        .timeline-item.timeline-spring { border-left-color: var(--season-spring); }
+        .timeline-item.timeline-summer { border-left-color: var(--season-summer); }
+        .timeline-item.timeline-endgame { border-left-color: var(--tier-s); }
 
         .timeline-item::before {
             content: '';
             position: absolute;
             left: -26px;
-            top: 1.5rem;
+            top: 1.25rem;
             width: 12px;
             height: 12px;
             background: var(--accent-primary);
@@ -304,31 +310,171 @@
             border: 3px solid var(--bg-primary);
         }
 
-        .timeline-day {
-            font-size: 0.8rem;
-            color: var(--accent-primary);
-            font-weight: bold;
-            margin-bottom: 0.25rem;
+        .timeline-item.timeline-autumn::before { background: var(--season-autumn); }
+        .timeline-item.timeline-winter::before { background: var(--season-winter); }
+        .timeline-item.timeline-spring::before { background: var(--season-spring); }
+        .timeline-item.timeline-summer::before { background: var(--season-summer); }
+        .timeline-item.timeline-endgame::before { background: var(--tier-s); }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            transition: background 0.2s;
         }
 
-        .timeline-title {
-            font-size: 1.1rem;
+        .timeline-header:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .timeline-header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .timeline-icon {
+            font-size: 1.5rem;
+        }
+
+        .timeline-toggle {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            transition: transform 0.2s;
+        }
+
+        .timeline-day {
+            font-size: 0.75rem;
+            color: var(--accent-primary);
             font-weight: bold;
-            margin-bottom: 0.5rem;
+        }
+
+        .timeline-item.timeline-autumn .timeline-day { color: var(--season-autumn); }
+        .timeline-item.timeline-winter .timeline-day { color: var(--season-winter); }
+        .timeline-item.timeline-spring .timeline-day { color: var(--season-spring); }
+        .timeline-item.timeline-summer .timeline-day { color: var(--season-summer); }
+        .timeline-item.timeline-endgame .timeline-day { color: var(--tier-s); }
+
+        .timeline-title {
+            font-size: 1rem;
+            font-weight: bold;
         }
 
         .timeline-content {
+            padding: 0 1.25rem 1.25rem;
+            transition: all 0.3s ease;
+            max-height: 1000px;
+            opacity: 1;
+        }
+
+        .timeline-content.collapsed {
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .task-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0.75rem;
+            margin-bottom: 0.35rem;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
             font-size: 0.9rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .task-item:hover {
+            transform: translateX(4px);
+            box-shadow: -2px 0 0 var(--accent-primary);
+        }
+
+        .task-item.priority-critical:hover { box-shadow: -2px 0 0 #e74c3c; }
+        .task-item.priority-important:hover { box-shadow: -2px 0 0 #f39c12; }
+        .task-item.priority-optional:hover { box-shadow: -2px 0 0 #3498db; }
+
+        .task-icon {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .task-text {
+            flex: 1;
+            color: var(--text-primary);
+        }
+
+        .priority-badge {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 2px 6px;
+            border-radius: 3px;
+            letter-spacing: 0.5px;
+        }
+
+        .priority-badge.critical {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        .priority-badge.important {
+            background: rgba(243, 156, 18, 0.2);
+            color: #f39c12;
+        }
+
+        .priority-badge.optional {
+            background: rgba(52, 152, 219, 0.2);
+            color: #3498db;
+        }
+
+        .progression-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .progression-btn {
+            padding: 0.5rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--bg-primary);
+            border-radius: 6px;
             color: var(--text-secondary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .timeline-content ul {
-            margin-left: 1.25rem;
-            margin-top: 0.5rem;
+        .progression-btn:hover {
+            background: var(--accent-primary);
+            color: #1a1a1a;
+            border-color: var(--accent-primary);
         }
 
-        .timeline-content li {
-            margin-bottom: 0.25rem;
+        .priority-legend {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
         }
 
         /* Season Cards */
@@ -1384,6 +1530,27 @@
         <!-- Progression Section -->
         <section id="progression" class="section">
             <h2 class="section-title">Progression Guide</h2>
+
+            <div class="priority-legend">
+                <div class="legend-item">
+                    <span class="priority-badge critical">critical</span>
+                    <span>Must do to survive</span>
+                </div>
+                <div class="legend-item">
+                    <span class="priority-badge important">important</span>
+                    <span>Highly recommended</span>
+                </div>
+                <div class="legend-item">
+                    <span class="priority-badge optional">optional</span>
+                    <span>Nice to have</span>
+                </div>
+            </div>
+
+            <div class="progression-controls">
+                <button class="progression-btn" onclick="expandAllPhases()">Expand All</button>
+                <button class="progression-btn" onclick="collapseAllPhases()">Collapse All</button>
+            </div>
+
             <div class="timeline" id="progression-timeline"></div>
         </section>
 
@@ -1987,97 +2154,113 @@
             {
                 day: 'Days 1-5',
                 title: 'Exploration & Basic Setup',
+                icon: '🗺️',
+                season: 'autumn',
                 tasks: [
-                    'Gather resources: Grass, Twigs, Flint, Logs',
-                    'Find Gold (Rock biome or Graveyard)',
-                    'Explore and map the world',
-                    'Pick Berries and Carrots for food',
-                    'Make Axe, Pickaxe, and Torch',
-                    'Find a good base location (near resources)'
+                    { text: 'Gather resources: Grass, Twigs, Flint, Logs', icon: '🌿', priority: 'critical' },
+                    { text: 'Find Gold (Rock biome or Graveyard)', icon: '🪨', priority: 'critical' },
+                    { text: 'Explore and map the world', icon: '🧭', priority: 'important' },
+                    { text: 'Pick Berries and Carrots for food', icon: '🍇', priority: 'critical' },
+                    { text: 'Make Axe, Pickaxe, and Torch', icon: '🪓', priority: 'critical' },
+                    { text: 'Find a good base location (near resources)', icon: '📍', priority: 'important' }
                 ]
             },
             {
                 day: 'Days 6-10',
                 title: 'Base Establishment',
+                icon: '🏠',
+                season: 'autumn',
                 tasks: [
-                    'Build Science Machine',
-                    'Build Fire Pit at your base location',
-                    'Build Alchemy Engine',
-                    'Build Crock Pot',
-                    'Build Lightning Rod',
-                    'Start Berry Bush transplanting',
-                    'Build Chest storage'
+                    { text: 'Build Science Machine', icon: '🔬', priority: 'critical' },
+                    { text: 'Build Fire Pit at your base location', icon: '🔥', priority: 'critical' },
+                    { text: 'Build Alchemy Engine', icon: '⚗️', priority: 'critical' },
+                    { text: 'Build Crock Pot', icon: '🍲', priority: 'critical' },
+                    { text: 'Build Lightning Rod', icon: '⚡', priority: 'important' },
+                    { text: 'Start Berry Bush transplanting', icon: '🫐', priority: 'important' },
+                    { text: 'Build Chest storage', icon: '📦', priority: 'important' }
                 ]
             },
             {
                 day: 'Days 11-15',
                 title: 'Winter Preparation',
+                icon: '❄️',
+                season: 'autumn',
                 tasks: [
-                    'Craft Thermal Stone',
-                    'Build Ice Box (needs Gears from Clockworks)',
-                    'Gather 40+ Grass, 40+ Twigs',
-                    'Stock food in Ice Box',
-                    'Build Drying Racks for jerky',
-                    'Optional: Build Bee Boxes'
+                    { text: 'Craft Thermal Stone', icon: '🪨', priority: 'critical' },
+                    { text: 'Build Ice Box (needs Gears from Clockworks)', icon: '🧊', priority: 'critical' },
+                    { text: 'Gather 40+ Grass, 40+ Twigs', icon: '🌿', priority: 'important' },
+                    { text: 'Stock food in Ice Box', icon: '🍖', priority: 'critical' },
+                    { text: 'Build Drying Racks for jerky', icon: '🥓', priority: 'important' },
+                    { text: 'Build Bee Boxes', icon: '🐝', priority: 'optional' }
                 ]
             },
             {
                 day: 'Days 16-20',
                 title: 'Final Autumn Tasks',
+                icon: '🍂',
+                season: 'autumn',
                 tasks: [
-                    'Ensure food supply for Winter',
-                    'Craft warm clothing (Beefalo Hat, Winter Hat)',
-                    'Find Walrus Camp locations',
-                    'Explore caves entrance (optional)',
-                    'Gather Silk for Bug Net and Tents'
+                    { text: 'Ensure food supply for Winter', icon: '🍖', priority: 'critical' },
+                    { text: 'Craft warm clothing (Beefalo Hat, Winter Hat)', icon: '🧥', priority: 'critical' },
+                    { text: 'Find Walrus Camp locations', icon: '🦭', priority: 'important' },
+                    { text: 'Explore caves entrance', icon: '🕳️', priority: 'optional' },
+                    { text: 'Gather Silk for Bug Net and Tents', icon: '🕸️', priority: 'important' }
                 ]
             },
             {
                 day: 'Days 21-35 (Winter)',
                 title: 'Surviving Winter',
+                icon: '🥶',
+                season: 'winter',
                 tasks: [
-                    'Stay warm near fire or with Thermal Stone',
-                    'Hunt Koalefant for Trunk',
-                    'Hunt Walrus for Tam o\' Shanter and Walking Cane',
-                    'Avoid Deerclops (spawns around Day 30)',
-                    'Ice fishing if needed',
-                    'Collect Ice for Ice Box refills'
+                    { text: 'Stay warm near fire or with Thermal Stone', icon: '🔥', priority: 'critical' },
+                    { text: 'Hunt Koalefant for Trunk', icon: '🐘', priority: 'important' },
+                    { text: 'Hunt Walrus for Tam o Shanter and Walking Cane', icon: '🦭', priority: 'important' },
+                    { text: 'Avoid or fight Deerclops (spawns around Day 30)', icon: '👁️', priority: 'critical' },
+                    { text: 'Ice fishing if needed', icon: '🎣', priority: 'optional' },
+                    { text: 'Collect Ice for Ice Box refills', icon: '🧊', priority: 'important' }
                 ]
             },
             {
                 day: 'Days 36-55 (Spring)',
                 title: 'Spring Activities',
+                icon: '🌸',
+                season: 'spring',
                 tasks: [
-                    'Craft Umbrella or Eyebrella for rain',
-                    'Avoid Frog Rain (dangerous)',
-                    'Fight Moose/Goose for feathers',
-                    'Plant farms and crops',
-                    'Expand base infrastructure',
-                    'Explore caves'
+                    { text: 'Craft Umbrella or Eyebrella for rain', icon: '☂️', priority: 'critical' },
+                    { text: 'Avoid Frog Rain (very dangerous!)', icon: '🐸', priority: 'critical' },
+                    { text: 'Fight Moose/Goose for feathers', icon: '🦆', priority: 'important' },
+                    { text: 'Plant farms and crops', icon: '🌱', priority: 'important' },
+                    { text: 'Expand base infrastructure', icon: '🏗️', priority: 'optional' },
+                    { text: 'Explore caves', icon: '🕳️', priority: 'optional' }
                 ]
             },
             {
                 day: 'Days 56-70 (Summer)',
                 title: 'Surviving Summer',
+                icon: '🔥',
+                season: 'summer',
                 tasks: [
-                    'Build Endothermic Fire Pit',
-                    'Build Ice Flingomatic to prevent fires',
-                    'Stay cool with Thermal Stone (in Ice Box)',
-                    'Fashion Melon Hat or Floral Shirt',
-                    'Underground exploration (caves are cooler)',
-                    'Avoid/fight Dragonfly'
+                    { text: 'Build Endothermic Fire Pit', icon: '💨', priority: 'critical' },
+                    { text: 'Build Ice Flingomatic to prevent fires', icon: '🧯', priority: 'critical' },
+                    { text: 'Stay cool with Thermal Stone (in Ice Box)', icon: '🪨', priority: 'critical' },
+                    { text: 'Fashion Melon Hat or Floral Shirt', icon: '👒', priority: 'important' },
+                    { text: 'Underground exploration (caves are cooler)', icon: '🕳️', priority: 'important' },
+                    { text: 'Avoid or fight Dragonfly', icon: '🐉', priority: 'important' }
                 ]
             },
             {
                 day: 'Year 2+',
                 title: 'Long-term Goals',
+                icon: '🏆',
+                season: 'endgame',
                 tasks: [
-                    'Fight seasonal bosses for loot',
-                    'Explore Ruins for Ancient crafting',
-                    'Defeat Ancient Guardian',
-                    'Unlock Shadow Manipulator',
-                    'Build Bee Queen arena',
-                    'Progress toward Celestial Champion'
+                    { text: 'Fight seasonal bosses for loot', icon: '⚔️', priority: 'important' },
+                    { text: 'Explore Ruins for Ancient crafting', icon: '🏛️', priority: 'important' },
+                    { text: 'Defeat Ancient Guardian', icon: '💀', priority: 'important' },
+                    { text: 'Unlock Shadow Manipulator', icon: '🔮', priority: 'important' },
+                    { text: 'Build Bee Queen arena', icon: '👑', priority: 'optional' },
+                    { text: 'Progress toward Celestial Champion', icon: '✨', priority: 'optional' }
                 ]
             }
         ];
@@ -2472,17 +2655,63 @@
         // Render Progression
         function renderProgression() {
             const timeline = document.getElementById('progression-timeline');
-            timeline.innerHTML = PROGRESSION.map(phase => `
-                <div class="timeline-item">
-                    <div class="timeline-day">${phase.day}</div>
-                    <div class="timeline-title">${phase.title}</div>
-                    <div class="timeline-content">
-                        <ul>
-                            ${phase.tasks.map(task => `<li>${task}</li>`).join('')}
+            timeline.innerHTML = PROGRESSION.map((phase, index) => `
+                <div class="timeline-item timeline-${phase.season}" data-phase="${index}">
+                    <div class="timeline-header" onclick="togglePhase(${index})">
+                        <div class="timeline-header-left">
+                            <span class="timeline-icon">${phase.icon}</span>
+                            <div>
+                                <div class="timeline-day">${phase.day}</div>
+                                <div class="timeline-title">${phase.title}</div>
+                            </div>
+                        </div>
+                        <span class="timeline-toggle">▼</span>
+                    </div>
+                    <div class="timeline-content" id="phase-content-${index}">
+                        <ul class="task-list">
+                            ${phase.tasks.map(task => `
+                                <li class="task-item priority-${task.priority}">
+                                    <span class="task-icon">${task.icon}</span>
+                                    <span class="task-text">${task.text}</span>
+                                    <span class="priority-badge ${task.priority}">${task.priority}</span>
+                                </li>
+                            `).join('')}
                         </ul>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function togglePhase(index) {
+            const content = document.getElementById('phase-content-' + index);
+            const item = content.closest('.timeline-item');
+            const toggle = item.querySelector('.timeline-toggle');
+
+            if (content.classList.contains('collapsed')) {
+                content.classList.remove('collapsed');
+                toggle.textContent = '▼';
+            } else {
+                content.classList.add('collapsed');
+                toggle.textContent = '▶';
+            }
+        }
+
+        function expandAllPhases() {
+            document.querySelectorAll('.timeline-content').forEach(content => {
+                content.classList.remove('collapsed');
+            });
+            document.querySelectorAll('.timeline-toggle').forEach(toggle => {
+                toggle.textContent = '▼';
+            });
+        }
+
+        function collapseAllPhases() {
+            document.querySelectorAll('.timeline-content').forEach(content => {
+                content.classList.add('collapsed');
+            });
+            document.querySelectorAll('.timeline-toggle').forEach(toggle => {
+                toggle.textContent = '▶';
+            });
         }
 
         // Render Seasons

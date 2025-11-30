@@ -730,6 +730,42 @@
         }
 
         /* Modal */
+        /* Compact Simulator Layout */
+        .crockpot-sim-section {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.25rem;
+            border: 1px solid var(--bg-tertiary);
+            margin-bottom: 1.5rem;
+        }
+
+        .simulator-compact {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .simulator-compact {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sim-left {
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .sim-right {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .recipe-browser-section .filter-bar {
+            margin-bottom: 1rem;
+        }
+
         /* Party Synergies */
         .synergy-grid {
             display: grid;
@@ -2191,12 +2227,12 @@
         </div>
         <nav class="nav-tabs">
             <button class="nav-tab active" data-tab="welcome">Welcome</button>
-            <button class="nav-tab" data-tab="recipes">Crock Pot Recipes</button>
+            <button class="nav-tab" data-tab="crockpot">Crock Pot</button>
             <button class="nav-tab" data-tab="progression">Progression</button>
             <button class="nav-tab" data-tab="bosses">Bosses</button>
             <button class="nav-tab" data-tab="characters">Characters</button>
             <button class="nav-tab" data-tab="crafting">Crafting</button>
-            <button class="nav-tab" data-tab="simulator">Crock Pot Sim</button>
+            
             <button class="nav-tab" data-tab="daytracker">Day Tracker</button>
             <button class="nav-tab" data-tab="checklists">Checklists</button>
             <button class="nav-tab" data-tab="gardening">Gardening</button>
@@ -2268,28 +2304,77 @@
             </div>
         </section>
 
-        <!-- Crock Pot Recipes Section -->
-        <section id="recipes" class="section">
-            <h2 class="section-title">Crock Pot Recipes</h2>
-            <div class="filter-bar">
-                <div class="filter-group">
-                    <button class="filter-btn recipe-filter active" data-tier="all">All</button>
-                    <button class="filter-btn recipe-filter" data-tier="essential">Essential</button>
-                    <button class="filter-btn recipe-filter" data-tier="great">Great</button>
-                    <button class="filter-btn recipe-filter" data-tier="good">Good</button>
-                    <button class="filter-btn favorite-filter" data-favorites="true">⭐ Favorites</button>
-                </div>
-                <div class="filter-group">
-                    <button class="filter-btn stat-filter" data-stat="health">Best Health</button>
-                    <button class="filter-btn stat-filter" data-stat="hunger">Best Hunger</button>
-                    <button class="filter-btn stat-filter" data-stat="sanity">Best Sanity</button>
-                </div>
-                <div class="search-wrapper">
-                    <input type="text" class="search-box" id="recipe-search" placeholder="Search recipes...">
-                    <button class="search-clear" id="recipe-search-clear" onclick="clearRecipeSearch()">×</button>
+        <!-- Crock Pot Section -->
+        <section id="crockpot" class="section">
+            <h2 class="section-title">Crock Pot</h2>
+
+            <!-- Simulator at top -->
+            <div class="crockpot-sim-section">
+                <h3 class="sim-section-title">What Can I Cook?</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Add ingredients to see possible recipes</p>
+
+                <div class="simulator-compact">
+                    <div class="sim-left">
+                        <div class="ingredient-search-wrapper">
+                            <input type="text" class="ingredient-search" id="ingredient-search" placeholder="Search ingredients..." oninput="filterIngredients(this.value)">
+                            <button class="ingredient-search-clear" id="ingredient-search-clear" onclick="clearIngredientSearch()">×</button>
+                        </div>
+                        <div id="ingredient-search-results" class="ingredient-search-results"></div>
+                        <div id="ingredient-categories"></div>
+                    </div>
+
+                    <div class="sim-right">
+                        <div class="crockpot-visual">
+                            <div class="crockpot-slots" id="crockpot-slots">
+                                <div class="crockpot-slot" data-slot="0">Empty</div>
+                                <div class="crockpot-slot" data-slot="1">Empty</div>
+                                <div class="crockpot-slot" data-slot="2">Empty</div>
+                                <div class="crockpot-slot" data-slot="3">Empty</div>
+                            </div>
+                            <button class="sim-btn sim-btn-clear" id="clear-pot">Clear All</button>
+                        </div>
+
+                        <div class="sim-values" id="sim-values" style="display: none;">
+                            <div class="sim-values-grid">
+                                <div class="sim-value-item"><span class="sim-value-label">Meat:</span><span class="sim-value-num" id="val-meat">0</span></div>
+                                <div class="sim-value-item"><span class="sim-value-label">Fish:</span><span class="sim-value-num" id="val-fish">0</span></div>
+                                <div class="sim-value-item"><span class="sim-value-label">Egg:</span><span class="sim-value-num" id="val-egg">0</span></div>
+                                <div class="sim-value-item"><span class="sim-value-label">Veggie:</span><span class="sim-value-num" id="val-veggie">0</span></div>
+                                <div class="sim-value-item"><span class="sim-value-label">Fruit:</span><span class="sim-value-num" id="val-fruit">0</span></div>
+                                <div class="sim-value-item"><span class="sim-value-label">Sweet:</span><span class="sim-value-num" id="val-sweet">0</span></div>
+                            </div>
+                        </div>
+
+                        <div id="sim-results">
+                            <div class="sim-empty">Add ingredients to see possible recipes</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="recipe-grid" id="recipe-grid"></div>
+
+            <!-- Recipe browser below -->
+            <div class="recipe-browser-section">
+                <h3 class="sim-section-title" style="margin-top: 2rem;">All Recipes</h3>
+                <div class="filter-bar">
+                    <div class="filter-group">
+                        <button class="filter-btn recipe-filter active" data-tier="all">All</button>
+                        <button class="filter-btn recipe-filter" data-tier="essential">Essential</button>
+                        <button class="filter-btn recipe-filter" data-tier="great">Great</button>
+                        <button class="filter-btn recipe-filter" data-tier="good">Good</button>
+                        <button class="filter-btn favorite-filter" data-favorites="true">⭐ Favorites</button>
+                    </div>
+                    <div class="filter-group">
+                        <button class="filter-btn stat-filter" data-stat="health">Best Health</button>
+                        <button class="filter-btn stat-filter" data-stat="hunger">Best Hunger</button>
+                        <button class="filter-btn stat-filter" data-stat="sanity">Best Sanity</button>
+                    </div>
+                    <div class="search-wrapper">
+                        <input type="text" class="search-box" id="recipe-search" placeholder="Search recipes...">
+                        <button class="search-clear" id="recipe-search-clear" onclick="clearRecipeSearch()">×</button>
+                    </div>
+                </div>
+                <div class="recipe-grid" id="recipe-grid"></div>
+            </div>
         </section>
 
         <!-- Progression Section -->
@@ -2367,73 +2452,6 @@
                 </div>
             </div>
             <div class="crafting-grid" id="crafting-grid"></div>
-        </section>
-
-        <!-- Crock Pot Simulator Section -->
-        <section id="simulator" class="section">
-            <h2 class="section-title">Crock Pot Simulator</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Select ingredients to see what you can cook. Click ingredients to add them to the pot (max 4).</p>
-
-            <div class="simulator-container">
-                <div class="sim-ingredients-panel">
-                    <h3 class="sim-section-title">Select Ingredients</h3>
-                    <div class="ingredient-search-wrapper">
-                        <input type="text" class="ingredient-search" id="ingredient-search" placeholder="Search ingredients..." oninput="filterIngredients(this.value)">
-                        <button class="ingredient-search-clear" id="ingredient-search-clear" onclick="clearIngredientSearch()">×</button>
-                    </div>
-                    <div id="ingredient-search-results" class="ingredient-search-results"></div>
-                    <div id="ingredient-categories"></div>
-                </div>
-
-                <div class="sim-results-panel">
-                    <h3 class="sim-section-title">Your Crock Pot</h3>
-                    <div class="crockpot-visual">
-                        <div class="crockpot-slots" id="crockpot-slots">
-                            <div class="crockpot-slot" data-slot="0">Empty</div>
-                            <div class="crockpot-slot" data-slot="1">Empty</div>
-                            <div class="crockpot-slot" data-slot="2">Empty</div>
-                            <div class="crockpot-slot" data-slot="3">Empty</div>
-                        </div>
-                        <div class="crockpot-actions">
-                            <button class="sim-btn sim-btn-clear" id="clear-pot">Clear All</button>
-                        </div>
-                    </div>
-
-                    <div class="sim-values" id="sim-values" style="display: none;">
-                        <div class="sim-values-grid">
-                            <div class="sim-value-item">
-                                <span class="sim-value-label">Meat:</span>
-                                <span class="sim-value-num" id="val-meat">0</span>
-                            </div>
-                            <div class="sim-value-item">
-                                <span class="sim-value-label">Fish:</span>
-                                <span class="sim-value-num" id="val-fish">0</span>
-                            </div>
-                            <div class="sim-value-item">
-                                <span class="sim-value-label">Egg:</span>
-                                <span class="sim-value-num" id="val-egg">0</span>
-                            </div>
-                            <div class="sim-value-item">
-                                <span class="sim-value-label">Veggie:</span>
-                                <span class="sim-value-num" id="val-veggie">0</span>
-                            </div>
-                            <div class="sim-value-item">
-                                <span class="sim-value-label">Fruit:</span>
-                                <span class="sim-value-num" id="val-fruit">0</span>
-                            </div>
-                            <div class="sim-value-item">
-                                <span class="sim-value-label">Sweet:</span>
-                                <span class="sim-value-num" id="val-sweet">0</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <h3 class="sim-section-title">Results</h3>
-                    <div id="sim-results">
-                        <div class="sim-empty">Add 4 ingredients to see possible recipes</div>
-                    </div>
-                </div>
-            </div>
         </section>
 
         <!-- Day Tracker Section -->

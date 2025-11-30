@@ -223,6 +223,37 @@
             gap: 1.5rem;
         }
 
+        .char-food-filter {
+            padding: 0.5rem 0.75rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--bg-tertiary);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .char-food-filter:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .recipe-char-favs {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin: 0.5rem 0;
+            padding: 0.4rem 0.6rem;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .char-fav-label {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
         .recipe-card-icon {
             font-size: 2rem;
             display: block;
@@ -2367,7 +2398,25 @@
                         <button class="filter-btn recipe-filter" data-tier="essential">Essential</button>
                         <button class="filter-btn recipe-filter" data-tier="great">Great</button>
                         <button class="filter-btn recipe-filter" data-tier="good">Good</button>
-                        <button class="filter-btn favorite-filter" data-favorites="true">⭐ Favorites</button>
+                        <select class="char-food-filter" id="char-food-filter" onchange="filterByCharacter(this.value)">
+                            <option value="">All Characters</option>
+                            <option value="wilson">Wilson</option>
+                            <option value="willow">Willow</option>
+                            <option value="wolfgang">Wolfgang</option>
+                            <option value="wendy">Wendy</option>
+                            <option value="wx78">WX-78</option>
+                            <option value="wickerbottom">Wickerbottom</option>
+                            <option value="woodie">Woodie</option>
+                            <option value="wes">Wes</option>
+                            <option value="wigfrid">Wigfrid</option>
+                            <option value="webber">Webber</option>
+                            <option value="warly">Warly</option>
+                            <option value="wormwood">Wormwood</option>
+                            <option value="winona">Winona</option>
+                            <option value="wurt">Wurt</option>
+                            <option value="walter">Walter</option>
+                            <option value="wanda">Wanda</option>
+                        </select>
                     </div>
                     <div class="filter-group">
                         <button class="filter-btn stat-filter" data-stat="health">Best Health</button>
@@ -3483,6 +3532,56 @@
             });
         });
 
+        // Character favorite foods - which characters prefer which dishes
+        const CHAR_FAVORITE_FOODS = {
+            'Meatballs': ['wolfgang', 'wigfrid'],
+            'Meaty Stew': ['wolfgang', 'wigfrid', 'webber'],
+            'Pierogi': ['wolfgang', 'warly'],
+            'Bacon and Eggs': ['wigfrid', 'willow'],
+            'Honey Ham': ['wolfgang', 'wendy', 'webber'],
+            'Dragonpie': ['wormwood', 'wickerbottom', 'warly'],
+            'Fish Sticks': ['wurt'],
+            'Trail Mix': ['woodie', 'walter', 'wormwood'],
+            'Bunny Stew': ['wolfgang', 'wigfrid'],
+            'Taffy': ['wendy', 'webber', 'wes'],
+            'Ice Cream': ['wendy', 'webber', 'willow'],
+            'Wobster Dinner': ['warly', 'wickerbottom'],
+            'Butter Muffin': ['wendy', 'wickerbottom'],
+            'Froggle Bunwich': ['wurt', 'webber'],
+            'Honey Nuggets': ['wendy', 'webber'],
+            'Kabobs': ['wigfrid', 'wolfgang'],
+            'Ratatouille': ['wormwood', 'wurt', 'warly'],
+            'Tall Scotch Eggs': ['wickerbottom', 'warly'],
+            'Waffles': ['wendy', 'wes', 'willow'],
+            'Mandrake Soup': ['wickerbottom', 'wendy']
+        };
+
+        const CHAR_INFO = {
+            'wilson': { name: 'Wilson', icon: '🧔' },
+            'willow': { name: 'Willow', icon: '🔥' },
+            'wolfgang': { name: 'Wolfgang', icon: '💪' },
+            'wendy': { name: 'Wendy', icon: '👻' },
+            'wx78': { name: 'WX-78', icon: '🤖' },
+            'wickerbottom': { name: 'Wickerbottom', icon: '📚' },
+            'woodie': { name: 'Woodie', icon: '🪓' },
+            'wes': { name: 'Wes', icon: '🎈' },
+            'wigfrid': { name: 'Wigfrid', icon: '⚔️' },
+            'webber': { name: 'Webber', icon: '🕷️' },
+            'warly': { name: 'Warly', icon: '👨‍🍳' },
+            'wormwood': { name: 'Wormwood', icon: '🌱' },
+            'winona': { name: 'Winona', icon: '🔧' },
+            'wurt': { name: 'Wurt', icon: '🐸' },
+            'walter': { name: 'Walter', icon: '🏕️' },
+            'wanda': { name: 'Wanda', icon: '⏰' }
+        };
+
+        let currentCharFilter = '';
+
+        function filterByCharacter(charId) {
+            currentCharFilter = charId;
+            renderRecipes();
+        }
+
         // Render Recipes
         function renderRecipes(tierFilter = 'all', search = '', sortBy = null) {
             const grid = document.getElementById('recipe-grid');
@@ -3491,15 +3590,18 @@
                 const searchMatch = search === '' || 
                     recipe.name.toLowerCase().includes(search.toLowerCase()) ||
                     recipe.ingredients.toLowerCase().includes(search.toLowerCase());
-                return tierMatch && searchMatch;
+                const charMatch = !currentCharFilter || (CHAR_FAVORITE_FOODS[recipe.name] && CHAR_FAVORITE_FOODS[recipe.name].includes(currentCharFilter));
+                return tierMatch && searchMatch && charMatch;
             });
 
             if (sortBy) {
                 filtered.sort((a, b) => b[sortBy] - a[sortBy]);
             }
 
-            grid.innerHTML = filtered.map(recipe => `
-                <div class="recipe-card" onclick="showRecipeModal('${recipe.name}')">
+            grid.innerHTML = filtered.map(recipe => {
+                const charFavs = CHAR_FAVORITE_FOODS[recipe.name] || [];
+                const charIcons = charFavs.map(c => CHAR_INFO[c] ? CHAR_INFO[c].icon : '').join(' ');
+                return `<div class="recipe-card" onclick="showRecipeModal('${recipe.name}')">
                     <div class="recipe-card-icon">${recipe.icon || '🍽️'}</div>
                     <div class="recipe-header">
                         <span class="recipe-name">${recipe.name}</span>
@@ -3511,10 +3613,11 @@
                         <span class="stat stat-sanity">🧠 +${recipe.sanity}</span>
                         <span class="stat">📦 ${recipe.spoilTime}d</span>
                     </div>
+                    ${charFavs.length > 0 ? `<div class="recipe-char-favs"><span class="char-fav-label">Loved by:</span> ${charIcons}</div>` : ''}
                     <div class="recipe-ingredients"><strong>Recipe:</strong> ${recipe.ingredients}</div>
                     <div class="recipe-notes">${recipe.notes}</div>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
         }
 
         function showRecipeModal(recipeName) {

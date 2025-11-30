@@ -2029,13 +2029,17 @@
                 <span>Recipes • Progression • Survival Guide</span>
             </div>
             <div class="header-controls">
+                <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle Day Tracker sidebar">
+                    <span class="sidebar-icon">📅</span>
+                </button>
                 <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
                     <span class="theme-icon">🌙</span>
                 </button>
             </div>
         </div>
         <nav class="nav-tabs">
-            <button class="nav-tab active" data-tab="recipes">Crock Pot Recipes</button>
+            <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+            <button class="nav-tab" data-tab="recipes">Crock Pot Recipes</button>
             <button class="nav-tab" data-tab="progression">Progression</button>
             <button class="nav-tab" data-tab="bosses">Bosses</button>
             <button class="nav-tab" data-tab="characters">Characters</button>
@@ -2047,9 +2051,99 @@
         </nav>
     </header>
 
+    <!-- Collapsible Day Tracker Sidebar -->
+    <aside class="day-sidebar" id="day-sidebar">
+        <div class="sidebar-header">
+            <h3>📅 Day Tracker</h3>
+            <button class="sidebar-close" onclick="toggleSidebar()">×</button>
+        </div>
+        <div class="sidebar-content">
+            <div class="sidebar-day-controls">
+                <button class="dash-day-btn" onclick="adjustDay(-1)">−</button>
+                <span class="sidebar-current-day" id="sidebar-current-day">Day 1</span>
+                <button class="dash-day-btn" onclick="adjustDay(1)">+</button>
+            </div>
+            <div class="sidebar-season" id="sidebar-season"></div>
+            <div class="sidebar-alerts" id="sidebar-alerts"></div>
+            <div class="sidebar-checklist" id="sidebar-checklist"></div>
+        </div>
+    </aside>
+
     <main class="main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <div class="dashboard-layout">
+                <!-- Day Tracker Widget -->
+                <div class="dash-widget dash-tracker">
+                    <div class="dash-widget-header">
+                        <h3>📅 Day Tracker</h3>
+                        <div class="dash-day-controls">
+                            <button class="dash-day-btn" onclick="adjustDay(-1)">−</button>
+                            <span class="dash-current-day" id="dash-current-day">Day 1</span>
+                            <button class="dash-day-btn" onclick="adjustDay(1)">+</button>
+                        </div>
+                    </div>
+                    <div class="dash-season-info" id="dash-season-info"></div>
+                    <div class="dash-alerts" id="dash-alerts"></div>
+                </div>
+
+                <!-- Active Warnings Widget -->
+                <div class="dash-widget dash-warnings">
+                    <div class="dash-widget-header">
+                        <h3>⚠️ Active Prep</h3>
+                    </div>
+                    <div class="dash-checklist-warnings" id="dash-checklist-warnings">
+                        <div class="dash-no-warnings">No urgent preparations needed</div>
+                    </div>
+                </div>
+
+                <!-- Favorite Recipes Widget -->
+                <div class="dash-widget dash-favorites">
+                    <div class="dash-widget-header">
+                        <h3>⭐ Favorite Recipes</h3>
+                        <button class="dash-link-btn" onclick="switchToTab('recipes')">View All</button>
+                    </div>
+                    <div class="dash-favorites-list" id="dash-favorites-list">
+                        <div class="dash-no-favorites">No favorites yet - star recipes to add them here</div>
+                    </div>
+                </div>
+
+                <!-- Seasonal Plants Widget -->
+                <div class="dash-widget dash-plants">
+                    <div class="dash-widget-header">
+                        <h3>🌱 Seasonal Plants</h3>
+                        <button class="dash-link-btn" onclick="switchToTab('gardening')">Gardening Guide</button>
+                    </div>
+                    <div class="dash-plants-list" id="dash-plants-list"></div>
+                </div>
+
+                <!-- Quick Actions Widget -->
+                <div class="dash-widget dash-actions">
+                    <div class="dash-widget-header">
+                        <h3>🎯 Quick Actions</h3>
+                    </div>
+                    <div class="dash-quick-actions">
+                        <button class="dash-action-btn" onclick="switchToTab('simulator')">🍳 Crock Pot Sim</button>
+                        <button class="dash-action-btn" onclick="switchToTab('checklists')">✅ Checklists</button>
+                        <button class="dash-action-btn" onclick="switchToTab('bosses')">👹 Boss Guide</button>
+                        <button class="dash-action-btn" onclick="switchToTab('crafting')">🔨 Crafting</button>
+                    </div>
+                </div>
+
+                <!-- Upcoming Boss Widget -->
+                <div class="dash-widget dash-boss">
+                    <div class="dash-widget-header">
+                        <h3>👹 Upcoming Boss</h3>
+                    </div>
+                    <div class="dash-boss-info" id="dash-boss-info">
+                        <div class="dash-no-boss">No imminent boss threats</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Crock Pot Recipes Section -->
-        <section id="recipes" class="section active">
+        <section id="recipes" class="section">
             <h2 class="section-title">Crock Pot Recipes</h2>
             <div class="filter-bar">
                 <div class="filter-group">
@@ -5623,6 +5717,391 @@
         renderPlantsGrid();
         renderSeasonalView();
         renderGiantsGrid();
+
+        // Dashboard functions
+        function updateDashboard() {
+            updateDashDayTracker();
+            updateDashWarnings();
+            updateDashFavorites();
+            updateDashPlants();
+            updateDashBoss();
+        }
+
+        function updateDashDayTracker() {
+            const day = currentDay;
+            const yearLen = Object.values(seasonLengths).reduce((a, b) => a + b, 0);
+            const year = Math.floor((day - 1) / yearLen) + 1;
+            const dayInYear = ((day - 1) % yearLen) + 1;
+
+            let seasonDay = dayInYear;
+            let currentSeason = 'Autumn';
+            const seasonOrder = ['Autumn', 'Winter', 'Spring', 'Summer'];
+
+            for (const season of seasonOrder) {
+                if (seasonDay <= seasonLengths[season]) {
+                    currentSeason = season;
+                    break;
+                }
+                seasonDay -= seasonLengths[season];
+            }
+
+            // Update day display
+            document.getElementById('dash-current-day').textContent = 'Day ' + day;
+
+            // Update season info
+            const seasonInfo = document.getElementById('dash-season-info');
+            const seasonClass = currentSeason.toLowerCase();
+            seasonInfo.innerHTML = '<span class="dash-season-badge ' + seasonClass + '">' + currentSeason + ' Day ' + seasonDay + '</span>' +
+                '<span class="dash-year-badge">Year ' + year + '</span>';
+
+            // Calculate days remaining in season
+            let daysInCurrentSeason = seasonLengths[currentSeason];
+            let daysRemaining = daysInCurrentSeason - seasonDay;
+
+            // Update alerts
+            const alertsDiv = document.getElementById('dash-alerts');
+            let alertsHtml = '';
+
+            if (currentSeason === 'Autumn' && daysRemaining <= 5) {
+                alertsHtml += '<div class="dash-alert warning">❄️ Winter in ' + daysRemaining + ' days</div>';
+            }
+            if (currentSeason === 'Winter' && day >= 25 && day <= 35) {
+                alertsHtml += '<div class="dash-alert danger">👁️ Deerclops imminent!</div>';
+            }
+            if (currentSeason === 'Spring' && daysRemaining <= 5) {
+                alertsHtml += '<div class="dash-alert warning">☀️ Summer in ' + daysRemaining + ' days</div>';
+            }
+
+            alertsDiv.innerHTML = alertsHtml || '<div class="dash-alert success">✓ No immediate threats</div>';
+
+            // Also update sidebar
+            updateSidebarTracker();
+        }
+
+        function updateDashWarnings() {
+            const warningsDiv = document.getElementById('dash-checklist-warnings');
+            const day = currentDay;
+            const yearLen = Object.values(seasonLengths).reduce((a, b) => a + b, 0);
+            const year = Math.floor((day - 1) / yearLen) + 1;
+            const dayInYear = ((day - 1) % yearLen) + 1;
+
+            let seasonDay = dayInYear;
+            let currentSeason = 'Autumn';
+            const seasonOrder = ['Autumn', 'Winter', 'Spring', 'Summer'];
+
+            for (const season of seasonOrder) {
+                if (seasonDay <= seasonLengths[season]) {
+                    currentSeason = season;
+                    break;
+                }
+                seasonDay -= seasonLengths[season];
+            }
+
+            let daysRemaining = seasonLengths[currentSeason] - seasonDay;
+            let warnings = [];
+
+            // Check relevant checklists based on current situation
+            if (currentSeason === 'Autumn' && daysRemaining <= 10) {
+                warnings.push({ id: 'first-winter', title: '❄️ Winter Prep', urgent: daysRemaining <= 5 });
+            }
+            if (currentSeason === 'Winter' && day >= 20 && day <= 35) {
+                warnings.push({ id: 'deerclops', title: '👁️ Deerclops Kit', urgent: day >= 25 });
+            }
+            if (currentSeason === 'Spring' && daysRemaining <= 10) {
+                warnings.push({ id: 'summer-prep', title: '☀️ Summer Prep', urgent: daysRemaining <= 5 });
+            }
+            if (currentSeason === 'Spring' && seasonDay <= 10) {
+                warnings.push({ id: 'moosegoose', title: '🦆 Moose/Goose Kit', urgent: false });
+            }
+            if (currentSeason === 'Summer' && seasonDay <= 10) {
+                warnings.push({ id: 'dragonfly', title: '🔥 Dragonfly Kit', urgent: false });
+            }
+            if (currentSeason === 'Autumn' && year >= 2 && seasonDay <= 10) {
+                warnings.push({ id: 'bearger', title: '🐻 Bearger Kit', urgent: false });
+            }
+
+            if (warnings.length === 0) {
+                warningsDiv.innerHTML = '<div class="dash-no-warnings">No urgent preparations needed</div>';
+                return;
+            }
+
+            let html = '';
+            warnings.forEach(warning => {
+                const items = CHECKLIST_DATA[warning.id];
+                if (!items) return;
+
+                const state = checklistState[warning.id] || {};
+                const total = items.length;
+                const done = items.filter(item => state[item.id]).length;
+                const pct = Math.round((done / total) * 100);
+                const color = pct >= 80 ? 'var(--season-spring)' : pct >= 50 ? 'var(--hunger-color)' : 'var(--health-color)';
+
+                html += '<div class="dash-warning-item">';
+                html += '<div class="dash-warning-header">';
+                html += '<span class="dash-warning-title">' + warning.title + '</span>';
+                html += '<span class="dash-warning-progress">' + done + '/' + total + '</span>';
+                html += '</div>';
+                html += '<div class="dash-warning-bar"><div class="dash-warning-fill" style="width:' + pct + '%;background:' + color + '"></div></div>';
+                html += '<div class="dash-warning-items">';
+
+                items.slice(0, 5).forEach(item => {
+                    const isDone = state[item.id];
+                    html += '<div class="dash-check-item ' + (isDone ? 'done' : '') + '" onclick="toggleDashCheck('' + warning.id + '', '' + item.id + '')">';
+                    html += '<span class="dash-check-box">' + (isDone ? '✓' : '') + '</span>';
+                    html += '<span>' + item.text + '</span>';
+                    html += '</div>';
+                });
+
+                if (items.length > 5) {
+                    html += '<div class="dash-check-item" style="color:var(--text-secondary);cursor:default">+' + (items.length - 5) + ' more...</div>';
+                }
+
+                html += '</div></div>';
+            });
+
+            warningsDiv.innerHTML = html;
+        }
+
+        function toggleDashCheck(checklistId, itemId) {
+            if (!checklistState[checklistId]) checklistState[checklistId] = {};
+            checklistState[checklistId][itemId] = !checklistState[checklistId][itemId];
+            localStorage.setItem('dst-checklists', JSON.stringify(checklistState));
+            updateDashWarnings();
+            updateSidebarTracker();
+            renderChecklists(); // Keep main checklists in sync
+        }
+
+        function updateDashFavorites() {
+            const favDiv = document.getElementById('dash-favorites-list');
+            const favs = Object.keys(recipeFavorites).filter(k => recipeFavorites[k]);
+
+            if (favs.length === 0) {
+                favDiv.innerHTML = '<div class="dash-no-favorites">No favorites yet - star recipes to add them here</div>';
+                return;
+            }
+
+            let html = '';
+            favs.slice(0, 8).forEach(name => {
+                const recipe = RECIPES.find(r => r.name === name);
+                if (!recipe) return;
+
+                html += '<div class="dash-fav-item" onclick="showRecipeModal('' + recipe.name.replace(/'/g, "\'") + '')">';
+                html += '<span class="dash-fav-icon">' + (recipe.icon || '🍲') + '</span>';
+                html += '<span class="dash-fav-name">' + recipe.name + '</span>';
+                html += '<div class="dash-fav-stats">';
+                if (recipe.health) html += '<span class="dash-fav-stat" style="color:var(--health-color)">❤️' + recipe.health + '</span>';
+                if (recipe.hunger) html += '<span class="dash-fav-stat" style="color:var(--hunger-color)">🍖' + recipe.hunger + '</span>';
+                html += '</div></div>';
+            });
+
+            favDiv.innerHTML = html;
+        }
+
+        function updateDashPlants() {
+            const plantsDiv = document.getElementById('dash-plants-list');
+            const day = currentDay;
+            const yearLen = Object.values(seasonLengths).reduce((a, b) => a + b, 0);
+            const dayInYear = ((day - 1) % yearLen) + 1;
+
+            let seasonDay = dayInYear;
+            let currentSeason = 'autumn';
+            const seasonOrder = ['autumn', 'winter', 'spring', 'summer'];
+            const seasonLens = [seasonLengths.Autumn, seasonLengths.Winter, seasonLengths.Spring, seasonLengths.Summer];
+
+            for (let i = 0; i < seasonOrder.length; i++) {
+                if (seasonDay <= seasonLens[i]) {
+                    currentSeason = seasonOrder[i];
+                    break;
+                }
+                seasonDay -= seasonLens[i];
+            }
+
+            if (typeof PLANTS === 'undefined') {
+                plantsDiv.innerHTML = '<div class="dash-no-warnings">Plants data not loaded</div>';
+                return;
+            }
+
+            const seasonPlants = PLANTS.filter(p => p.seasons.includes(currentSeason));
+
+            let html = '';
+            seasonPlants.forEach(plant => {
+                html += '<div class="dash-plant-item">';
+                html += '<span class="dash-plant-icon">' + plant.icon + '</span>';
+                html += '<span>' + plant.name + '</span>';
+                html += '</div>';
+            });
+
+            plantsDiv.innerHTML = html || '<div class="dash-no-warnings">No plants this season</div>';
+        }
+
+        function updateDashBoss() {
+            const bossDiv = document.getElementById('dash-boss-info');
+            const day = currentDay;
+            const yearLen = Object.values(seasonLengths).reduce((a, b) => a + b, 0);
+            const year = Math.floor((day - 1) / yearLen) + 1;
+            const dayInYear = ((day - 1) % yearLen) + 1;
+
+            let seasonDay = dayInYear;
+            let currentSeason = 'Autumn';
+            const seasonOrder = ['Autumn', 'Winter', 'Spring', 'Summer'];
+
+            for (const season of seasonOrder) {
+                if (seasonDay <= seasonLengths[season]) {
+                    currentSeason = season;
+                    break;
+                }
+                seasonDay -= seasonLengths[season];
+            }
+
+            let boss = null;
+
+            // Determine upcoming boss
+            if (currentSeason === 'Winter' && day >= 20 && day <= 35) {
+                boss = { name: 'Deerclops', icon: '👁️', when: 'Spawns around Day 30', kit: 'deerclops' };
+            } else if (currentSeason === 'Spring' && seasonDay <= 15) {
+                boss = { name: 'Moose/Goose', icon: '🦆', when: 'Can spawn early Spring', kit: 'moosegoose' };
+            } else if (currentSeason === 'Summer' && seasonDay <= 15) {
+                boss = { name: 'Dragonfly', icon: '🔥', when: 'Active in Summer desert', kit: 'dragonfly' };
+            } else if (currentSeason === 'Autumn' && year >= 2 && seasonDay <= 15) {
+                boss = { name: 'Bearger', icon: '🐻', when: 'Spawns Year 2+ Autumn', kit: 'bearger' };
+            }
+
+            if (!boss) {
+                bossDiv.innerHTML = '<div class="dash-no-boss">No imminent boss threats</div>';
+                return;
+            }
+
+            const items = CHECKLIST_DATA[boss.kit];
+            const state = checklistState[boss.kit] || {};
+            const done = items ? items.filter(item => state[item.id]).length : 0;
+            const total = items ? items.length : 0;
+
+            let html = '<div class="dash-boss-card">';
+            html += '<div class="dash-boss-header">';
+            html += '<span class="dash-boss-icon">' + boss.icon + '</span>';
+            html += '<div><div class="dash-boss-name">' + boss.name + '</div>';
+            html += '<div class="dash-boss-when">' + boss.when + '</div></div>';
+            html += '</div>';
+
+            if (items) {
+                html += '<div class="dash-boss-kit">';
+                html += '<div style="font-size:0.85rem;margin-bottom:0.5rem">Kit: ' + done + '/' + total + ' ready</div>';
+                items.slice(0, 4).forEach(item => {
+                    const isDone = state[item.id];
+                    html += '<div class="dash-check-item ' + (isDone ? 'done' : '') + '" onclick="toggleDashCheck('' + boss.kit + '', '' + item.id + '')">';
+                    html += '<span class="dash-check-box">' + (isDone ? '✓' : '') + '</span>';
+                    html += '<span>' + item.text + '</span>';
+                    html += '</div>';
+                });
+                html += '</div>';
+            }
+
+            html += '</div>';
+            bossDiv.innerHTML = html;
+        }
+
+        function switchToTab(tabName) {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelector('.nav-tab[data-tab="' + tabName + '"]').classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Sidebar functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('day-sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        function updateSidebarTracker() {
+            const day = currentDay;
+            const yearLen = Object.values(seasonLengths).reduce((a, b) => a + b, 0);
+            const year = Math.floor((day - 1) / yearLen) + 1;
+            const dayInYear = ((day - 1) % yearLen) + 1;
+
+            let seasonDay = dayInYear;
+            let currentSeason = 'Autumn';
+            const seasonOrder = ['Autumn', 'Winter', 'Spring', 'Summer'];
+
+            for (const season of seasonOrder) {
+                if (seasonDay <= seasonLengths[season]) {
+                    currentSeason = season;
+                    break;
+                }
+                seasonDay -= seasonLengths[season];
+            }
+
+            // Update sidebar day
+            const sidebarDay = document.getElementById('sidebar-current-day');
+            if (sidebarDay) sidebarDay.textContent = 'Day ' + day;
+
+            // Update sidebar season
+            const sidebarSeason = document.getElementById('sidebar-season');
+            if (sidebarSeason) {
+                const seasonClass = currentSeason.toLowerCase();
+                sidebarSeason.innerHTML = '<span class="dash-season-badge ' + seasonClass + '">' + currentSeason + ' Day ' + seasonDay + '</span> <span class="dash-year-badge">Year ' + year + '</span>';
+            }
+
+            // Update sidebar alerts
+            const sidebarAlerts = document.getElementById('sidebar-alerts');
+            if (sidebarAlerts) {
+                let alertsHtml = '';
+                let daysRemaining = seasonLengths[currentSeason] - seasonDay;
+
+                if (currentSeason === 'Autumn' && daysRemaining <= 5) {
+                    alertsHtml += '<div class="dash-alert warning">❄️ Winter in ' + daysRemaining + ' days</div>';
+                }
+                if (currentSeason === 'Winter' && day >= 25 && day <= 35) {
+                    alertsHtml += '<div class="dash-alert danger">👁️ Deerclops imminent!</div>';
+                }
+                if (currentSeason === 'Spring' && daysRemaining <= 5) {
+                    alertsHtml += '<div class="dash-alert warning">☀️ Summer in ' + daysRemaining + ' days</div>';
+                }
+
+                sidebarAlerts.innerHTML = alertsHtml || '<div class="dash-alert success">✓ All clear</div>';
+            }
+
+            // Update sidebar checklist preview
+            const sidebarChecklist = document.getElementById('sidebar-checklist');
+            if (sidebarChecklist) {
+                let checklistId = null;
+                if (currentSeason === 'Autumn') checklistId = 'first-winter';
+                else if (currentSeason === 'Winter') checklistId = 'deerclops';
+                else if (currentSeason === 'Spring') checklistId = 'summer-prep';
+
+                if (checklistId && CHECKLIST_DATA[checklistId]) {
+                    const items = CHECKLIST_DATA[checklistId];
+                    const state = checklistState[checklistId] || {};
+                    const done = items.filter(item => state[item.id]).length;
+
+                    let html = '<div class="sidebar-checklist-title">Current Prep: ' + done + '/' + items.length + '</div>';
+                    items.slice(0, 5).forEach(item => {
+                        const isDone = state[item.id];
+                        html += '<div class="dash-check-item ' + (isDone ? 'done' : '') + '" onclick="toggleDashCheck('' + checklistId + '', '' + item.id + '')">';
+                        html += '<span class="dash-check-box">' + (isDone ? '✓' : '') + '</span>';
+                        html += '<span>' + item.text + '</span>';
+                        html += '</div>';
+                    });
+                    sidebarChecklist.innerHTML = html;
+                } else {
+                    sidebarChecklist.innerHTML = '';
+                }
+            }
+        }
+
+        // Override adjustDay to also update dashboard
+        const originalAdjustDay = typeof adjustDay === 'function' ? adjustDay : null;
+        function adjustDay(delta) {
+            currentDay = Math.max(1, currentDay + delta);
+            localStorage.setItem('dst-current-day', currentDay);
+            if (typeof updateDayTracker === 'function') updateDayTracker();
+            updateDashboard();
+        }
+
+        // Initialize dashboard on load
+        setTimeout(function() {
+            updateDashboard();
+        }, 100);
 
         // Theme handling
         function toggleTheme() {

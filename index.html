@@ -2483,6 +2483,73 @@
                 </div>
             </div>
         </section>
+
+        <!-- Gardening Section -->
+        <section id="gardening" class="section">
+            <h2 class="section-title">🌱 Gardening Guide</h2>
+
+            <div class="garden-tabs">
+                <button class="garden-tab active" data-gardentab="overview">Overview</button>
+                <button class="garden-tab" data-gardentab="plants">All Plants</button>
+                <button class="garden-tab" data-gardentab="seasons">Seasonal</button>
+                <button class="garden-tab" data-gardentab="giants">Giant Crops</button>
+            </div>
+
+            <div class="garden-content">
+                <!-- Overview Tab -->
+                <div class="garden-panel active" id="garden-overview">
+                    <div class="garden-basics">
+                        <div class="garden-info-card">
+                            <h3>🌡️ Plant Needs</h3>
+                            <div class="needs-list">
+                                <div class="need-item"><span class="need-icon">💧</span><span>Water</span><span class="need-desc">Use Watering Can when soil is dry</span></div>
+                                <div class="need-item"><span class="need-icon">🌱</span><span>Nutrients</span><span class="need-desc">Add fertilizer (compost, manure, rot)</span></div>
+                                <div class="need-item"><span class="need-icon">🌡️</span><span>Temperature</span><span class="need-desc">Each plant has preferred seasons</span></div>
+                                <div class="need-item"><span class="need-icon">👥</span><span>Companions</span><span class="need-desc">Some plants help each other grow</span></div>
+                            </div>
+                        </div>
+                        <div class="garden-info-card">
+                            <h3>📊 Stress System</h3>
+                            <p>Plants gain stress from unmet needs. High stress = smaller harvest.</p>
+                            <div class="stress-levels">
+                                <div class="stress-level good">0-15% = Giant possible</div>
+                                <div class="stress-level okay">16-60% = Normal crop</div>
+                                <div class="stress-level bad">61%+ = Smaller yield</div>
+                            </div>
+                        </div>
+                        <div class="garden-info-card">
+                            <h3>🧪 Nutrient Types</h3>
+                            <div class="nutrient-types">
+                                <div class="nutrient-type"><span class="nutrient-icon compost">🟤</span><span>Compost</span><span class="nutrient-source">Rot, Rotten Eggs</span></div>
+                                <div class="nutrient-type"><span class="nutrient-icon growth">🟢</span><span>Growth Formula</span><span class="nutrient-source">Seeds, Manure</span></div>
+                                <div class="nutrient-type"><span class="nutrient-icon manure">🟡</span><span>Manure</span><span class="nutrient-source">Guano, Manure</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- All Plants Tab -->
+                <div class="garden-panel" id="garden-plants">
+                    <div class="garden-search-wrapper">
+                        <input type="text" class="garden-search" id="garden-search" placeholder="Search plants..." oninput="filterGardenPlants(this.value)">
+                    </div>
+                    <div class="plants-grid" id="plants-grid"></div>
+                </div>
+
+                <!-- Seasonal Tab -->
+                <div class="garden-panel" id="garden-seasons">
+                    <div class="season-plant-grid" id="season-plant-grid"></div>
+                </div>
+
+                <!-- Giant Crops Tab -->
+                <div class="garden-panel" id="garden-giants">
+                    <div class="giants-intro">
+                        <p>Giant crops require <strong>stress under 15%</strong> at harvest. Plant in 3x3 grids of the same crop!</p>
+                    </div>
+                    <div class="giants-grid" id="giants-grid"></div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Modal -->

@@ -3524,6 +3524,213 @@
         }
 
         // Find matching recipes sorted by priority
+        // Get recipe suggestions based on current ingredients
+        function getSuggestedRecipes(slots) {
+            const currentValues = calculateValues(slots);
+            const currentIngredients = slots.filter(s => s !== null);
+            const suggestions = [];
+
+            // Recipe hints for what you need to complete them
+            const recipeHints = {
+                'Meatballs': { need: 'meat >= 0.5', hint: 'Add 3 fillers (ice, berries, mushrooms)' },
+                'Meaty Stew': { need: 'meat >= 3', hint: 'Add more meat (total 3+)' },
+                'Pierogi': { need: 'meat >= 0.5, egg >= 1, veggie >= 0.5', hint: 'Need meat + egg + veggie' },
+                'Bacon and Eggs': { need: 'meat >= 1.5, egg >= 2', hint: 'Need 2+ eggs and meat' },
+                'Honey Ham': { need: 'meat >= 2, honey >= 1', hint: 'Need honey and more meat' },
+                'Honey Nuggets': { need: 'meat < 0.5 but > 0, honey >= 1', hint: 'Need honey + small meat' },
+                'Dragonpie': { need: 'dragonfruit, meat = 0', hint: 'Add NO meat, just fillers' },
+                'Fish Tacos': { need: 'fish >= 0.5, corn', hint: 'Need corn to complete' },
+                'Fishsticks': { need: 'fish >= 0.5, twig', hint: 'Add a twig + filler' },
+                'Froggle Bunwich': { need: 'frog legs, veggie >= 0.5', hint: 'Add veggies' },
+                'Turkey Dinner': { need: 'drumstick >= 2, meat >= 1, veggie/fruit >= 0.5', hint: 'Need drumsticks + veggie/fruit' },
+                'Guacamole': { need: 'moleworm, cactus', hint: 'Need cactus flesh' },
+                'Ice Cream': { need: 'ice, dairy, sweetener', hint: 'Need dairy and sweetener' },
+                'Pumpkin Cookie': { need: 'pumpkin, sweetener >= 2', hint: 'Need 2 honey/sweetener' },
+                'Taffy': { need: 'sweetener >= 3', hint: 'Add more honey/sweetener' },
+                'Waffles': { need: 'butter, egg, berries', hint: 'Need butter + egg + berries' },
+                'Stuffed Eggplant': { need: 'eggplant, veggie >= 0.5', hint: 'Add more veggies' },
+                'Ratatouille': { need: 'veggie >= 0.5, no meat/fish/egg', hint: 'Veggies only, no meat!' },
+                'Fruit Medley': { need: 'fruit >= 3, no meat/fish/veggie', hint: 'Fruit only!' },
+                'Unagi': { need: 'eel, lichen', hint: 'Need eel + lichen' },
+                'Surf n Turf': { need: 'meat >= 2.5, fish >= 1.5', hint: 'Need lots of meat AND fish' },
+                'Wobster Dinner': { need: 'wobster, butter', hint: 'Need butter' },
+                'Lobster Bisque': { need: 'wobster, ice', hint: 'Add ice' },
+                'Monster Lasagna': { need: 'monster >= 2', hint: 'Warning: Makes bad food!' },
+                'Flower Salad': { need: 'cactus flower, veggie >= 2', hint: 'Need cactus flower + veggies' },
+                'California Roll': { need: 'seaweed >= 2, fish >= 1', hint: 'Need seaweed + fish' },
+                'Ceviche': { need: 'fish >= 2, ice', hint: 'Add ice to fish' },
+                'Banana Pop': { need: 'banana, twig, ice', hint: 'Need banana + twig + ice' },
+                'Jelly Salad': { need: 'jellyfishCap >= 2, sweetener', hint: 'Need sweetener' },
+                'Seafood Gumbo': { need: 'fish >= 2 (different types)', hint: 'Need 2+ different fish' },
+                'Asparagus Soup': { need: 'asparagus, veggie >= 1.5', hint: 'Need asparagus + veggies' },
+                'Vegetable Stinger': { need: 'asparagus, ice, veggie >= 1.5', hint: 'Asparagus + ice + veggie' },
+                'Fancy Spiralled Tubers': { need: 'potato, twig', hint: 'Need potato + twig' },
+                'Creamy Potato Puree': { need: 'potato >= 2, garlic', hint: 'Need 2 potatoes + garlic' }
+            };
+
+            for (const recipe of SIM_RECIPES) {
+                if (recipe.warning && recipe.name !== 'Monster Lasagna') continue;
+                if (recipe.name === 'Wet Goop') continue;
+
+                // Check what this recipe needs
+                let match = 'none';
+                let matchText = '';
+                let hint = recipeHints[recipe.name] ? recipeHints[recipe.name].hint : '';
+
+                // Simple matching based on current values
+                const testValues = { ...currentValues };
+
+                // Check if current ingredients are compatible with this recipe
+                if (recipe.name === 'Meatballs' && currentValues.meat >= 0.5) {
+                    match = currentValues.meat >= 0.5 ? 'likely' : 'possible';
+                    matchText = 'Add fillers';
+                    hint = '+ 3 fillers (ice, berries, mushrooms, etc.)';
+                }
+                else if (recipe.name === 'Meaty Stew' && currentValues.meat >= 1) {
+                    match = currentValues.meat >= 3 ? 'exact' : 'possible';
+                    matchText = currentValues.meat >= 3 ? 'Need fillers' : 'Need more meat';
+                    hint = currentValues.meat >= 3 ? '+ any filler' : '+ meat until 3+ total';
+                }
+                else if (recipe.name === 'Pierogi' && (currentValues.meat > 0 || currentValues.egg > 0)) {
+                    const hasMeat = currentValues.meat >= 0.5;
+                    const hasEgg = currentValues.egg >= 1;
+                    const hasVeg = currentValues.veggie >= 0.5;
+                    if (hasMeat && hasEgg && hasVeg) {
+                        match = 'exact';
+                        matchText = 'Add filler!';
+                    } else if ((hasMeat && hasEgg) || (hasMeat && hasVeg) || (hasEgg && hasVeg)) {
+                        match = 'likely';
+                        matchText = 'Almost there';
+                        hint = !hasMeat ? '+ meat' : !hasEgg ? '+ egg' : '+ veggie';
+                    } else if (hasMeat || hasEgg) {
+                        match = 'possible';
+                        matchText = 'Need more';
+                        hint = 'Need meat + egg + veggie';
+                    }
+                }
+                else if (recipe.name === 'Bacon and Eggs' && currentValues.egg >= 1) {
+                    match = currentValues.egg >= 2 && currentValues.meat >= 1.5 ? 'exact' : 'possible';
+                    matchText = match === 'exact' ? 'Need filler' : 'Need eggs + meat';
+                    hint = '2 eggs + meat (1.5+)';
+                }
+                else if (recipe.name === 'Honey Ham' && (currentValues.honey > 0 || currentValues.meat >= 2)) {
+                    const hasHoney = currentValues.honey >= 1;
+                    const hasMeat = currentValues.meat >= 2;
+                    if (hasHoney && hasMeat) {
+                        match = 'exact';
+                        matchText = 'Add filler!';
+                    } else {
+                        match = 'possible';
+                        matchText = !hasHoney ? 'Need honey' : 'Need more meat';
+                    }
+                }
+                else if (recipe.name === 'Honey Nuggets' && currentValues.honey > 0) {
+                    match = 'possible';
+                    matchText = 'Add small meat';
+                    hint = 'Morsel/small meat + fillers';
+                }
+                else if (recipe.name === 'Dragonpie' && currentValues.dragonfruit) {
+                    match = currentValues.meat === 0 ? 'exact' : 'blocked';
+                    matchText = currentValues.meat === 0 ? 'Add fillers (no meat!)' : 'Remove meat!';
+                    hint = 'NO meat allowed';
+                }
+                else if (recipe.name === 'Fishsticks' && currentValues.fish >= 0.5) {
+                    match = currentValues.twig ? 'exact' : 'possible';
+                    matchText = currentValues.twig ? 'Add fillers' : 'Need twig';
+                    hint = '+ 1 twig + filler';
+                }
+                else if (recipe.name === 'Fish Tacos' && currentValues.fish >= 0.5) {
+                    match = currentValues.corn ? 'exact' : 'possible';
+                    matchText = currentValues.corn ? 'Add filler' : 'Need corn';
+                    hint = '+ corn';
+                }
+                else if (recipe.name === 'Surf n Turf' && (currentValues.fish >= 0.5 || currentValues.meat >= 1)) {
+                    const needMeat = 2.5 - currentValues.meat;
+                    const needFish = 1.5 - currentValues.fish;
+                    if (needMeat <= 0 && needFish <= 0) {
+                        match = 'exact';
+                        matchText = 'Add filler!';
+                    } else {
+                        match = 'possible';
+                        matchText = 'Need meat + fish';
+                        hint = 'Meat (2.5+) + Fish (1.5+)';
+                    }
+                }
+                else if (recipe.name === 'Taffy' && currentValues.sweetener >= 1) {
+                    match = currentValues.sweetener >= 3 ? 'exact' : 'possible';
+                    matchText = currentValues.sweetener >= 3 ? 'Add filler' : 'Need more honey';
+                    hint = 'Need 3+ sweetener total';
+                }
+                else if (recipe.name === 'Ratatouille' && currentValues.veggie >= 0.5 && currentValues.meat === 0 && currentValues.fish === 0) {
+                    match = 'likely';
+                    matchText = 'Add veggies';
+                    hint = 'Veggies only, no meat/fish';
+                }
+                else if (recipe.name === 'Fruit Medley' && currentValues.fruit >= 1 && currentValues.meat === 0 && currentValues.veggie === 0) {
+                    match = currentValues.fruit >= 3 ? 'exact' : 'possible';
+                    matchText = currentValues.fruit >= 3 ? 'Add fruit' : 'Need more fruit';
+                    hint = 'Fruit only (3+)';
+                }
+                else if (recipe.name === 'Monster Lasagna' && currentValues.monster >= 1) {
+                    match = 'possible';
+                    matchText = 'Warning!';
+                    hint = '2+ monster = Monster Lasagna';
+                }
+                else if (recipe.name === 'Ice Cream' && (currentValues.ice > 0 || currentValues.dairy > 0)) {
+                    match = 'possible';
+                    matchText = 'Need ice + dairy + sweet';
+                    hint = 'Ice + Butter/Dairy + Honey';
+                }
+                else if (recipe.name === 'Froggle Bunwich' && currentValues.froglegs > 0) {
+                    match = currentValues.veggie >= 0.5 ? 'likely' : 'possible';
+                    matchText = currentValues.veggie >= 0.5 ? 'Add filler' : 'Need veggie';
+                }
+                else if (recipe.name === 'Lobster Bisque' && currentValues.wobster) {
+                    match = currentValues.ice ? 'exact' : 'possible';
+                    matchText = currentValues.ice ? 'Add fillers' : 'Need ice';
+                }
+                else if (recipe.name === 'Wobster Dinner' && currentValues.wobster) {
+                    match = currentValues.butter ? 'exact' : 'possible';
+                    matchText = currentValues.butter ? 'Add fillers' : 'Need butter';
+                }
+                else if (recipe.name === 'California Roll' && currentValues.seaweed >= 1) {
+                    match = currentValues.seaweed >= 2 && currentValues.fish >= 1 ? 'exact' : 'possible';
+                    matchText = 'Need seaweed + fish';
+                }
+                else if (recipe.name === 'Ceviche' && currentValues.fish >= 1) {
+                    match = currentValues.fish >= 2 && currentValues.ice ? 'exact' : 'possible';
+                    matchText = 'Need fish + ice';
+                }
+
+                if (match !== 'none' && match !== 'blocked') {
+                    suggestions.push({
+                        name: recipe.name,
+                        health: recipe.health,
+                        hunger: recipe.hunger,
+                        sanity: recipe.sanity,
+                        priority: recipe.priority,
+                        match: match,
+                        matchText: matchText,
+                        hint: hint,
+                        warning: recipe.warning
+                    });
+                }
+            }
+
+            // Sort: exact matches first, then likely, then possible, then by priority
+            suggestions.sort((a, b) => {
+                const matchOrder = { exact: 0, likely: 1, possible: 2 };
+                if (matchOrder[a.match] !== matchOrder[b.match]) {
+                    return matchOrder[a.match] - matchOrder[b.match];
+                }
+                if (a.warning && !b.warning) return 1;
+                if (!a.warning && b.warning) return -1;
+                return b.priority - a.priority;
+            });
+
+            return suggestions;
+        }
+
         function findRecipes(slots) {
             const values = calculateValues(slots);
             const matches = [];
@@ -3634,8 +3841,42 @@
             const resultsDiv = document.getElementById('sim-results');
             const filledSlots = crockpotSlots.filter(s => s !== null).length;
 
+            if (filledSlots === 0) {
+                resultsDiv.innerHTML = '<div class="sim-empty">Add ingredients to see recipe suggestions</div>';
+                return;
+            }
+
             if (filledSlots < 4) {
-                resultsDiv.innerHTML = `<div class="sim-empty">Add ${4 - filledSlots} more ingredient${4 - filledSlots > 1 ? 's' : ''} to see results</div>`;
+                // Show suggestions based on current ingredients
+                const suggestions = getSuggestedRecipes(crockpotSlots);
+                let html = '<div class="sim-suggestions">';
+                html += '<div class="sim-suggestions-title">Possible Recipes (' + filledSlots + '/4 ingredients)</div>';
+
+                if (suggestions.length === 0) {
+                    html += '<div class="sim-suggestion-item dim">Add more ingredients to see suggestions</div>';
+                } else {
+                    suggestions.slice(0, 6).forEach(function(sug) {
+                        const matchClass = sug.match === 'exact' ? 'exact' : sug.match === 'likely' ? 'likely' : 'possible';
+                        html += '<div class="sim-suggestion-item ' + matchClass + '">';
+                        html += '<div class="sim-suggestion-header">';
+                        html += '<span class="sim-suggestion-name">' + sug.name + '</span>';
+                        html += '<span class="sim-suggestion-match">' + sug.matchText + '</span>';
+                        html += '</div>';
+                        html += '<div class="sim-suggestion-stats">';
+                        html += '<span class="stat stat-health">❤️ ' + (sug.health >= 0 ? '+' : '') + sug.health + '</span>';
+                        html += '<span class="stat stat-hunger">🍖 +' + sug.hunger + '</span>';
+                        html += '<span class="stat stat-sanity">🧠 ' + (sug.sanity >= 0 ? '+' : '') + sug.sanity + '</span>';
+                        html += '</div>';
+                        if (sug.hint) {
+                            html += '<div class="sim-suggestion-hint">' + sug.hint + '</div>';
+                        }
+                        html += '</div>';
+                    });
+                }
+
+                html += '</div>';
+                html += '<div class="sim-empty" style="margin-top: 1rem;">Add ' + (4 - filledSlots) + ' more ingredient' + (4 - filledSlots > 1 ? 's' : '') + ' to cook</div>';
+                resultsDiv.innerHTML = html;
                 return;
             }
 

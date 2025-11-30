@@ -2078,9 +2078,9 @@
                     <div class="dash-widget-header">
                         <h3>📅 Day Tracker</h3>
                         <div class="dash-day-controls">
-                            <button class="dash-day-btn" onclick="adjustDay(-1)">−</button>
+                            <button class="dash-day-btn" onclick="adjustDayFromDash(-1)">−</button>
                             <span class="dash-current-day" id="dash-current-day">Day 1</span>
-                            <button class="dash-day-btn" onclick="adjustDay(1)">+</button>
+                            <button class="dash-day-btn" onclick="adjustDayFromDash(1)">+</button>
                         </div>
                     </div>
                     <div class="dash-season-info" id="dash-season-info"></div>
@@ -5727,8 +5727,22 @@
             updateDashBoss();
         }
 
+        function adjustDayFromDash(delta) {
+            const dayInput = document.getElementById('current-day');
+            if (dayInput) {
+                const newDay = Math.max(1, (parseInt(dayInput.value) || 1) + delta);
+                dayInput.value = newDay;
+                updateDayTracker();
+            }
+        }
+
+        function getCurrentDay() {
+            const dayInput = document.getElementById('current-day');
+            return dayInput ? (parseInt(dayInput.value) || 1) : 1;
+        }
+
         function updateDashDayTracker() {
-            const day = currentDay;
+            const day = getCurrentDay();
             const yearLen = Object.values(seasonLengths).reduce((a, b) => a + b, 0);
             const year = Math.floor((day - 1) / yearLen) + 1;
             const dayInYear = ((day - 1) % yearLen) + 1;
@@ -5780,7 +5794,7 @@
 
         function updateDashWarnings() {
             const warningsDiv = document.getElementById('dash-checklist-warnings');
-            const day = currentDay;
+            const day = getCurrentDay();
             const yearLen = Object.values(seasonLengths).reduce((a, b) => a + b, 0);
             const year = Math.floor((day - 1) / yearLen) + 1;
             const dayInYear = ((day - 1) % yearLen) + 1;
@@ -5899,7 +5913,7 @@
 
         function updateDashPlants() {
             const plantsDiv = document.getElementById('dash-plants-list');
-            const day = currentDay;
+            const day = getCurrentDay();
             const yearLen = Object.values(seasonLengths).reduce((a, b) => a + b, 0);
             const dayInYear = ((day - 1) % yearLen) + 1;
 
@@ -5936,7 +5950,7 @@
 
         function updateDashBoss() {
             const bossDiv = document.getElementById('dash-boss-info');
-            const day = currentDay;
+            const day = getCurrentDay();
             const yearLen = Object.values(seasonLengths).reduce((a, b) => a + b, 0);
             const year = Math.floor((day - 1) / yearLen) + 1;
             const dayInYear = ((day - 1) % yearLen) + 1;
@@ -6014,7 +6028,7 @@
         }
 
         function updateSidebarTracker() {
-            const day = currentDay;
+            const day = getCurrentDay();
             const yearLen = Object.values(seasonLengths).reduce((a, b) => a + b, 0);
             const year = Math.floor((day - 1) / yearLen) + 1;
             const dayInYear = ((day - 1) % yearLen) + 1;
@@ -6089,19 +6103,17 @@
             }
         }
 
-        // Override adjustDay to also update dashboard
-        const originalAdjustDay = typeof adjustDay === 'function' ? adjustDay : null;
-        function adjustDay(delta) {
-            currentDay = Math.max(1, currentDay + delta);
-            localStorage.setItem('dst-current-day', currentDay);
-            if (typeof updateDayTracker === 'function') updateDayTracker();
-            updateDashboard();
-        }
-
         // Initialize dashboard on load
         setTimeout(function() {
             updateDashboard();
         }, 100);
+
+        // Hook into day tracker updates
+        const originalUpdateDayTracker = updateDayTracker;
+        updateDayTracker = function() {
+            originalUpdateDayTracker();
+            updateDashboard();
+        };
 
         // Theme handling
         function toggleTheme() {

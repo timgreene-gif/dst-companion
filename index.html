@@ -1778,6 +1778,11 @@
             <div class="simulator-container">
                 <div class="sim-ingredients-panel">
                     <h3 class="sim-section-title">Select Ingredients</h3>
+                    <div class="ingredient-search-wrapper">
+                        <input type="text" class="ingredient-search" id="ingredient-search" placeholder="Search ingredients..." oninput="filterIngredients(this.value)">
+                        <button class="ingredient-search-clear" id="ingredient-search-clear" onclick="clearIngredientSearch()">×</button>
+                    </div>
+                    <div id="ingredient-search-results" class="ingredient-search-results"></div>
                     <div id="ingredient-categories"></div>
                 </div>
 
@@ -3778,6 +3783,77 @@
                     addToPot(ing);
                 });
             });
+        }
+
+        // Filter ingredients by search
+        function filterIngredients(query) {
+            const searchInput = document.getElementById('ingredient-search');
+            const clearBtn = document.getElementById('ingredient-search-clear');
+            const resultsDiv = document.getElementById('ingredient-search-results');
+            const categoriesDiv = document.getElementById('ingredient-categories');
+
+            // Show/hide clear button
+            if (query.length > 0) {
+                clearBtn.classList.add('visible');
+            } else {
+                clearBtn.classList.remove('visible');
+            }
+
+            // If empty query, hide results and show categories
+            if (query.trim() === '') {
+                resultsDiv.classList.remove('active');
+                categoriesDiv.style.display = '';
+                return;
+            }
+
+            // Search through all ingredients
+            const matches = [];
+            const lowerQuery = query.toLowerCase();
+
+            for (const [key, category] of Object.entries(INGREDIENTS)) {
+                category.items.forEach(ing => {
+                    if (ing.name.toLowerCase().includes(lowerQuery)) {
+                        matches.push({
+                            ...ing,
+                            category: category.name
+                        });
+                    }
+                });
+            }
+
+            // Show results
+            if (matches.length > 0) {
+                resultsDiv.innerHTML = matches.slice(0, 15).map(ing => `
+                    <div class="search-result-item" onclick='addIngredientFromSearch(${JSON.stringify(ing).replace(/'/g, "&#39;")})'>
+                        <span class="search-result-icon">${ing.icon || '🍽️'}</span>
+                        <span class="search-result-name">${ing.name}</span>
+                        <span class="search-result-category">${ing.category}</span>
+                    </div>
+                `).join('');
+            } else {
+                resultsDiv.innerHTML = '<div class="search-no-results">No ingredients found</div>';
+            }
+
+            resultsDiv.classList.add('active');
+            categoriesDiv.style.display = 'none';
+        }
+
+        function addIngredientFromSearch(ing) {
+            addToPot(ing);
+            // Clear search after adding
+            clearIngredientSearch();
+        }
+
+        function clearIngredientSearch() {
+            const searchInput = document.getElementById('ingredient-search');
+            const clearBtn = document.getElementById('ingredient-search-clear');
+            const resultsDiv = document.getElementById('ingredient-search-results');
+            const categoriesDiv = document.getElementById('ingredient-categories');
+
+            searchInput.value = '';
+            clearBtn.classList.remove('visible');
+            resultsDiv.classList.remove('active');
+            categoriesDiv.style.display = '';
         }
 
         // Add ingredient to pot

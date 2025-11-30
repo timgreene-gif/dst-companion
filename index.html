@@ -730,6 +730,55 @@
         }
 
         /* Modal */
+        /* Party Synergies */
+        .synergy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .synergy-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.25rem;
+            border: 1px solid var(--bg-tertiary);
+            transition: all 0.2s;
+        }
+
+        .synergy-card:hover {
+            border-color: var(--accent-secondary);
+            transform: translateY(-2px);
+        }
+
+        .synergy-card-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .synergy-card-members {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .synergy-member-tag {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .synergy-card-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
         /* Welcome Section */
         .welcome-container {
             max-width: 800px;

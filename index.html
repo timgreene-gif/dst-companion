@@ -223,6 +223,12 @@
             gap: 1.5rem;
         }
 
+        .recipe-card-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
         .recipe-card {
             background: var(--bg-secondary);
             border-radius: var(--border-radius);
@@ -2810,6 +2816,7 @@
             // ESSENTIAL RECIPES
             {
                 name: 'Meatballs',
+                icon: '🍖',
                 tier: 'essential',
                 health: 3,
                 hunger: 62.5,
@@ -2822,6 +2829,7 @@
             },
             {
                 name: 'Meaty Stew',
+                icon: '🍲',
                 tier: 'essential',
                 health: 12,
                 hunger: 150,
@@ -2834,6 +2842,7 @@
             },
             {
                 name: 'Pierogi',
+                icon: '🥟',
                 tier: 'essential',
                 health: 40,
                 hunger: 37.5,
@@ -2846,6 +2855,7 @@
             },
             {
                 name: 'Bacon and Eggs',
+                icon: '🥓',
                 tier: 'essential',
                 health: 20,
                 hunger: 75,
@@ -2858,6 +2868,7 @@
             },
             {
                 name: 'Honey Ham',
+                icon: '🍯',
                 tier: 'essential',
                 health: 30,
                 hunger: 75,
@@ -2870,6 +2881,7 @@
             },
             {
                 name: 'Dragonpie',
+                icon: '🥧',
                 tier: 'essential',
                 health: 40,
                 hunger: 75,
@@ -2884,6 +2896,7 @@
             // GREAT RECIPES
             {
                 name: 'Fish Sticks',
+                icon: '🐟',
                 tier: 'great',
                 health: 40,
                 hunger: 37.5,
@@ -2908,6 +2921,7 @@
             },
             {
                 name: 'Trail Mix',
+                icon: '🥜',
                 tier: 'great',
                 health: 30,
                 hunger: 12.5,
@@ -2920,6 +2934,7 @@
             },
             {
                 name: 'Bunny Stew',
+                icon: '🐰',
                 tier: 'great',
                 health: 20,
                 hunger: 37.5,
@@ -2932,6 +2947,7 @@
             },
             {
                 name: 'Taffy',
+                icon: '🍬',
                 tier: 'great',
                 health: -3,
                 hunger: 25,
@@ -2944,6 +2960,7 @@
             },
             {
                 name: 'Ice Cream',
+                icon: '🍨',
                 tier: 'great',
                 health: 0,
                 hunger: 25,
@@ -2956,6 +2973,7 @@
             },
             {
                 name: 'Wobster Dinner',
+                icon: '🦞',
                 tier: 'great',
                 health: 60,
                 hunger: 37.5,
@@ -2970,6 +2988,7 @@
             // GOOD RECIPES
             {
                 name: 'Butter Muffin',
+                icon: '🧁',
                 tier: 'good',
                 health: 20,
                 hunger: 37.5,
@@ -2982,6 +3001,7 @@
             },
             {
                 name: 'Froggle Bunwich',
+                icon: '🐸',
                 tier: 'good',
                 health: 20,
                 hunger: 37.5,
@@ -2994,6 +3014,7 @@
             },
             {
                 name: 'Honey Nuggets',
+                icon: '🍗',
                 tier: 'good',
                 health: 20,
                 hunger: 37.5,
@@ -3006,6 +3027,7 @@
             },
             {
                 name: 'Kabobs',
+                icon: '🍢',
                 tier: 'good',
                 health: 3,
                 hunger: 37.5,
@@ -3018,6 +3040,7 @@
             },
             {
                 name: 'Ratatouille',
+                icon: '🍆',
                 tier: 'good',
                 health: 3,
                 hunger: 25,
@@ -3030,6 +3053,7 @@
             },
             {
                 name: 'Tall Scotch Eggs',
+                icon: '🥚',
                 tier: 'good',
                 health: 60,
                 hunger: 150,
@@ -3042,6 +3066,7 @@
             },
             {
                 name: 'Waffles',
+                icon: '🧇',
                 tier: 'good',
                 health: 60,
                 hunger: 37.5,
@@ -3054,6 +3079,7 @@
             },
             {
                 name: 'Mandrake Soup',
+                icon: '🌿',
                 tier: 'good',
                 health: 100,
                 hunger: 150,
@@ -3474,6 +3500,7 @@
 
             grid.innerHTML = filtered.map(recipe => `
                 <div class="recipe-card" onclick="showRecipeModal('${recipe.name}')">
+                    <div class="recipe-card-icon">${recipe.icon || '🍽️'}</div>
                     <div class="recipe-header">
                         <span class="recipe-name">${recipe.name}</span>
                         <span class="recipe-tier tier-${recipe.tier}">${recipe.tier.charAt(0).toUpperCase() + recipe.tier.slice(1)}</span>
@@ -3954,6 +3981,7 @@
             },
             {
                 name: 'Mandrake Soup',
+                icon: '🌿',
                 test: (v) => v.mandrake,
                 priority: 10,
                 health: 100,
@@ -3962,6 +3990,7 @@
             },
             {
                 name: 'Dragonpie',
+                icon: '🥧',
                 test: (v) => v.dragonfruit && v.meat === 0,
                 priority: 1,
                 health: 40,
@@ -3970,6 +3999,7 @@
             },
             {
                 name: 'Wobster Dinner',
+                icon: '🦞',
                 test: (v) => v.wobster && v.butter,
                 priority: 25,
                 health: 60,
@@ -3994,6 +4024,7 @@
             },
             {
                 name: 'Tall Scotch Eggs',
+                icon: '🥚',
                 test: (v) => v.tallbirdegg && v.veggie >= 0.5,
                 priority: 10,
                 health: 60,
@@ -4002,6 +4033,7 @@
             },
             {
                 name: 'Bacon and Eggs',
+                icon: '🥓',
                 test: (v) => v.meat >= 1.5 && v.egg >= 2 && v.veggie === 0,
                 priority: 10,
                 health: 20,
@@ -4010,6 +4042,7 @@
             },
             {
                 name: 'Pierogi',
+                icon: '🥟',
                 test: (v) => v.meat >= 0.5 && v.egg >= 1 && v.veggie >= 0.5 && !v.twig,
                 priority: 5,
                 health: 40,
@@ -4018,6 +4051,7 @@
             },
             {
                 name: 'Honey Ham',
+                icon: '🍯',
                 test: (v) => v.meat >= 2 && v.honey && !v.twig && !v.inedible,
                 priority: 2,
                 health: 30,
@@ -4026,6 +4060,7 @@
             },
             {
                 name: 'Honey Nuggets',
+                icon: '🍗',
                 test: (v) => v.honey && v.meat >= 0.5 && v.meat < 2 && !v.twig && !v.inedible,
                 priority: 2,
                 health: 20,
@@ -4034,6 +4069,7 @@
             },
             {
                 name: 'Taffy',
+                icon: '🍬',
                 test: (v) => v.sweetener >= 3 && v.meat === 0,
                 priority: 10,
                 health: -3,
@@ -4042,6 +4078,7 @@
             },
             {
                 name: 'Ice Cream',
+                icon: '🍨',
                 test: (v) => v.dairy && v.ice && v.sweetener >= 1 && v.meat === 0 && v.egg === 0 && v.veggie === 0 && !v.twig,
                 priority: 10,
                 health: 0,
@@ -4050,6 +4087,7 @@
             },
             {
                 name: 'Waffles',
+                icon: '🧇',
                 test: (v) => v.butter && v.egg >= 1 && v.fruit >= 0.5,
                 priority: 10,
                 health: 60,
@@ -4058,6 +4096,7 @@
             },
             {
                 name: 'Trail Mix',
+                icon: '🥜',
                 test: (v) => v.birchnut && v.fruit >= 1 && v.meat === 0 && v.veggie === 0 && v.egg === 0 && v.dairy === 0,
                 priority: 0,
                 health: 30,
@@ -4066,6 +4105,7 @@
             },
             {
                 name: 'Fish Sticks',
+                icon: '🐟',
                 test: (v) => v.fish >= 0.5 && v.twig && v.fillers >= 1,
                 priority: 10,
                 health: 40,
@@ -4082,6 +4122,7 @@
             },
             {
                 name: 'Butter Muffin',
+                icon: '🧁',
                 test: (v) => v.butterflywings && v.veggie >= 0.5 && v.meat === 0,
                 priority: 1,
                 health: 20,
@@ -4090,6 +4131,7 @@
             },
             {
                 name: 'Froggle Bunwich',
+                icon: '🐸',
                 test: (v) => v.froglegs && v.veggie >= 0.5,
                 priority: 1,
                 health: 20,
@@ -4098,6 +4140,7 @@
             },
             {
                 name: 'Meaty Stew',
+                icon: '🍲',
                 test: (v) => v.meat >= 3 && !v.inedible,
                 priority: 0,
                 health: 12,
@@ -4106,6 +4149,7 @@
             },
             {
                 name: 'Bunny Stew',
+                icon: '🐰',
                 test: (v) => v.meat >= 0.5 && !v.monster && v.iceCount >= 2 && !v.twig && !v.inedible,
                 priority: 1,
                 health: 20,
@@ -4114,6 +4158,7 @@
             },
             {
                 name: 'Kabobs',
+                icon: '🍢',
                 test: (v) => v.meat >= 0.5 && !v.monster && v.twig && !v.inedible,
                 priority: 5,
                 health: 3,
@@ -4122,6 +4167,7 @@
             },
             {
                 name: 'Ratatouille',
+                icon: '🍆',
                 test: (v) => v.veggie >= 0.5 && v.meat === 0 && !v.twig && !v.inedible,
                 priority: 0,
                 health: 3,
@@ -4138,6 +4184,7 @@
             },
             {
                 name: 'Meatballs',
+                icon: '🍖',
                 test: (v) => v.meat >= 0.5 && !v.twig && !v.inedible,
                 priority: -1,
                 health: 3,
@@ -5107,13 +5154,15 @@
             'puffy-vest': { name: 'Puffy Vest', type: 'craft', station: 'Science Machine', ingredients: [['Winter Koalefant Trunk', 1], ['Silk', 8], ['Beefalo Wool', 2]] },
             'fire-pit': { name: 'Fire Pit', type: 'craft', station: 'None', ingredients: [['Logs', 2], ['Rocks', 12]] },
             'ice-box': { name: 'Ice Box', type: 'craft', station: 'Alchemy Engine', ingredients: [['Gold Nugget', 2], ['Gears', 1], ['Boards', 1]] },
-            'meatballs': { name: 'Meatballs', type: 'food', cooktime: '15 sec', ingredients: [['Any Meat', 0.5], ['Filler x3', 0]], stats: { health: 3, hunger: 62.5, sanity: 5 } },
+            'meatballs': { name: 'Meatballs',
+                icon: '🍖', type: 'food', cooktime: '15 sec', ingredients: [['Any Meat', 0.5], ['Filler x3', 0]], stats: { health: 3, hunger: 62.5, sanity: 5 } },
             'ham-bat': { name: 'Ham Bat', type: 'craft', station: 'Alchemy Engine', ingredients: [['Pig Skin', 1], ['Meat', 2], ['Twigs', 2]] },
             'spear': { name: 'Spear', type: 'craft', station: 'Science Machine', ingredients: [['Twigs', 2], ['Rope', 1], ['Flint', 1]] },
             'log-suit': { name: 'Log Suit', type: 'craft', station: 'Science Machine', ingredients: [['Logs', 8], ['Rope', 2]] },
             'football-helmet': { name: 'Football Helmet', type: 'craft', station: 'Science Machine', ingredients: [['Pig Skin', 1], ['Rope', 1]] },
             'dark-sword': { name: 'Dark Sword', type: 'craft', station: 'Shadow Manipulator', ingredients: [['Nightmare Fuel', 5], ['Living Log', 1]] },
-            'pierogi': { name: 'Pierogi', type: 'food', cooktime: '20 sec', ingredients: [['Egg', 1], ['Meat', 0.5], ['Veggie', 0.5]], stats: { health: 40, hunger: 37.5, sanity: 5 } },
+            'pierogi': { name: 'Pierogi',
+                icon: '🥟', type: 'food', cooktime: '20 sec', ingredients: [['Egg', 1], ['Meat', 0.5], ['Veggie', 0.5]], stats: { health: 40, hunger: 37.5, sanity: 5 } },
             'endo-fire': { name: 'Endothermic Fire Pit', type: 'craft', station: 'Alchemy Engine', ingredients: [['Rocks', 12], ['Nitre', 2], ['Electrical Doodad', 2]] },
             'eyebrella': { name: 'Eyebrella', type: 'craft', station: 'Alchemy Engine', ingredients: [['Deerclops Eyeball', 1], ['Twigs', 15], ['Bone Shards', 4]] },
             'flingo': { name: 'Ice Flingomatic', type: 'craft', station: 'Alchemy Engine', ingredients: [['Gears', 2], ['Ice', 15], ['Electrical Doodad', 2]] },

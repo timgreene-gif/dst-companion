@@ -5860,7 +5860,7 @@
 
                 items.slice(0, 5).forEach(item => {
                     const isDone = state[item.id];
-                    html += '<div class="dash-check-item ' + (isDone ? 'done' : '') + '" onclick="toggleDashCheck('' + warning.id + '', '' + item.id + '')">';
+                    html += "<div class=\"dash-check-item " + (isDone ? "done" : "") + "\" onclick=\"toggleDashCheck('" + warning.id + "', '" + item.id + "')\">"; 
                     html += '<span class="dash-check-box">' + (isDone ? '✓' : '') + '</span>';
                     html += '<span>' + item.text + '</span>';
                     html += '</div>';
@@ -5899,7 +5899,7 @@
                 const recipe = RECIPES.find(r => r.name === name);
                 if (!recipe) return;
 
-                html += '<div class="dash-fav-item" onclick="showRecipeModal('' + recipe.name.replace(/'/g, "\'") + '')">';
+                html += '<div class="dash-fav-item" onclick="showRecipeModal(\'' + recipe.name.replace(/'/g, "\\'") + '\')">';
                 html += '<span class="dash-fav-icon">' + (recipe.icon || '🍲') + '</span>';
                 html += '<span class="dash-fav-name">' + recipe.name + '</span>';
                 html += '<div class="dash-fav-stats">';
@@ -6002,7 +6002,7 @@
                 html += '<div style="font-size:0.85rem;margin-bottom:0.5rem">Kit: ' + done + '/' + total + ' ready</div>';
                 items.slice(0, 4).forEach(item => {
                     const isDone = state[item.id];
-                    html += '<div class="dash-check-item ' + (isDone ? 'done' : '') + '" onclick="toggleDashCheck('' + boss.kit + '', '' + item.id + '')">';
+                    html += "<div class=\"dash-check-item " + (isDone ? "done" : "") + "\" onclick=\"toggleDashCheck('" + boss.kit + "', '" + item.id + "')\">"; 
                     html += '<span class="dash-check-box">' + (isDone ? '✓' : '') + '</span>';
                     html += '<span>' + item.text + '</span>';
                     html += '</div>';
@@ -6091,7 +6091,7 @@
                     let html = '<div class="sidebar-checklist-title">Current Prep: ' + done + '/' + items.length + '</div>';
                     items.slice(0, 5).forEach(item => {
                         const isDone = state[item.id];
-                        html += '<div class="dash-check-item ' + (isDone ? 'done' : '') + '" onclick="toggleDashCheck('' + checklistId + '', '' + item.id + '')">';
+                        html += "<div class=\"dash-check-item " + (isDone ? "done" : "") + "\" onclick=\"toggleDashCheck('" + checklistId + "', '" + item.id + "')\">"; 
                         html += '<span class="dash-check-box">' + (isDone ? '✓' : '') + '</span>';
                         html += '<span>' + item.text + '</span>';
                         html += '</div>';
